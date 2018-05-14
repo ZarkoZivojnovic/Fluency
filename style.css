@@ -1,0 +1,126 @@
+html, body {box-sizing: border-box; height: 100%; }
+*,*:before,*:after {box-sizing: inherit;margin: auto;}
+
+
+body {
+    background-color: rgba(81, 0, 172, 1);
+}
+
+#wrap {
+    background-color: rgba(80,80,80,0.9);
+    min-height: 100%;
+    padding: 20px;
+}
+
+#content>h1 {
+    margin: -10px auto 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 60px;
+    text-align: center;
+    letter-spacing: 10px;
+    color: white;
+    text-shadow: 0 0 10px rgba(81, 0, 172, 0.8);
+}
+
+#content>p {
+    font-family: 'Montserrat', sans-serif;
+    text-align: center;
+}
+
+#slogan {
+    position: relative;
+    top: -12px;
+    left: -25px;
+    color: rgba(185, 61, 255, 1);
+    letter-spacing: 1px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#logo {
+    height: auto;
+    width: 160px;
+    text-align: center;
+    margin: 5px auto;
+}
+
+#formDiv {
+    width: 400px;
+    margin: 20px auto;
+    border-radius: 10px;
+    padding: 10px 5px 40px;
+    display: flex;
+    flex-direction: column;
+    background: rgb(229, 229, 229);
+    box-shadow: 0 0 10px rgba(81, 0, 172, 0.8);
+    border: solid white 1px;
+}
+
+form {
+    width: 80%;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    width: 80%;
+    border-top: 0;
+    border-bottom: solid rgba(81, 0, 172, 0.5) 1px;
+    border-right: 0;
+    border-left: 0;
+    border-radius: 4px;
+    margin: 20px auto;
+    padding: 5px;
+    text-align: center;
+    background: transparent;
+    transition: box-shadow 1s;
+    height: 30px;
+    font-size: 1em;
+    font-family: 'Montserrat', sans-serif;
+}
+
+input:focus {
+    box-shadow: 0 0 10px rgb(81, 0, 172);
+    outline: 0;
+}
+
+.submitBtn {
+    background-color: transparent;
+    color: gray;
+    width: 60%;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 7px;
+    border: solid gray 1px;
+    cursor: pointer;
+    transition: transform 1s;
+    height: 50px;
+    font-weight: bold;
+}
+
+.submitBtn:hover, .submitBtn:active {
+    border: solid white 1px;
+    box-shadow: 0 0 10px rgb(81, 0, 172);
+    background-color: #afafaf;
+    color: white;
+    
+}
+
+#haveAcc{
+    margin: auto;
+    text-align: center;
+    color: white;
+}
+
+#haveAcc>a {
+    color: white;
+    text-shadow: 0 0 5px rgb(81, 0, 172);
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-decoration: none;
+}
+
+#haveAcc>a:hover {
+    color: rgb(185, 61, 255);
+}
