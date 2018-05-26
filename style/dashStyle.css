@@ -1,0 +1,235 @@
+body {
+    font-family: AvenirNextBold, 'Montserrat', sans-serif;
+}
+
+header {
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+
+#logo {
+    width: 60px;
+    height: 60px;
+}
+
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    border-left: solid rgb(81, 0, 172) 1px;
+    transition: right 1s ease-in;
+}
+
+#showHideSidebar {
+    width: 150px;
+    padding: 3px 30px;
+    color: white;
+    border: solid rgba(81, 0, 172, 0.8) 1px;
+    background-color: rgba(81, 0, 172, 0.3);
+    cursor: pointer;
+    transition: transform, top 1s;
+}
+
+.showingSidebar {
+    border-radius: 0 30px 30px 0;
+    position: absolute;
+    top: 5px;
+    left: 0px;
+}
+
+.hiddenSidebar {
+    transform: rotate(270deg);
+    border-radius: 30px 30px 0 0;
+    position: absolute;
+    top: 150px;
+    left: -90px;
+}
+
+#showHideSidebar:hover {
+    border: solid white 1px;
+}
+
+#contentsDiv {
+    margin-top: 30px;
+}
+
+#profileForms {
+    display: none;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+}
+
+li {
+    width: 80%;
+    border-bottom: solid rgb(81, 0, 172) 1px;
+    padding: 10px;
+}
+
+a {
+    display: block;
+    color: white;
+    text-decoration: none;
+}
+
+#pictureDiv {
+    margin-bottom: 20px;
+    width: 150px;
+    height: 150px;
+    background-color: blue;
+    border-radius: 100%;
+    border: solid gray 4px;
+    box-shadow: 0 0 10px 2px rgb(81, 0, 172);
+}
+
+#usersName {
+    color: white;
+}
+
+#signOut {
+    text-decoration: none;
+    color: white;
+    margin: auto;
+}
+
+.langLevel {
+    display: none;
+}
+
+.langLevel label {
+    font-size: 12px;
+}
+
+#lang, #interests {
+    width: 100%;
+    max-height: 200px;
+    overflow: scroll;
+    overflow-x: hidden;
+    text-align: left;
+    border: solid rgb(81, 0, 172) 1px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding: 5px;
+}
+
+#languageInfoForm, #personalInfoForm, #aboutMeForm {
+    text-align: center;
+    width: 90%;
+    display: none;
+    overflow: hidden;
+}
+#languageInfoFormDiv, #personalInfoFormDiv, #aboutMeFormDiv {
+    margin: 0 auto;
+    height: 60px;
+    transition: height 1s ease-in-out;
+    overflow: hidden;
+}
+
+#personalInfoForm{
+    display: block;
+}
+#personalInfoFormDiv {
+    height: 500px;
+}
+
+#languageInfoFormDiv:hover, #personalInfoFormDiv:hover, #aboutMeFormDiv:hover {
+    cursor: pointer;
+}
+
+.submitBtn{
+    margin: 15px auto;
+    padding: 5px;
+    height: 40px;
+    border-radius: 30px;
+    border: solid rgb(81, 0, 172) 1px;
+    color: rgb(81, 0, 172);
+}
+
+.formName {
+    color: rgb(81, 0, 172);
+}
+
+hr {
+    width: 20%;
+    display: block;
+    margin: 5px auto;
+    border: solid 1px;
+    color: rgb(81, 0, 172);
+}
+
+.form input[type="checkbox"], .form input[type="radio"] {
+    width: 10px;
+    height: 10px;
+}
+
+input, #genderDiv {
+    border: solid rgb(81, 0, 172) 1px;
+    border-radius: 20px;
+    margin: 5px auto;
+    width: 80%;
+}
+
+#genderDiv {
+    padding: 5px;
+}
+
+textarea {
+    border: solid rgb(81, 0, 172) 1px;
+    border-radius: 5px;
+}
+
+.form p, label {
+    margin: 7px;
+    font-size: 14px;
+}
+
+input[type="checkbox"]:focus, input[type="radio"]:focus {
+    box-shadow: none;
+    outline: 0;
+}
+
+select {
+    border: solid rgb(81, 0, 172) 1px;
+    border-radius: 5px;
+    padding: 3px;
+    margin-top: 3px;
+    width: 60%;
+}
+
+.hide {
+    display: none;
+}
+
+#editProfile {
+    padding: 10px;
+}
+
+#interests {
+    max-height: 130px;
+    width: 60%;
+}
+
+.editIcon {
+    position: relative;
+    right: -150px;
+    bottom: -20px;
+}
+
+#maxFive {
+    font-size: 12px;
+    color: rgb(81, 0, 172);
+    margin: 0;
+}
+
