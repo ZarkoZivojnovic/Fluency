@@ -22,7 +22,7 @@ header {
     position: fixed;
     top: 0;
     right: 0;
-    width: 400px;
+    width: 300px;
     height: 100%;
     background: rgba(0,0,0,0.5);
     border-left: solid rgb(81, 0, 172) 1px;
@@ -43,7 +43,7 @@ header {
     border-radius: 0 30px 30px 0;
     position: absolute;
     top: 5px;
-    left: 0px;
+    left: 0;
 }
 
 .hiddenSidebar {
@@ -60,10 +60,6 @@ header {
 
 #contentsDiv {
     margin-top: 30px;
-}
-
-#profileForms {
-    display: none;
 }
 
 ul {
@@ -130,6 +126,7 @@ a {
     display: none;
     overflow: hidden;
 }
+
 #languageInfoFormDiv, #personalInfoFormDiv, #aboutMeFormDiv {
     margin: 0 auto;
     height: 60px;
@@ -140,12 +137,9 @@ a {
 #personalInfoForm{
     display: block;
 }
+
 #personalInfoFormDiv {
     height: 500px;
-}
-
-#languageInfoFormDiv:hover, #personalInfoFormDiv:hover, #aboutMeFormDiv:hover {
-    cursor: pointer;
 }
 
 .submitBtn{
@@ -158,7 +152,11 @@ a {
 }
 
 .formName {
+    display: block;
+    width: 100%;
+    text-align: center;
     color: rgb(81, 0, 172);
+    cursor: pointer;
 }
 
 hr {
@@ -225,6 +223,7 @@ select {
     position: relative;
     right: -150px;
     bottom: -20px;
+    cursor: pointer;
 }
 
 #maxFive {
@@ -232,4 +231,123 @@ select {
     color: rgb(81, 0, 172);
     margin: 0;
 }
+
+#channelsDiv>div {
+    margin: auto;
+    width: 800px;
+    display: flex;
+    flex-direction: row;
+    border: solid rgb(81, 0, 172) 1px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(81, 0, 172, 0.5);
+}
+
+#channelsList {
+    width: 30%;
+    height: 600px;
+    background-color: rgba(0,0,0,0.5);
+    border-right: solid rgb(81, 0, 172) 1px;
+    color: white;
+    overflow: hidden;
+}
+
+#channelsList form {
+    margin: 0;
+    width: 100%;
+}
+
+#langSelect {
+    width: 110%;
+    max-height: 400px;
+    overflow-y: scroll;
+}
+
+#channelsList input[type="radio"] {
+    display: none;
+}
+
+#channelsList select {
+    margin: 10px 0;
+    width: 110%;
+    overflow: hidden;
+    background-color: rgba(81, 0, 172, 0.4);
+    border-radius: 0;
+    color: white;
+    text-align: center;
+}
+
+#channelsList input[type="submit"]{
+    height: auto;
+    padding: 10px;
+    color: white;
+    margin: 25px auto;
+    border: solid white 1px;
+    cursor: pointer;
+}
+
+#channelsList input[type="submit"]:hover {
+    background-color: rgb(81, 0, 172);
+    box-shadow: 0 0 10px 2px rgb(81, 0, 172);
+}
+
+#channelsList p {
+    padding: 3px;
+    width: 100%;
+    text-align: center;
+    border-bottom: solid rgb(81, 0, 172) 1px;
+}
+#channelsList label {
+    display: block;
+    cursor: pointer;
+}
+
+#usersList {
+    background-color: rgba(255,255,255,0.1);
+    width: 70%;
+    height: 600px;
+}
+
+@media screen and (max-width:900px){
+    #channelsDiv>div {
+        width: 600px;
+    }
+}
+
+@media screen and (max-width:650px){
+    #channelsDiv>div {
+        width: 100%;
+    }
+
+    #usersList {
+        width: 100%;
+    }
+
+    #channelsList {
+        display: none;
+    }
+}
+
+@media screen and (max-width:500px){
+    #languageInfoForm, #personalInfoForm, #aboutMeForm {
+        width: 100%;
+    }
+    .form {
+        width: 100%;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
