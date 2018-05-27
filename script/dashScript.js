@@ -1,5 +1,7 @@
 const navigation = document.getElementById("navigation"),
     signOutButton = document.getElementById("signOut"),
+    channelsDiv = document.getElementById("channelsDiv"),
+    myProfileDiv = document.getElementById("myProfileDiv"),
     profileForms = document.getElementById("profileForms"),
     personalInfoForm = document.getElementById("personalInfoForm"),
     aboutMeForm = document.getElementById("aboutMeForm"),
@@ -8,32 +10,34 @@ const navigation = document.getElementById("navigation"),
     interests = document.getElementById("interests"),
     userUid = localStorage.getItem("userId"),
     showHideSidebar = document.getElementById("showHideSidebar"),
-    sidebar = document.getElementById("sidebar");
-let myProfileData = getExistingData(userUid),
-    usersName = document.getElementById("usersName");
+    sidebar = document.getElementById("sidebar"),
+    myProfileData = getExistingData(userUid),
+    usersName = document.getElementById("usersName"),
+    mainDivs = [myProfileDiv, channelsDiv],
+    fluencyColor = "rgb(81, 0, 172)";
+
+signOutButton.addEventListener("click", goOffline);
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
 
-window.load = () => {
-    firebase.auth().onAuthStateChanged((user) => {
-        if (!user) {
-            location.assign("./login.html");
-        }
-    });
-};
-
-let getUsername = setInterval(() => {
-    if (myProfileData.username !== undefined) {
-        clearInterval(getUsername);
-        usersName.innerText = myProfileData.username;
+firebase.auth().onAuthStateChanged((user) => {
+    if (!user) {
+        location.assign("./login.html");
+    } else {
+        let getUsername = setInterval(() => {
+            if (myProfileData.username !== undefined) {
+                clearInterval(getUsername);
+                usersName.innerText = myProfileData.username;
+            }
+        }, 100);
     }
-}, 100);
+});
 
 firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
 
-showHideSidebar.addEventListener("click", () => {
+showHideSidebar.addEventListener("click", event => {
     if (sidebar.style.right === "" || sidebar.style.right === "0px") {
-        sidebar.style.right = "-400px";
+        sidebar.style.right = "-300px";
         showHideSidebar.classList.remove("showingSidebar");
         showHideSidebar.classList.add("hiddenSidebar");
         showHideSidebar.innerText = "show ⇑"
@@ -44,31 +48,53 @@ showHideSidebar.addEventListener("click", () => {
         showHideSidebar.innerText = "hide ⇒";
     }
 });
+
 navigation.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
-        let divElement = document.getElementById(event.target.id + "Div");
-        show(divElement);
-        if (event.target.id === "myProfile") {
-            showProfileEditForm("disable");
+        if (event.target.nodeName === "A") {
+            let divElement = document.getElementById(event.target.id + "Div");
+            show(divElement);
+            if (event.target.id === "myProfile") {
+                let waitingForData = setInterval(() => {
+                    if (typeof myProfileData.username !== "undefined") {
+                        clearInterval(waitingForData);
+                        showProfileEditForm("disable");
+                        hide(channelsDiv);
+                    }
+                });
+            } else if (event.target.id === "channels") {
+                hide(myProfileDiv);
+                channelsDiv.addEventListener("click", selectLangChannel);
+            }
         }
     }
     event.preventDefault();
 });
 
-signOutButton.addEventListener("click", goOffline);
+function selectLangChannel(event) {
+    if (event.target.nodeName === "INPUT") console.log(event.target.value);
+    const radioInputs = document.querySelectorAll("input[type='radio']");
+    for (let element = 0; element < radioInputs.length; element++) {
+        if (radioInputs[element].checked) {
+            radioInputs[element].parentNode.style.backgroundColor = fluencyColor;
+        } else {
+            radioInputs[element].parentNode.style.backgroundColor = "inherit";
+        }
+    }
+    event.stopPropagation();
+}
 
-function showProfileEditForm(disable) {
+function showProfileEditForm(disableEnable) {
     addExistingData(myProfileData);
-    if (disable === "disable") {
-        disableFormElements();
-        showHideFormButtons("none");
+    if (disableEnable === "disable") {
+        disableEnableFormElements(myProfileDiv, "disable");
+        showHideFormButtons(myProfileDiv, "none");
         showHideEditIcon("block");
-    } else if (disable === "enable") {
-        enableFormElements();
-        showHideFormButtons("block");
+    } else if (disableEnable === "enable") {
+        disableEnableFormElements(myProfileDiv, "enable");
+        showHideFormButtons(myProfileDiv, "block");
         showHideEditIcon("none");
     }
-    show(profileForms);
     profileForms.addEventListener("click", showAndHideForms);
     personalInfoForm.addEventListener("submit", savePersonalInfo);
     aboutMeForm.addEventListener("submit", saveAboutMe);
@@ -84,86 +110,41 @@ function showHideEditIcon(property) {
     }
 }
 
-function showHideFormButtons(property) {
+function showHideFormButtons(parentDiv, property) {
     let buttons = document.querySelectorAll("input[type='submit']");
     for (let btn = 0; btn < buttons.length; btn++) {
-        buttons[btn].style.display = property;
+        if (parentDiv.contains(buttons[btn])) {
+            buttons[btn].style.display = property;
+        }
     }
 }
 
-function enableFormElements() {
+function disableEnableFormElements(parentDiv, property) {
     const inputsArr = document.querySelectorAll("input"),
         textareaArr = document.querySelectorAll("textarea"),
         selectArr = document.querySelectorAll("select");
-    for (let input = 0; input < inputsArr.length; input++) {
-        inputsArr[input].removeAttribute("disabled");
-    }
-    for (let textarea = 0; textarea < textareaArr.length; textarea++) {
-        textareaArr[textarea].removeAttribute("disabled");
-    }
-    for (let select = 0; select < selectArr.length; select++) {
-        selectArr[select].removeAttribute("disabled");
-    }
-}
-
-function disableFormElements() {
-    const inputsArr = document.querySelectorAll("input"),
-        textareaArr = document.querySelectorAll("textarea"),
-        selectArr = document.querySelectorAll("select");
-    for (let input = 0; input < inputsArr.length; input++) {
-        inputsArr[input].setAttribute("disabled", "disabled");
-    }
-    for (let textarea = 0; textarea < textareaArr.length; textarea++) {
-        textareaArr[textarea].setAttribute("disabled", "disabled");
-    }
-    for (let select = 0; select < selectArr.length; select++) {
-        selectArr[select].setAttribute("disabled", "disabled");
+    let allInputs = [...inputsArr, ...textareaArr, ...selectArr];
+    for (let input = 0; input < allInputs.length; input++) {
+        if (parentDiv.contains(allInputs[input])) {
+            property === "enable" ? allInputs[input].removeAttribute("disabled") : allInputs[input].setAttribute("disabled", "disabled");
+        }
     }
 }
 
 function addExistingData(object) {
-    /*delete object.status;
-    delete object.email;
-    delete object.username;
-    for (let info in object) {
-        let key = info,
-            infoArray = info.split(" ");
-        if (infoArray.length !== 1) {
-            key = infoArray[0] + infoArray[1].substring(0, 1).toUpperCase() + infoArray[1].substring(1);
-        }
-        let element = document.getElementById(key);
-        if (element.type === "text" || element.nodeName === "textarea" || element.nodeName === "select") {
-            document.getElementById(key).value = object[key];
-        } else if (element.type === "checkbox") {
-            // ako je string i ako je niz ---napisati logiku
-            for (let index = 0; index < object["other languages"].length; index++) {
-                let lang = object["other languages"][index][0],
-                    lvl = object["other languages"][index][1];
-                document.getElementById(lang).checked = true;
-                document.getElementById(lvl + "_" + lang).checked = true;
-                document.querySelector("label[for='" + lang + "']").style.color = "rgb(81, 0, 172)";
-                document.getElementById("language" + lang).style.display = "block";
-            }
-        } else if (element.type === "radio") {
-            document.getElementById(key).checked = true;
-        }
-
-    }*/
     if (typeof object.name !== "undefined") document.getElementById("name").value = object.name;
     if (typeof object.country !== "undefined") document.getElementById("country").value = object.country;
     if (typeof object.city !== "undefined") document.getElementById("city").value = object.city;
     if (typeof object["birth date"] !== "undefined") document.getElementById("birthDate").value = object["birth date"];
     if (typeof object.gender !== "undefined") document.getElementById(object.gender).checked = true;
-
     if (typeof object["about me"] !== "undefined") document.getElementById("aboutMe").value = object["about me"];
     if (typeof object.interests !== "undefined") {
         for (let index = 0; index < object["interests"].length; index++) {
             let option = object["interests"][index];
             document.getElementById(option).checked = true;
-            document.querySelector("label[for='" + option + "']").style.color = "rgb(81, 0, 172)";
+            document.querySelector("label[for='" + option + "']").style.color = fluencyColor;
         }
     }
-
     if (typeof object["native language"] !== "undefined") document.getElementById("nativeLang").value = object["native language"];
     if (typeof object["other languages"] !== "undefined") {
         for (let index = 0; index < object["other languages"].length; index++) {
@@ -171,7 +152,7 @@ function addExistingData(object) {
                 lvl = object["other languages"][index][1];
             document.getElementById(lang).checked = true;
             document.getElementById(lvl + "_" + lang).checked = true;
-            document.querySelector("label[for='" + lang + "']").style.color = "rgb(81, 0, 172)";
+            document.querySelector("label[for='" + lang + "']").style.color = fluencyColor;
             document.getElementById("language" + lang).style.display = "block";
         }
     }
@@ -203,8 +184,7 @@ function saveLangInfo(event) {
             }
         }
     }
-    firebase.database().ref('users/' + userUid).update(myProfileData);
-    alert("Informations are Saved");
+    updateInformationsInDatabase(userUid, myProfileData);
     showProfileEditForm("disable");
 }
 
@@ -216,8 +196,7 @@ function saveAboutMe(event) {
     for (let index = 0; index < checkboxArr.length; index++) {
         if (checkboxArr[index].checked) myProfileData.interests.push(checkboxArr[index].value)
     }
-    firebase.database().ref('users/' + userUid).update(myProfileData);
-    alert("Informations are Saved");
+    updateInformationsInDatabase(userUid, myProfileData);
     showProfileEditForm("disable");
 }
 
@@ -232,13 +211,17 @@ function savePersonalInfo(event) {
     for (let element = 0; element < radioInput.length; element++) {
         if (radioInput[element].checked === true) myProfileData.gender = radioInput[element].id;
     }
-    firebase.database().ref('users/' + userUid).update(myProfileData);
-    alert("Informations are Saved");
+    updateInformationsInDatabase(userUid, myProfileData);
     showProfileEditForm("disable");
 }
 
+function updateInformationsInDatabase(uid, infoObj) {
+    firebase.database().ref('users/' + uid).update(infoObj);
+    alert("Informations are Saved");
+}
+
 function showAndHideForms(event) {
-    if (event.target.nodeName === "IMG") {
+    if (event.target.className === "editIcon") {
         showProfileEditForm("enable");
     }
     if (event.target !== event.currentTarget) {
@@ -247,14 +230,6 @@ function showAndHideForms(event) {
             contentArray[0] = contentArray[0].toLowerCase();
             let formId = contentArray.join("") + "Form";
             setDisplayToForm(formId);
-        } else if (event.target.nodeName === "DIV") {
-            let targetChilds = event.target.childNodes;
-            for (let child = 0; child < targetChilds.length; child++) {
-                if (targetChilds[child].nodeName === "FORM") {
-                    let formId = targetChilds[child].id;
-                    setDisplayToForm(formId);
-                }
-            }
         }
     }
 }
@@ -262,12 +237,14 @@ function showAndHideForms(event) {
 function selectLanguage(event) {
     if (event.target !== event.currentTarget) {
         if (event.target.type !== "radio") {
+            let levelsDiv = document.getElementById("language" + event.target.id),
+                label = document.querySelector("label[for='" + event.target.id + "']");
             if (event.target.checked === true) {
-                document.getElementById("language" + event.target.id).style.display = "block";
-                document.querySelector("label[for='" + event.target.id + "']").style.color = "rgb(81, 0, 172)";
+                levelsDiv.style.display = "inherit";
+                label.style.color = fluencyColor;
             } else if (event.target.checked === false) {
-                document.getElementById("language" + event.target.id).style.display = "none";
-                document.querySelector("label[for='" + event.target.id + "']").style.color = "black";
+                levelsDiv.style.display = "none";
+                label.style.color = "inherit";
             }
         }
     }
@@ -275,12 +252,13 @@ function selectLanguage(event) {
 }
 
 function selectInterest(event) {
-    if (countSelectedInterests() <= 5){
+    if (countSelectedInterests() <= 5) {
         if (event.target !== event.currentTarget) {
+            let label = document.querySelector("label[for='" + event.target.id + "']");
             if (event.target.checked === true) {
-                document.querySelector("label[for='" + event.target.id + "']").style.color = "rgb(81, 0, 172)";
+                label.style.color = fluencyColor;
             } else if (event.target.checked === false) {
-                document.querySelector("label[for='" + event.target.id + "']").style.color = "black";
+                label.style.color = "inherit";
             }
         }
     } else {
@@ -293,7 +271,7 @@ function selectInterest(event) {
 function countSelectedInterests() {
     let counter = 0,
         interestsArr = document.querySelectorAll("input[name='interests']");
-    for (let index = 0; index < interestsArr.length; index++){
+    for (let index = 0; index < interestsArr.length; index++) {
         if (interestsArr[index].checked) counter++
     }
     return counter;
@@ -337,9 +315,9 @@ function addAttributesToElementAndLabel(element, label, level, lang) {
 }
 
 function setDisplayToForm(id) {
-    document.getElementById("personalInfoForm").style.display = id === "personalInfoForm" ? "block" : "none";
-    document.getElementById("aboutMeForm").style.display = id === "aboutMeForm" ? "block" : "none";
-    document.getElementById("languageInfoForm").style.display = id === "languageInfoForm" ? "block" : "none";
+    personalInfoForm.style.display = id === "personalInfoForm" ? "inherit" : "none";
+    aboutMeForm.style.display = id === "aboutMeForm" ? "inherit" : "none";
+    languageForm.style.display = id === "languageInfoForm" ? "inherit" : "none";
     setTimeout(() => {
         document.getElementById("personalInfoFormDiv").style.height = id === "personalInfoForm" ? "500px" : "60px";
         document.getElementById("aboutMeFormDiv").style.height = id === "aboutMeForm" ? "500px" : "60px";
@@ -348,10 +326,9 @@ function setDisplayToForm(id) {
 }
 
 function show(element) {
-    element.style.display = "block";
+    element.style.display = "inherit";
 }
 
 function hide(element) {
     element.style.display = "none";
 }
-
