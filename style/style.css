@@ -24,6 +24,14 @@ html, body {
     padding: 20px;
 }
 
+header{
+    width: 400px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+
 #fluency {
     margin: -10px auto 0;
     font-size: 60px;
@@ -137,6 +145,10 @@ input:focus {
     box-shadow: 0 0 10px rgb(81, 0, 172);
 }
 
+.border {
+    border: solid rgb(81, 0, 172) 1px;
+}
+
 #noticeBackground{
     position: absolute;
     top: 0;
@@ -164,4 +176,16 @@ input:focus {
     color: white;
     text-align: center;
     padding: 15px;
+}
+
+
+@media screen and (max-width:500px){
+   header{
+       width: 100%;
+       transform: scale(0.6,0.6);
+       margin-top: -30px;
+    }
+    #formDiv, .form {
+        width: 100%;
+    }
 }

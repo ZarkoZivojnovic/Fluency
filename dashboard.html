@@ -23,10 +23,10 @@
         <div id="myMessagesDiv" class="hide"></div>
         <div id="myProfileDiv" class="hide">
             <div id="profileForms">
-                <div id="personalInfoFormDiv" class="form">
+                <div id="personalInfoFormDiv" class="form infoFormDiv">
                     <h2 class="formName">Personal Info</h2>
                     <hr>
-                    <form action="?" method="post" id="personalInfoForm">
+                    <form action="?" method="post" id="personalInfoForm" class="infoForm">
                         <p>
                             <label for="name">Name:</label><br>
                             <input type="text" name="name" id="name">
@@ -54,16 +54,16 @@
                     </form>
                     <img src="graph/editIcon.png" alt="editIcon" class="editIcon">
                 </div>
-                <div id="aboutMeFormDiv" class="form">
+                <div id="aboutMeFormDiv" class="form infoFormDiv">
                     <h2 class="formName">About Me</h2>
                     <hr>
-                    <form action="?" method="post" id="aboutMeForm">
+                    <form action="?" method="post" id="aboutMeForm" class="infoForm">
                         <p>
                             <label for="aboutMe">About Me:</label><br>
                             <textarea name="aboutMe" id="aboutMe" cols="30" rows="7"></textarea>
                         </p>
                         <p>Interests:</p>
-                        <div id="interests">
+                        <div id="interests" class="border">
                             <input type="checkbox" name="interests" value="traveling" id="traveling"><label
                                 for="traveling">traveling</label><br>
                             <input type="checkbox" name="interests" value="sports" id="sports"><label for="sports">sports</label><br>
@@ -90,10 +90,10 @@
                     </form>
                     <img src="graph/editIcon.png" alt="editIcon" class="editIcon">
                 </div>
-                <div id="languageInfoFormDiv" class="form">
+                <div id="languageInfoFormDiv" class="form infoFormDiv">
                     <h2 class="formName">Language Info</h2>
                     <hr>
-                    <form action="?" method="post" id="languageInfoForm">
+                    <form action="?" method="post" id="languageInfoForm" class="infoForm">
                         <p>
                             <label for="nativeLang">Native Language:</label><br>
                             <select name="nativeLang" id="nativeLang">
@@ -174,7 +174,7 @@
                         </p>
                         <br>
                         <p>Other Languages:</p>
-                        <div id="lang">
+                        <div id="lang" class="border">
                             <input type="checkbox" name="Afrikanns" id="Afrikanns"><label
                                 for="Afrikanns">Afrikanns</label><br>
                             <input type="checkbox" name="Albanian" id="Albanian"><label
@@ -282,7 +282,10 @@
         <div id="myFriendsDiv" class="hide"></div>
         <div id="myNotesDiv" class="hide"></div>
         <div id="channelsDiv" class="hide borderAndShadow">
-            <div>
+            <div class="searchMenu border shadow">
+                <a href="#" id="showChannelsMenu">Choose Channel</a>
+            </div>
+            <div class="shadow border">
                 <div id="channelsList">
                     <form action="?" method="post" id="chooseChannel">
                         <div id="langSelect">
@@ -446,9 +449,9 @@
         </div>
     </div>
     <div id="sidebar">
-        <div id="showHideSidebar" class="showingSidebar">hide ⇒</div>
+        <div id="showHideSidebar" class="showingSidebar border">hide ⇒</div>
         <div>
-            <div id="pictureDiv">
+            <div id="pictureDiv" class="shadow">
             </div>
             <h2 id="usersName">
                 User

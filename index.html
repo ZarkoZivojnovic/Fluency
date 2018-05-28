@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Nunito" rel="stylesheet">
     <style>
-        body{
+        body {
             font-family: AvenirNextBold, 'Montserrat', sans-serif;
         }
 
@@ -24,10 +24,8 @@
             margin: 50px auto 30px;
         }
 
-        img {
-            margin: auto;
-            position: relative;
-            left: 45%;
+        #logo {
+            margin: 30px auto;
         }
 
         @-webkit-keyframes glow {
@@ -41,15 +39,22 @@
                 text-shadow: 0 0 10px rgba(81, 0, 172, 0.8);
             }
         }
+
+        @media screen and (max-width: 500px) {
+        }
     </style>
 </head>
 <body>
 <div id="wrap">
-    <div>
-        <h1 id="fluency">Fluency</h1>
-        <p id="slogan">is a bridge for a foreign culture</p>
+    <header>
+        <div>
+            <h1 id="fluency">Fluency</h1>
+            <p id="slogan">is a bridge for a foreign culture</p>
+        </div>
+    </header>
+    <div id="logo">
+        <img src="graph/logo.png" alt="logo">
     </div>
-    <img src="graph/logo.png" alt="logo" id="logo">
     <h3>loading...</h3>
 </div>
 <script src="https://www.gstatic.com/firebasejs/5.0.1/firebase-app.js"></script>

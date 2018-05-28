@@ -16,6 +16,28 @@ const navigation = document.getElementById("navigation"),
     mainDivs = [myProfileDiv, channelsDiv],
     fluencyColor = "rgb(81, 0, 172)";
 
+window.onload = () => {
+    if (screen.width < 650) {
+
+        sidebar.style.right = "-300px";
+        setUpSideBar("hiddenSidebar", "showingSidebar", "show ⇑");
+
+        document.getElementById("showChannelsMenu").addEventListener("click", event => {
+            event.preventDefault();
+            const channelsList = document.getElementById("channelsList");
+            if (channelsList.style.display === "none" || channelsList.style.display === "") {
+                channelsList.parentNode.style.display = "block";
+                channelsList.style.display = "block";
+                channelsList.style.width = "100%";
+                channelsList.style.position = "relative";
+            } else {
+                channelsList.parentNode.style.display = "inherit";
+                channelsList.style.display = "none";
+            }
+        });
+    }
+};
+
 signOutButton.addEventListener("click", goOffline);
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
@@ -38,14 +60,10 @@ firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offl
 showHideSidebar.addEventListener("click", event => {
     if (sidebar.style.right === "" || sidebar.style.right === "0px") {
         sidebar.style.right = "-300px";
-        showHideSidebar.classList.remove("showingSidebar");
-        showHideSidebar.classList.add("hiddenSidebar");
-        showHideSidebar.innerText = "show ⇑"
+        setUpSideBar("hiddenSidebar", "showingSidebar", "show ⇑");
     } else {
         sidebar.style.right = "0";
-        showHideSidebar.classList.remove("hiddenSidebar");
-        showHideSidebar.classList.add("showingSidebar");
-        showHideSidebar.innerText = "hide ⇒";
+        setUpSideBar("showingSidebar", "hiddenSidebar", "hide ⇒");
     }
 });
 
@@ -70,6 +88,12 @@ navigation.addEventListener("click", event => {
     }
     event.preventDefault();
 });
+
+function setUpSideBar(addClass, removeClass, string) {
+    showHideSidebar.classList.remove(removeClass);
+    showHideSidebar.classList.add(addClass);
+    showHideSidebar.innerText = string;
+}
 
 function selectLangChannel(event) {
     if (event.target.nodeName === "INPUT") console.log(event.target.value);
