@@ -16,7 +16,11 @@ const navigation = document.getElementById("navigation"),
     mainDivs = [myProfileDiv, channelsDiv],
     fluencyColor = "rgb(81, 0, 172)";
 
+var listaUseraIzBaze = [];
+
 signOutButton.addEventListener("click", goOffline);
+
+
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
 
@@ -60,6 +64,7 @@ navigation.addEventListener("click", event => {
                 });
             } else if (event.target.id === "channels") {
                 hide(myProfileDiv);
+                dovuciUsere();
                 channelsDiv.addEventListener("click", selectLangChannel);
             }
         }
@@ -334,3 +339,13 @@ function show(element) {
 function hide(element) {
     element.style.display = "none";
 }
+
+function dovuciUsere() {
+firebase.database().ref('users/').once('value').then(function(snapshot) {
+    snapshot.forEach(function(userSnapshot) {
+        var userFromBase = userSnapshot.val();
+        console.log(userFromBase);
+        listaUseraIzBaze.push(userFromBase);
+    });
+    console.log(listaUseraIzBaze);
+});}
