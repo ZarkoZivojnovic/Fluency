@@ -243,22 +243,12 @@ select {
 
 #langSelect {
     width: 110%;
-    max-height: 400px;
+    max-height: 350px;
     overflow-y: scroll;
 }
 
 #channelsList input[type="radio"] {
     display: none;
-}
-
-#channelsList select {
-    margin: 10px 0;
-    width: 110%;
-    overflow: hidden;
-    background-color: rgba(81, 0, 172, 0.4);
-    border-radius: 0;
-    color: white;
-    text-align: center;
 }
 
 #channelsList input[type="submit"]{
@@ -277,7 +267,7 @@ select {
 
 #channelsList p {
     padding: 3px;
-    width: 100%;
+    width: 80%;
     text-align: center;
     border-bottom: solid rgb(81, 0, 172) 1px;
 }
@@ -292,19 +282,40 @@ select {
     height: 600px;
 }
 
-#channelsDiv>div.searchMenu {
-    display: none;
-    width: 100%;
-    height: auto;
-    padding: 3px 0;
-    text-align: center;
-    position: relative;
-    border-radius: 20px 20px 0 0;
-}
-
 #channelsDiv>div.searchMenu:hover {
     background-color: rgb(81, 0, 172);
     border-color: white;
+}
+
+#levelSelect label {
+    width: 100%;
+    font-family: AvenirNextRegular, 'Montserrat', sans-serif;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+#levelSelect p {
+    padding: 0;
+    width: 60%;
+}
+
+#levelSelect {
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    width: 100%;
+}
+
+#showHideChannelsList {
+    display: none;
+    padding: 3px 5px;
+}
+
+h3 {
+    text-align: center;
+    border-bottom: solid white 1px;
+    width: 90%;
+    margin: 5px auto;
 }
 
 @media screen and (max-width:900px){
@@ -316,19 +327,31 @@ select {
 @media screen and (max-width:650px){
     #channelsDiv>div {
         width: 100%;
-        border-top-left-radius: 0;
-        border-top-right-radius: 0;
     }
 
     #usersList {
         width: 100%;
     }
 
-    #channelsList {
-        display: none;
-    }
-    #channelsDiv>div.searchMenu {
+    #showHideChannelsList{
         display: block;
+        text-align: center;
+    }
+
+    #channelsList {
+        position: absolute;
+        max-height: 25px;
+        width: 100px;
+        border-radius: 10px;
+    }
+
+    #langSelect{
+        max-height: 300px;
+    }
+
+    #channelsList:hover {
+        width: 60%;
+        max-height: 100%;
     }
 }
 

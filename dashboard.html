@@ -282,12 +282,11 @@
         <div id="myFriendsDiv" class="hide"></div>
         <div id="myNotesDiv" class="hide"></div>
         <div id="channelsDiv" class="hide borderAndShadow">
-            <div class="searchMenu border shadow">
-                <a href="#" id="showChannelsMenu">Choose Channel</a>
-            </div>
             <div class="shadow border">
                 <div id="channelsList">
+                    <div id="showHideChannelsList">Channels</div>
                     <form action="?" method="post" id="chooseChannel">
+                        <h3>Select language:</h3>
                         <div id="langSelect">
                             <p><input type="radio" name="langChannel" value="Afrikanns" id="channelAfrikanns"><label
                                     for="channelAfrikanns">Afrikanns</label></p>
@@ -434,13 +433,21 @@
                             <p><input type="radio" name="langChannel" value="Xhosa" id="channelXhosa"><label
                                     for="channelXhosa">Xhosa</label></p>
                         </div>
-                        <select name="level" id="level" size="5">
-                            <option value="select level" selected>select level</option>
-                            <option value="elementary">elementary</option>
-                            <option value="intermediate">intermediate</option>
-                            <option value="advanced">advanced</option>
-                            <option value="native">native</option>
-                        </select>
+                        <h3>Select level:</h3>
+                        <div id="levelSelect">
+                            <p>
+                                <input type="radio" name="level" id="elementary"><label for="elementary">elementary</label>
+                            </p>
+                            <p>
+                                <input type="radio" name="level" id="intermediate"><label for="intermediate">intermediate</label>
+                            </p>
+                            <p>
+                                <input type="radio" name="level" id="advanced"><label for="advanced">advanced</label>
+                            </p>
+                            <p>
+                                <input type="radio" name="level" id="native"><label for="native">native</label>
+                            </p>
+                        </div>
                         <input type="submit" value="Search">
                     </form>
                 </div>

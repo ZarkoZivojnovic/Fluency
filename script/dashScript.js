@@ -16,28 +16,6 @@ const navigation = document.getElementById("navigation"),
     mainDivs = [myProfileDiv, channelsDiv],
     fluencyColor = "rgb(81, 0, 172)";
 
-window.onload = () => {
-    if (screen.width < 650) {
-
-        sidebar.style.right = "-300px";
-        setUpSideBar("hiddenSidebar", "showingSidebar", "show ⇑");
-
-        document.getElementById("showChannelsMenu").addEventListener("click", event => {
-            event.preventDefault();
-            const channelsList = document.getElementById("channelsList");
-            if (channelsList.style.display === "none" || channelsList.style.display === "") {
-                channelsList.parentNode.style.display = "block";
-                channelsList.style.display = "block";
-                channelsList.style.width = "100%";
-                channelsList.style.position = "relative";
-            } else {
-                channelsList.parentNode.style.display = "inherit";
-                channelsList.style.display = "none";
-            }
-        });
-    }
-};
-
 signOutButton.addEventListener("click", goOffline);
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
