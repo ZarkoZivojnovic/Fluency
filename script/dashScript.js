@@ -345,7 +345,9 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
     snapshot.forEach(function(userSnapshot) {
         var userFromBase = userSnapshot.val();
         console.log(userFromBase);
+        if (userFromBase.status == "online") {
         listaUseraIzBaze.push(userFromBase);
+    }
     });
     console.log(listaUseraIzBaze);
 });}
