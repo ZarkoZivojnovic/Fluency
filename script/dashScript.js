@@ -354,6 +354,50 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
     console.log(listaUseraIzBaze);
 });}
 
+function prikaziUsere() {
+    var glavniDiv = document.getElementById("usersList");
+    for (korisnik of listaUseraIzBaze) {
+       var userDiv = document.createElement("div");
+       userDiv.id = korisnik.username;
+       userDiv.classList.add("userDiv");
+
+       var usersPhoto = document.createElement("div");
+       usersPhoto.classList.add("usersPhoto");
+
+       var usernameAndStatus = document.createElement("div");
+       usernameAndStatus.classList.add("usernameAndStatus");
+
+       var usernameP = document.createElement("h3");
+       usernameP.classList.add("username");
+       usernameP.innerHTML = korisnik.username;
+
+       var statusP = document.createElement("p");
+       statusP.classList.add("status");
+       statusP.innerHTML = korisnik.status;
+
+       usernameAndStatus.appendChild(usernameP);
+       usernameAndStatus.appendChild(statusP);
+
+       var iconsDiv = document.createElement("div");
+       iconsDiv.classList.add("icons");
+
+       var callIcon = document.createElement("div");
+       callIcon.classList.add("callIcon");
+
+       var msgIcon = document.createElement("div");
+       msgIcon.classList.add("msgIcon");
+
+       iconsDiv.appendChild(callIcon);
+       iconsDiv.appendChild(msgIcon);
+
+       userDiv.appendChild(usersPhoto);
+       userDiv.appendChild(usernameAndStatus);
+       userDiv.appendChild(iconsDiv);
+
+       glavniDiv.appendChild(userDiv);
+    }
+}
+
 function filtrirajPoJeziku(event) {
     event.preventDefault();
     var filterJezik = [];
