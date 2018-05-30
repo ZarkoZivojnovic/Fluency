@@ -17,10 +17,11 @@ const navigation = document.getElementById("navigation"),
     fluencyColor = "rgb(81, 0, 172)";
 
 var listaUseraIzBaze = [];
+var filtriraniUseri = [];
 
 signOutButton.addEventListener("click", goOffline);
 
-
+document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
 
@@ -349,5 +350,33 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
         listaUseraIzBaze.push(userFromBase);
     }
     });
+    console.log("USERI");
     console.log(listaUseraIzBaze);
 });}
+
+function filtrirajPoJeziku(event) {
+    event.preventDefault();
+    var filterJezik = [];
+    var radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']");
+    var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
+    for (jezik of radioJezici) {
+        if (jezik.checked == true) {
+           filterJezik.push(jezik.value);
+        }
+    }
+    for (nivo of radioNivoi) {
+        if (nivo.checked == true) {
+           filterJezik.push(nivo.id);
+        }
+    }
+    console.log(filterJezik);
+
+    for (korisnik of listaUseraIzBaze) {
+        for (korisnikJezik of korisnik["other languages"]) {
+            if (korisnikJezik.toString() == filterJezik.toString()) {
+                filtriraniUseri.push(korisnik);
+            }
+        }
+    }
+    console.log(filtriraniUseri);
+}
