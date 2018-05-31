@@ -479,7 +479,7 @@
     </div>
     <div id="sidebar">
         <div id="showHideSidebar" class="showingSidebar border">hide ⇒</div>
-        <div>
+        <div class="photoAndUsername">
             <div id="pictureDiv" class="shadow"></div>
             <button id="editProfilePhoto">Change Photo</button>
             <h2 id="usersName">
@@ -532,10 +532,11 @@
     </div>
 </div>
 <div id="uploadProfilePhoto" class="shadow">
+    <a class="close shadow" id="closeUploadDiv">X</a>
     <h3 id="uploadStatus"></h3>
     <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
         <div class="uploadBtnWrapper">
-            <button class="chooseFileBtn shadow">Choose a file</button>
+            <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
             <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile" name="profilePhoto" accept=".jpeg,.gif,.png,.jpg">
         </div>
         <input type="submit" value="Upload" class="shadow">

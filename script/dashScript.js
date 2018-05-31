@@ -333,8 +333,8 @@ function setDisplayToForm(id) {
     }, 200);
 }
 
-function show(element) {
-    element.style.display = "inherit";
+function show(element, property="inherit") {
+    element.style.display = property;
 }
 
 function hide(element) {

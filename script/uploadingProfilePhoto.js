@@ -1,6 +1,11 @@
 let editPhotoBtn = document.getElementById("editProfilePhoto"),
     uploadPhotoDiv = document.getElementById("uploadProfilePhoto"),
-    uploadPhotoForm = document.getElementById("uploadPhoto");
+    uploadPhotoForm = document.getElementById("uploadPhoto"),
+    closeUploadDiv = document.getElementById("closeUploadDiv"),
+    noticeBackground = document.getElementById("noticeBackground"),
+    uploadStatusInfo = document.getElementById("uploadStatus"),
+    chooseFileBtn = document.getElementById("chooseFileBtn"),
+    file = document.getElementById("profilePhotoFile");
 
 let showProfilePhoto = setInterval(() => {
     let img = document.createElement("img");
@@ -16,18 +21,32 @@ let showProfilePhoto = setInterval(() => {
 
 editPhotoBtn.addEventListener("click", event => {
     event.preventDefault();
-    uploadPhotoDiv.style.display = "block";
+    show(uploadPhotoDiv, "block");
+    show(noticeBackground);
+});
+
+chooseFileBtn.addEventListener("click", event => {
+    event.preventDefault();
+});
+
+file.addEventListener("change", event => {
+    uploadStatusInfo.innerHTML = `File ${file.files[0].name} added`;
 });
 
 uploadPhotoForm.addEventListener("submit", uploadProfilePhoto);
 
+closeUploadDiv.addEventListener("click", event => {
+    event.preventDefault();
+    hide(uploadPhotoDiv);
+    hide(noticeBackground);
+});
+
 function uploadProfilePhoto(event) {
     event.preventDefault();
-    let file = document.getElementById("profilePhotoFile"),
-        uploading = firebase.storage().ref('profilePhotos/' + myProfileData.username + "/" + file.name).put(file.files[0]);
-    uploading.on("state_changed", function (snapshot) {
+    let uploading = firebase.storage().ref('profilePhotos/' + myProfileData.username + "/" + file.name).put(file.files[0]);
+    uploading.on("state_changed", snapshot => {
         let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        document.getElementById("uploadStatus").innerHTML = `Upload is ${Math.round(progress)} % done`;
+        uploadStatusInfo.innerHTML = `Upload is ${Math.round(progress)} % done`;
         if (progress === 100) {
             getImageUrl(uploading);
         }
@@ -35,9 +54,11 @@ function uploadProfilePhoto(event) {
 }
 
 function getImageUrl(uploading) {
-    uploading.snapshot.ref.getDownloadURL().then(function (downloadURL) {
+    uploading.snapshot.ref.getDownloadURL().then(downloadURL => {
         myProfileData["profilePhoto"] = downloadURL;
         updateInformationsInDatabase(userUid, myProfileData);
-        setTimeout(()=>{location.reload();},3e3)
+        setTimeout(() => {
+            location.reload();
+        }, 3e3);
     });
 }

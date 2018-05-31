@@ -79,13 +79,15 @@ a {
 }
 
 #editProfilePhoto {
-    opacity: 0.3;
+    height: 150px;
+    width: 150px;
+    opacity: 0;
     position: relative;
-    top: -90px;
+    top: -170px;
     background: rgba(0, 0, 0, 0.5);
     padding: 10px;
     border: 0;
-    border-radius: 5px;
+    border-radius: 100%;
     color: white;
     font-weight: 600;
     text-shadow: 0 0 1px black;
@@ -96,6 +98,10 @@ a {
 
 #editProfilePhoto:hover {
     opacity: 1;
+}
+
+#editProfilePhoto:focus {
+    outline: 0;
 }
 
 #uploadProfilePhoto {
@@ -135,7 +141,6 @@ a {
     display: none;
 }
 
-
 .uploadBtnWrapper {
     position: relative;
     overflow: hidden;
@@ -143,24 +148,36 @@ a {
 }
 
 .chooseFileBtn {
+    width: 100%;
+    height: 40px;
     color: white;
     background-color: inherit;
     padding: 5px 20px;
     border: solid 1px white;
     border-radius: 30px;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 }
 
 .uploadBtnWrapper input[type=file] {
-    font-size: 40px;
+    width: 100%;
+    height: 40px;
+    font-size: 50px;
     position: absolute;
     left: 0;
     top: 0;
     opacity: 0;
+    cursor: pointer;
+}
+
+.photoAndUsername{
+    position: relative;
+    top:10%;
 }
 
 #usersName {
+    position: relative;
+    top: -150px;
     color: white;
 }
 
@@ -524,7 +541,7 @@ h3 {
     overflow-y: scroll;
 }
 
-div.usersPhoto{
+div.usersPhoto {
     background-color: indianred;
 
 }
@@ -556,7 +573,7 @@ div.usersPhoto{
 .username, .status {
     text-align: left;
     width: 100%;
-    border:0;
+    border: 0;
     margin: 0;
 }
 
@@ -569,7 +586,7 @@ div.usersPhoto{
     flex-direction: row;
 }
 
-.icons>div {
+.icons > div {
     height: 50px;
     width: 50px;
     border: solid gray 3px;
@@ -579,7 +596,7 @@ div.usersPhoto{
     background-size: cover;
 }
 
-.icons>div:hover{
+.icons > div:hover {
     box-shadow: 0 0 5px 1px rgb(81, 0, 172);
 }
 
@@ -597,6 +614,24 @@ div .callIcon {
 
 .callIcon {
     background: url("../graph/phoneIcon.png");
+}
+
+.close {
+    position: relative;
+    top:-20px;
+    right: -80%;
+    width: 35px;
+    color: white;
+    border: solid 1px white;
+    border-radius: 5px;
+    text-align: center;
+    padding: 2px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.close:hover {
+    background: rgb(81, 0, 172);
 }
 
 @media screen and (max-width: 900px) {
