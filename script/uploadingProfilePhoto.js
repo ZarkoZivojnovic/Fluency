@@ -41,6 +41,7 @@ closeUploadDiv.addEventListener("click", event => {
     hide(noticeBackground);
 });
 
+
 function uploadProfilePhoto(event) {
     event.preventDefault();
     let uploading = firebase.storage().ref('profilePhotos/' + myProfileData.username + "/" + file.name).put(file.files[0]);

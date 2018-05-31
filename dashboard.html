@@ -531,16 +531,18 @@
         <button class="profileBtns">Add To Favorites</button>
     </div>
 </div>
-<div id="uploadProfilePhoto" class="shadow">
-    <a class="close shadow" id="closeUploadDiv">X</a>
-    <h3 id="uploadStatus"></h3>
-    <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
-        <div class="uploadBtnWrapper">
-            <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
-            <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile" name="profilePhoto" accept=".jpeg,.gif,.png,.jpg">
-        </div>
-        <input type="submit" value="Upload" class="shadow">
-    </form>
+<div class="center">
+    <div id="uploadProfilePhoto" class="shadow">
+        <a class="close shadow" id="closeUploadDiv">X</a>
+        <h3 id="uploadStatus"></h3>
+        <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
+            <div class="uploadBtnWrapper">
+                <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
+                <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile" name="profilePhoto" accept=".jpeg,.gif,.png,.jpg">
+            </div>
+            <input type="submit" value="Upload" class="shadow">
+        </form>
+    </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>

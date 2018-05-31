@@ -105,7 +105,7 @@ a {
 }
 
 #uploadProfilePhoto {
-    /*display: none;*/
+    display: none;
     position: relative;
     width: 400px;
     background: rgba(0, 0, 0, 0.5);
@@ -635,6 +635,12 @@ div .callIcon {
 
 .close:hover {
     background: rgb(81, 0, 172);
+}
+
+.center {
+    position: absolute;
+    top: 150px;
+    width: 100%;
 }
 
 @media screen and (max-width: 900px) {
