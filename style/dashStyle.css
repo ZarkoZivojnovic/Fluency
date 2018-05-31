@@ -75,6 +75,89 @@ a {
     border-radius: 100%;
     border: solid gray 4px;
     box-shadow: 0 0 10px 2px rgb(81, 0, 172);
+    overflow: hidden;
+}
+
+#editProfilePhoto {
+    opacity: 0.3;
+    position: relative;
+    top: -90px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border: 0;
+    border-radius: 5px;
+    color: white;
+    font-weight: 600;
+    text-shadow: 0 0 1px black;
+    transition: opacity 600ms;
+    cursor: pointer;
+    z-index: 10;
+}
+
+#editProfilePhoto:hover {
+    opacity: 1;
+}
+
+#uploadProfilePhoto {
+    display: none;
+    position: relative;
+    width: 400px;
+    top: -70%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 30px 20px;
+    border-radius: 15px;
+}
+
+#uploadProfilePhoto input {
+    border-color: white;
+    color: white;
+    margin: 10px auto;
+}
+
+#uploadProfilePhoto input[type="file"] {
+    border-radius: 10px;
+}
+
+#uploadProfilePhoto input[type="submit"]:hover {
+    background: rgb(81, 0, 172);
+}
+
+#uploadPhoto {
+    border-radius: 10px;
+}
+
+#uploadProfilePhoto h3 {
+    border: 0;
+    color: white;
+}
+
+#uploadProfilePhoto label {
+    display: none;
+}
+
+
+.uploadBtnWrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.chooseFileBtn {
+    color: white;
+    background-color: inherit;
+    padding: 5px 20px;
+    border: solid 1px white;
+    border-radius: 30px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.uploadBtnWrapper input[type=file] {
+    font-size: 40px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
 }
 
 #usersName {

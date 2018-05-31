@@ -18,7 +18,6 @@ const navigation = document.getElementById("navigation"),
 
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
-
 signOutButton.addEventListener("click", goOffline);
 
 document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
@@ -355,6 +354,7 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
 });}
 
 function prikaziUsere() {
+    console.log("prikazi");
     var glavniDiv = document.getElementById("usersList");
     for (korisnik of listaUseraIzBaze) {
        var userDiv = document.createElement("div");
@@ -424,3 +424,4 @@ function filtrirajPoJeziku(event) {
     }
     console.log(filtriraniUseri);
 }
+
