@@ -18,8 +18,9 @@ const navigation = document.getElementById("navigation"),
 
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
-signOutButton.addEventListener("click", goOffline);
 var glavniDiv = document.getElementById("usersList");
+
+signOutButton.addEventListener("click", goOffline);
 
 document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
 
@@ -140,28 +141,35 @@ function disableEnableFormElements(parentDiv, property) {
 }
 
 function addExistingData(object) {
-    if (typeof object.name !== "undefined") document.getElementById("name").value = object.name;
-    if (typeof object.country !== "undefined") document.getElementById("country").value = object.country;
-    if (typeof object.city !== "undefined") document.getElementById("city").value = object.city;
-    if (typeof object["birth date"] !== "undefined") document.getElementById("birthDate").value = object["birth date"];
-    if (typeof object.gender !== "undefined") document.getElementById(object.gender).checked = true;
-    if (typeof object["about me"] !== "undefined") document.getElementById("aboutMe").value = object["about me"];
-    if (typeof object.interests !== "undefined") {
-        for (let index = 0; index < object["interests"].length; index++) {
-            let option = object["interests"][index];
-            document.getElementById(option).checked = true;
-            document.querySelector("label[for='" + option + "']").style.color = fluencyColor;
+    let inputsWithValue = ["name", "country", "city", "birthDate", "aboutMe", "nativeLanguage"],
+        inputsWithChecked = ["gender", "interests", "otherLanguages"];
+    for (let input = 0; input<inputsWithValue.length; input++) {
+        let key = inputsWithValue[input].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
+        if (typeof object[key] !== "undefined") {
+            document.getElementById(inputsWithValue[input]).value = object[key];
         }
     }
-    if (typeof object["native language"] !== "undefined") document.getElementById("nativeLang").value = object["native language"];
-    if (typeof object["other languages"] !== "undefined") {
-        for (let index = 0; index < object["other languages"].length; index++) {
-            let lang = object["other languages"][index][0],
-                lvl = object["other languages"][index][1];
-            document.getElementById(lang).checked = true;
-            document.getElementById(lvl + "_" + lang).checked = true;
-            document.querySelector("label[for='" + lang + "']").style.color = fluencyColor;
-            document.getElementById("language" + lang).style.display = "block";
+    for (let index = 0; index<inputsWithChecked.length; index++){
+        let key = inputsWithChecked[index].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
+        if (typeof object[key] !== "undefined") {
+            if (inputsWithChecked[index] === "gender"){
+                document.getElementById(object[key]).checked = true;
+            } else if (inputsWithChecked[index] === "interests"){
+                for (let interest = 0; interest < object[key].length; interest++) {
+                    let option = object[key][interest];
+                    document.getElementById(option).checked = true;
+                    document.querySelector("label[for='" + option + "']").style.color = fluencyColor;
+                }
+            } else if (inputsWithChecked[index] === "otherLanguages"){
+                for (let data = 0; data < object[key].length; data++) {
+                    let lang = object[key][data][0],
+                        lvl = object[key][data][1];
+                    document.getElementById(lang).checked = true;
+                    document.getElementById(lvl + "_" + lang).checked = true;
+                    document.querySelector("label[for='" + lang + "']").style.color = fluencyColor;
+                    document.getElementById("language" + lang).style.display = "block";
+                }
+            }
         }
     }
 }
@@ -177,7 +185,7 @@ function getExistingData(userId) {
 function saveLangInfo(event) {
     event.preventDefault();
     const checkboxArray = document.querySelectorAll("input[type='checkbox']");
-    myProfileData["native language"] = document.getElementById("nativeLang").value;
+    myProfileData["native language"] = document.getElementById("nativeLanguage").value;
     myProfileData["other languages"] = [];
     for (let element = 0; element < checkboxArray.length; element++) {
         let language = checkboxArray[element];
