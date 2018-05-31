@@ -19,6 +19,7 @@ const navigation = document.getElementById("navigation"),
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
 signOutButton.addEventListener("click", goOffline);
+var glavniDiv = document.getElementById("usersList");
 
 document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
 
@@ -341,6 +342,7 @@ function hide(element) {
 }
 
 function dovuciUsere() {
+	listaUseraIzBaze = [];
 firebase.database().ref('users/').once('value').then(function(snapshot) {
     snapshot.forEach(function(userSnapshot) {
         var userFromBase = userSnapshot.val();
@@ -351,12 +353,13 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
     });
     console.log("USERI");
     console.log(listaUseraIzBaze);
+    prikaziUsere(listaUseraIzBaze);
 });}
 
-function prikaziUsere() {
+function prikaziUsere(nizUsera) {
     console.log("prikazi");
-    var glavniDiv = document.getElementById("usersList");
-    for (korisnik of listaUseraIzBaze) {
+    glavniDiv.innerHTML = "";
+    for (korisnik of nizUsera) {
        var userDiv = document.createElement("div");
        userDiv.id = korisnik.username;
        userDiv.classList.add("userDiv");
@@ -401,6 +404,8 @@ function prikaziUsere() {
 function filtrirajPoJeziku(event) {
     event.preventDefault();
     var filterJezik = [];
+    filtriraniUseri = [];
+    var divUser = document.getElementsByClassName("userDiv");
     var radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']");
     var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
     for (jezik of radioJezici) {
@@ -419,9 +424,13 @@ function filtrirajPoJeziku(event) {
         for (korisnikJezik of korisnik["other languages"]) {
             if (korisnikJezik.toString() == filterJezik.toString()) {
                 filtriraniUseri.push(korisnik);
+
             }
         }
     }
     console.log(filtriraniUseri);
+    prikaziUsere(filtriraniUseri);
+    
+    
 }
 
