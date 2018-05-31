@@ -106,18 +106,21 @@ a {
 
 #uploadProfilePhoto {
     display: none;
-    position: relative;
-    width: 400px;
-    top: -70%;
+    position: absolute;
+    top:20%;
+    left: 35%;
+    width: 30%;
     background: rgba(0, 0, 0, 0.5);
     padding: 30px 20px;
     border-radius: 15px;
 }
 
 #uploadProfilePhoto input {
+    height: auto;
     border-color: white;
     color: white;
     margin: 10px auto;
+    padding: 10px;
 }
 
 #uploadProfilePhoto input[type="file"] {
@@ -355,7 +358,7 @@ select {
     height: auto;
     padding: 10px;
     color: white;
-    margin: 25px auto;
+    margin: 10px auto;
     border: solid white 1px;
     cursor: pointer;
 }

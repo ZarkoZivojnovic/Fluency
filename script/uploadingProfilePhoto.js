@@ -11,7 +11,7 @@ let showProfilePhoto = setInterval(() => {
     let img = document.createElement("img");
     if (typeof myProfileData.profilePhoto !== "undefined") {
         img.setAttribute("src", myProfileData.profilePhoto);
-        if (img.width > 0) {
+        if (img.width > 0 && img.height > 0) {
             img.width < img.height ? img.style.width = "100%" : img.style.height = "100%";
             document.getElementById("pictureDiv").appendChild(img);
             clearInterval(showProfilePhoto);
