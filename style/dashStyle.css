@@ -105,14 +105,14 @@ a {
 }
 
 #uploadProfilePhoto {
-    display: none;
-    position: absolute;
-    top:20%;
-    left: 35%;
-    width: 30%;
+    /*display: none;*/
+    position: relative;
+    width: 400px;
     background: rgba(0, 0, 0, 0.5);
     padding: 30px 20px;
     border-radius: 15px;
+    margin: 5px auto;
+    height: 500px;
 }
 
 #uploadProfilePhoto input {
