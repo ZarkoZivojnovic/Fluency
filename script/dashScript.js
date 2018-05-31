@@ -18,10 +18,13 @@ const navigation = document.getElementById("navigation"),
 
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
+var useriZaPrikaz = [];
 var glavniDiv = document.getElementById("usersList");
 
 signOutButton.addEventListener("click", goOffline);
 
+document.getElementById("backSaProfila").addEventListener('click', backSaProfila);
+document.getElementById("usersList").addEventListener('click', udjiNaProfil);
 document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
@@ -365,11 +368,15 @@ firebase.database().ref('users/').once('value').then(function(snapshot) {
 });}
 
 function prikaziUsere(nizUsera) {
+    useriZaPrikaz = [];
     console.log("prikazi");
     glavniDiv.innerHTML = "";
     for (korisnik of nizUsera) {
+        useriZaPrikaz.push(korisnik);
        var userDiv = document.createElement("div");
-       userDiv.id = korisnik.username;
+       //userDiv.id = "useriZaPrikaz["+nizUsera.indexOf(korisnik)+"]";
+       userDiv.id = nizUsera.indexOf(korisnik);
+       console.log(userDiv.id);
        userDiv.classList.add("userDiv");
 
        var usersPhoto = document.createElement("div");
@@ -440,5 +447,27 @@ function filtrirajPoJeziku(event) {
     prikaziUsere(filtriraniUseri);
     
     
+}
+
+function udjiNaProfil(event) { 
+    var indexOsobe = event.target.id;
+    document.getElementById("usersUsername").textContent = useriZaPrikaz[indexOsobe].username;
+    document.getElementById("usersGender").textContent = useriZaPrikaz[indexOsobe].gender;
+    document.getElementById("usersYears").textContent = useriZaPrikaz[indexOsobe]["birth date"];
+    document.getElementById("usersAboutMe").textContent = useriZaPrikaz[indexOsobe]["about me"];
+    document.getElementById("usersCountry").textContent = useriZaPrikaz[indexOsobe].country;
+    document.getElementById("usersCity").textContent = useriZaPrikaz[indexOsobe].city;
+    document.getElementById("usersInterests").textContent = useriZaPrikaz[indexOsobe].interests;
+    document.getElementById("usersLanguages").textContent = useriZaPrikaz[indexOsobe]["other languages"];
+    document.getElementById("contentsDiv").style.display = "none";
+    document.getElementById("profileDiv").style.display = "block";
+    
+        
+
+}
+
+function backSaProfila() {
+    document.getElementById("profileDiv").style.display = "none";
+    document.getElementById("contentsDiv").style.display = "block";
 }
 
