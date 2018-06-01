@@ -92,6 +92,7 @@ function userRegistration(event) {
 }
 
 function setStatus(status, userId) {
+    if (typeof userId === "undefined") return;
     firebase.database().ref('users/' + userId).update({
         status: status
     });

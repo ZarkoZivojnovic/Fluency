@@ -449,19 +449,22 @@ function filtrirajPoJeziku(event) {
     
 }
 
-function udjiNaProfil(event) { 
+function udjiNaProfil(event) {
     var indexOsobe = event.target.id;
+    let years = useriZaPrikaz[indexOsobe]["birth date"]=== "" ? "":new Date().getFullYear() - new Date(useriZaPrikaz[indexOsobe]["birth date"]).getFullYear()+"y/o";
+    document.getElementById("profilePhoto").style.backgroundImage = "url('"+useriZaPrikaz[indexOsobe].profilePhoto+"')";
+    document.getElementById("profilePhoto").style.backgroundSize = "cover";
     document.getElementById("usersUsername").textContent = useriZaPrikaz[indexOsobe].username;
     document.getElementById("usersGender").textContent = useriZaPrikaz[indexOsobe].gender;
-    document.getElementById("usersYears").textContent = useriZaPrikaz[indexOsobe]["birth date"];
+    document.getElementById("usersYears").textContent = years;
     document.getElementById("usersAboutMe").textContent = useriZaPrikaz[indexOsobe]["about me"];
     document.getElementById("usersCountry").textContent = useriZaPrikaz[indexOsobe].country;
     document.getElementById("usersCity").textContent = useriZaPrikaz[indexOsobe].city;
-    document.getElementById("usersInterests").textContent = useriZaPrikaz[indexOsobe].interests;
-    document.getElementById("usersLanguages").textContent = useriZaPrikaz[indexOsobe]["other languages"];
+    document.getElementById("usersInterests").textContent = useriZaPrikaz[indexOsobe].interests.join(", ");
+    document.getElementById("usersLanguages").textContent = useriZaPrikaz[indexOsobe]["other languages"].join(", ");
     document.getElementById("contentsDiv").style.display = "none";
     document.getElementById("profileDiv").style.display = "block";
-    
+    show(noticeBackground);
         
 
 }
@@ -469,5 +472,6 @@ function udjiNaProfil(event) {
 function backSaProfila() {
     document.getElementById("profileDiv").style.display = "none";
     document.getElementById("contentsDiv").style.display = "block";
+    hide(noticeBackground);
 }
 

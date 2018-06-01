@@ -20,8 +20,10 @@ html, body {
 
 #wrap {
     background-color: rgb(80,71,88);
+    width: 100%;
     min-height: 100%;
     padding: 20px;
+    position: fixed;
 }
 
 header{

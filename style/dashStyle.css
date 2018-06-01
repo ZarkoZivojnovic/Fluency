@@ -46,7 +46,7 @@
 }
 
 #contentsDiv {
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 ul {
@@ -84,7 +84,7 @@ a {
     opacity: 0;
     position: relative;
     top: -170px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border: 0;
     border-radius: 100%;
@@ -112,7 +112,7 @@ a {
     padding: 30px 20px;
     border-radius: 15px;
     margin: 5px auto;
-    height: 500px;
+    height: auto;
 }
 
 #uploadProfilePhoto input {
@@ -429,14 +429,14 @@ h3 {
     color: white;
     text-align: center;
     position: absolute;
-    top: 150px;
+    top: 100px;
     width: 100%;
-    height: 600px;
+    /*height: 600px;*/
 }
 
 #profile {
     width: 500px;
-    height: 600px;
+    min-height: 600px;
     border-radius: 10px;
     background-color: rgba(0, 0, 0, 0.5);
 }
@@ -446,9 +446,9 @@ h3 {
     height: 150px;
     border-radius: 100%;
     border: solid gray 4px;
-    background: indianred;
     position: relative;
     top: -50px;
+    background: indianred;
 }
 
 #genderAndYears {
