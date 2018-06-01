@@ -461,7 +461,16 @@ h3 {
 .genderAndYears {
     width: 50%;
     margin: 20px;
-    font-size: 30px;
+}
+
+#usersYears {
+    font-size: 18px;
+}
+
+#usersGender {
+    font-size: 40px;
+    font-weight: 900;
+    margin: -5px 20px;
 }
 
 .usernameAndAboutMe {
