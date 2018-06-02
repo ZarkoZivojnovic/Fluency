@@ -448,9 +448,14 @@ h3 {
     text-align: center;
 }
 
-#favorites li:hover {
+#favorites li:focus {
     background-color: rgba(0, 0, 0, 0.4);
 }
+
+#aFavs {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
 
 
 .favList {

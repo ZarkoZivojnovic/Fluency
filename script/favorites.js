@@ -24,8 +24,12 @@ function refreshFavorites(event) {
     console.log(event.target.id);
     if (event.target !== event.currentTarget) {
         if (event.target.id === "allFavs") {
+            document.getElementById("aFavs").style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+            document.getElementById("oFavs").style.backgroundColor = "rgba(255, 255, 255, 0.1)";
             showFavs(myProfileData.myFavorites);
         } else if (event.target.id === "onlineFavs") {
+            document.getElementById("aFavs").style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            document.getElementById("oFavs").style.backgroundColor = "rgba(0, 0, 0, 0.4)";
             showFavs(myProfileData.myFavorites, "online");
         }
     }
