@@ -279,9 +279,17 @@
                 </div>
             </div>
         </div>
-        <div id="myFriendsDiv" class="hide"></div>
+        <div id="myFavoritesDiv" class="hide">
+            <div id="favorites" class="border shadow">
+                <ul id="favNavigation">
+                    <li><a href="#" id="allFavs">All Favorites</a></li>
+                    <li><a href="#" id="onlineFavs">Online Favorites</a></li>
+                </ul>
+                <div id="favoritesList"></div>
+            </div>
+        </div>
         <div id="myNotesDiv" class="hide"></div>
-        <div id="channelsDiv" class="hide borderAndShadow">
+        <div id="channelsDiv" class="hide">
             <div class="shadow border">
                 <div id="channelsList">
                     <div id="showHideChannelsList">Channels</div>
@@ -436,7 +444,8 @@
                         <h3>Select level:</h3>
                         <div id="levelSelect">
                             <p>
-                                <input type="radio" name="level" id="elementary"><label for="elementary">elementary</label>
+                                <input type="radio" name="level" id="elementary"><label
+                                    for="elementary">elementary</label>
                             </p>
                             <p>
                                 <input type="radio" name="level" id="intermediate"><label for="intermediate">intermediate</label>
@@ -458,7 +467,7 @@
                     diva #usersPhoto ali to nam jos uvek ne treba xD
                     -->
 
-                                <!-- model -->
+                    <!-- model -->
 
                     <!--    <div class="userDiv" id="username">
                                 <div class="usersPhoto"></div>
@@ -489,7 +498,7 @@
         <ul id="navigation">
             <li><a href="#" id="myMessages" class="">My Messages</a></li>
             <li><a href="#" id="myProfile" class="">My Profile</a></li>
-            <li><a href="#" id="myFriends" class="">My Friends</a></li>
+            <li><a href="#" id="myFavorites" class="">My Favorites</a></li>
             <li><a href="#" id="myNotes" class="">My Notes</a></li>
             <li><a href="#" id="channels" class="">Channels</a></li>
         </ul>
@@ -498,6 +507,21 @@
 </div>
 <div id="noticeBackground"></div>
 <div id="notice" class="shadow"></div>
+<div id="uploadBackground" class="center">
+    <div id="uploadProfilePhoto" class="shadow">
+        <a class="close shadow" id="closeUploadDiv">X</a>
+        <h3 id="uploadStatus"></h3>
+        <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
+            <div class="uploadBtnWrapper">
+                <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
+                <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile"
+                                                                       name="profilePhoto"
+                                                                       accept=".jpeg,.gif,.png,.jpg">
+            </div>
+            <input type="submit" value="Upload" class="shadow">
+        </form>
+    </div>
+</div>
 <div id="profileDiv">
     <div id="profile" class="shadow border">
         <div id="profilePhoto" class="shadow"></div>
@@ -527,21 +551,10 @@
             <p>Languages:</p>
             <p id="usersLanguages"></p>
         </div>
-        <button id ="backSaProfila" class="profileBtns">🡐 Back</button>
-        <button class="profileBtns">Add To Favorites</button>
-    </div>
-</div>
-<div class="center">
-    <div id="uploadProfilePhoto" class="shadow">
-        <a class="close shadow" id="closeUploadDiv">X</a>
-        <h3 id="uploadStatus"></h3>
-        <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
-            <div class="uploadBtnWrapper">
-                <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
-                <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile" name="profilePhoto" accept=".jpeg,.gif,.png,.jpg">
-            </div>
-            <input type="submit" value="Upload" class="shadow">
-        </form>
+        <div class="flexRow">
+            <button id="backSaProfila" class="profileBtns">🡐 Back</button>
+            <button class="profileBtns" id="addToFavsBtn">Add To Favorites</button>
+        </div>
     </div>
 </div>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
@@ -551,5 +564,6 @@
 <script src="script/main.js"></script>
 <script src="script/dashScript.js"></script>
 <script src="script/uploadingProfilePhoto.js"></script>
+<script src="script/favorites.js"></script>
 </body>
 </html>

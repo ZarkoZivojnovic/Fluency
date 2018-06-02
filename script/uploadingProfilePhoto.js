@@ -1,8 +1,7 @@
 let editPhotoBtn = document.getElementById("editProfilePhoto"),
-    uploadPhotoDiv = document.getElementById("uploadProfilePhoto"),
+    uploadBackground = document.getElementById("uploadBackground"),
     uploadPhotoForm = document.getElementById("uploadPhoto"),
     closeUploadDiv = document.getElementById("closeUploadDiv"),
-    noticeBackground = document.getElementById("noticeBackground"),
     uploadStatusInfo = document.getElementById("uploadStatus"),
     chooseFileBtn = document.getElementById("chooseFileBtn"),
     file = document.getElementById("profilePhotoFile");
@@ -19,10 +18,16 @@ let showProfilePhoto = setInterval(() => {
     }
 }, 100);
 
+uploadBackground.addEventListener("click", event=>{
+    event.stopPropagation();
+    if (event.target === event.currentTarget) {
+        hide(uploadBackground);
+    }
+});
+
 editPhotoBtn.addEventListener("click", event => {
     event.preventDefault();
-    show(uploadPhotoDiv, "block");
-    show(noticeBackground);
+    show(uploadBackground, "block");
 });
 
 chooseFileBtn.addEventListener("click", event => {
@@ -37,8 +42,7 @@ uploadPhotoForm.addEventListener("submit", uploadProfilePhoto);
 
 closeUploadDiv.addEventListener("click", event => {
     event.preventDefault();
-    hide(uploadPhotoDiv);
-    hide(noticeBackground);
+    hide(uploadBackground);
 });
 
 function uploadProfilePhoto(event) {

@@ -13,7 +13,9 @@ const navigation = document.getElementById("navigation"),
     sidebar = document.getElementById("sidebar"),
     myProfileData = getExistingData(userUid),
     usersName = document.getElementById("usersName"),
+    myFavoritesDiv = document.getElementById("myFavoritesDiv"),
     mainDivs = [myProfileDiv, channelsDiv],
+    profileDiv = document.getElementById("profileDiv"),
     fluencyColor = "rgb(81, 0, 172)";
 
 var listaUseraIzBaze = [];
@@ -26,6 +28,13 @@ signOutButton.addEventListener("click", goOffline);
 document.getElementById("backSaProfila").addEventListener('click', backSaProfila);
 document.getElementById("usersList").addEventListener('click', udjiNaProfil);
 document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
+
+profileDiv.addEventListener("click", event => {
+    event.stopPropagation();
+    if (event.target === event.currentTarget) {
+        hide(profileDiv);
+    }
+});
 
 addRadioInput(); // dok se ne nadje bolje mesto xD
 
@@ -65,12 +74,18 @@ navigation.addEventListener("click", event => {
                         clearInterval(waitingForData);
                         showProfileEditForm("disable");
                         hide(channelsDiv);
+                        hide(myFavoritesDiv)
                     }
                 });
             } else if (event.target.id === "channels") {
                 hide(myProfileDiv);
+                hide(myFavoritesDiv);
                 dovuciUsere();
                 channelsDiv.addEventListener("click", selectLangChannel);
+            } else if (event.target.id === "myFavorites") {
+                showFavs(myProfileData.myFavorites);
+                hide(myProfileDiv);
+                hide(channelsDiv)
             }
         }
     }
@@ -146,24 +161,24 @@ function disableEnableFormElements(parentDiv, property) {
 function addExistingData(object) {
     let inputsWithValue = ["name", "country", "city", "birthDate", "aboutMe", "nativeLanguage"],
         inputsWithChecked = ["gender", "interests", "otherLanguages"];
-    for (let input = 0; input<inputsWithValue.length; input++) {
+    for (let input = 0; input < inputsWithValue.length; input++) {
         let key = inputsWithValue[input].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
         if (typeof object[key] !== "undefined") {
             document.getElementById(inputsWithValue[input]).value = object[key];
         }
     }
-    for (let index = 0; index<inputsWithChecked.length; index++){
+    for (let index = 0; index < inputsWithChecked.length; index++) {
         let key = inputsWithChecked[index].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
         if (typeof object[key] !== "undefined") {
-            if (inputsWithChecked[index] === "gender"){
+            if (inputsWithChecked[index] === "gender") {
                 document.getElementById(object[key]).checked = true;
-            } else if (inputsWithChecked[index] === "interests"){
+            } else if (inputsWithChecked[index] === "interests") {
                 for (let interest = 0; interest < object[key].length; interest++) {
                     let option = object[key][interest];
                     document.getElementById(option).checked = true;
                     document.querySelector("label[for='" + option + "']").style.color = fluencyColor;
                 }
-            } else if (inputsWithChecked[index] === "otherLanguages"){
+            } else if (inputsWithChecked[index] === "otherLanguages") {
                 for (let data = 0; data < object[key].length; data++) {
                     let lang = object[key][data][0],
                         lvl = object[key][data][1];
@@ -344,7 +359,7 @@ function setDisplayToForm(id) {
     }, 200);
 }
 
-function show(element, property="inherit") {
+function show(element, property = "inherit") {
     element.style.display = property;
 }
 
@@ -353,19 +368,20 @@ function hide(element) {
 }
 
 function dovuciUsere() {
-	listaUseraIzBaze = [];
-firebase.database().ref('users/').once('value').then(function(snapshot) {
-    snapshot.forEach(function(userSnapshot) {
-        var userFromBase = userSnapshot.val();
-        console.log(userFromBase);
-        if (userFromBase.status == "online") {
-        listaUseraIzBaze.push(userFromBase);
-    }
+    listaUseraIzBaze = [];
+    firebase.database().ref('users/').once('value').then(function (snapshot) {
+        snapshot.forEach(function (userSnapshot) {
+            var userFromBase = userSnapshot.val();
+            console.log(userFromBase);
+            if (userFromBase.status == "online") {
+                listaUseraIzBaze.push(userFromBase);
+            }
+        });
+        console.log("USERI");
+        console.log("lista", listaUseraIzBaze, "length", listaUseraIzBaze.length);
+        prikaziUsere(listaUseraIzBaze);
     });
-    console.log("USERI");
-    console.log(listaUseraIzBaze);
-    prikaziUsere(listaUseraIzBaze);
-});}
+}
 
 function prikaziUsere(nizUsera) {
     useriZaPrikaz = [];
@@ -373,48 +389,48 @@ function prikaziUsere(nizUsera) {
     glavniDiv.innerHTML = "";
     for (korisnik of nizUsera) {
         useriZaPrikaz.push(korisnik);
-       var userDiv = document.createElement("div");
-       //userDiv.id = "useriZaPrikaz["+nizUsera.indexOf(korisnik)+"]";
-       userDiv.id = nizUsera.indexOf(korisnik);
-       console.log(userDiv.id);
-       userDiv.classList.add("userDiv");
+        var userDiv = document.createElement("div");
+        //userDiv.id = "useriZaPrikaz["+nizUsera.indexOf(korisnik)+"]";
+        userDiv.id = nizUsera.indexOf(korisnik);
+        console.log(userDiv.id);
+        userDiv.classList.add("userDiv");
 
-       var usersPhoto = document.createElement("div");
-       usersPhoto.classList.add("usersPhoto");
-       usersPhoto.style.backgroundImage = "url('"+korisnik.profilePhoto+"')";
-       usersPhoto.style.backgroundSize = "cover";
+        var usersPhoto = document.createElement("div");
+        usersPhoto.classList.add("usersPhoto");
+        usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
+        usersPhoto.style.backgroundSize = "cover";
 
-       var usernameAndStatus = document.createElement("div");
-       usernameAndStatus.classList.add("usernameAndStatus");
+        var usernameAndStatus = document.createElement("div");
+        usernameAndStatus.classList.add("usernameAndStatus");
 
-       var usernameP = document.createElement("h3");
-       usernameP.classList.add("username");
-       usernameP.innerHTML = korisnik.username;
+        var usernameP = document.createElement("h3");
+        usernameP.classList.add("username");
+        usernameP.innerHTML = korisnik.username;
 
-       var statusP = document.createElement("p");
-       statusP.classList.add("status");
-       statusP.innerHTML = korisnik.status;
+        var statusP = document.createElement("p");
+        statusP.classList.add("status");
+        statusP.innerHTML = korisnik.status;
 
-       usernameAndStatus.appendChild(usernameP);
-       usernameAndStatus.appendChild(statusP);
+        usernameAndStatus.appendChild(usernameP);
+        usernameAndStatus.appendChild(statusP);
 
-       var iconsDiv = document.createElement("div");
-       iconsDiv.classList.add("icons");
+        var iconsDiv = document.createElement("div");
+        iconsDiv.classList.add("icons");
 
-       var callIcon = document.createElement("div");
-       callIcon.classList.add("callIcon");
+        var callIcon = document.createElement("div");
+        callIcon.classList.add("callIcon");
 
-       var msgIcon = document.createElement("div");
-       msgIcon.classList.add("msgIcon");
+        var msgIcon = document.createElement("div");
+        msgIcon.classList.add("msgIcon");
 
-       iconsDiv.appendChild(callIcon);
-       iconsDiv.appendChild(msgIcon);
+        iconsDiv.appendChild(callIcon);
+        iconsDiv.appendChild(msgIcon);
 
-       userDiv.appendChild(usersPhoto);
-       userDiv.appendChild(usernameAndStatus);
-       userDiv.appendChild(iconsDiv);
+        userDiv.appendChild(usersPhoto);
+        userDiv.appendChild(usernameAndStatus);
+        userDiv.appendChild(iconsDiv);
 
-       glavniDiv.appendChild(userDiv);
+        glavniDiv.appendChild(userDiv);
     }
 }
 
@@ -427,12 +443,12 @@ function filtrirajPoJeziku(event) {
     var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
     for (jezik of radioJezici) {
         if (jezik.checked == true) {
-           filterJezik.push(jezik.value);
+            filterJezik.push(jezik.value);
         }
     }
     for (nivo of radioNivoi) {
         if (nivo.checked == true) {
-           filterJezik.push(nivo.id);
+            filterJezik.push(nivo.id);
         }
     }
     console.log(filterJezik);
@@ -449,40 +465,48 @@ function filtrirajPoJeziku(event) {
 }
 
 function udjiNaProfil(event) {
-    let indexOsobe = event.target.id,
-        birthday = useriZaPrikaz[indexOsobe]["birth date"]=== "" ? "": "🎂 "+ useriZaPrikaz[indexOsobe]["birth date"],
-        gender = "n/a",
-        languages = useriZaPrikaz[indexOsobe]["native language"],
-    otherLang = useriZaPrikaz[indexOsobe]["other languages"];
+    let indexOsobe = event.target.id;
+    if (indexOsobe === "") {
+        indexOsobe = event.target.parentNode.id;
+    }
+    if (indexOsobe === "") {
+        indexOsobe = event.target.parentNode.parentNode.id;
+    }
+    drawProfile(useriZaPrikaz[indexOsobe]);
+}
 
-    if (useriZaPrikaz[indexOsobe].gender === "male") {
+function backSaProfila(event) {
+    event.preventDefault();
+    hide(profileDiv);
+}
+
+function drawProfile(user) {
+    let birthday = user["birth date"] === "" ? "" : "🎂 " + user["birth date"],
+        gender = "n/a",
+        languages = user["native language"],
+        otherLang = user["other languages"];
+    if (user.gender === "male") {
         gender = "♂";
-    } else if  (useriZaPrikaz[indexOsobe].gender === "female"){
+    } else if (user.gender === "female") {
         gender = "♀";
     }
-
-    for (let i = 0; i < otherLang.length; i++){
-        languages += ", "+otherLang[i][0];
+    for (let i = 0; i < otherLang.length; i++) {
+        languages += ", " + otherLang[i][0];
     }
-
-    document.getElementById("profilePhoto").style.backgroundImage = "url('"+useriZaPrikaz[indexOsobe].profilePhoto+"')";
+    if (myProfileData.myFavorites.indexOf(user.username) !== -1) {
+        document.getElementById("addToFavsBtn").innerText = "Remove From Favorites"
+    }
+    document.getElementById("profilePhoto").style.backgroundImage = "url('" + user.profilePhoto + "')";
     document.getElementById("profilePhoto").style.backgroundSize = "cover";
-    document.getElementById("usersUsername").textContent = useriZaPrikaz[indexOsobe].username;
+    document.getElementById("usersUsername").textContent = user.username;
     document.getElementById("usersGender").textContent = gender;
     document.getElementById("usersYears").textContent = birthday;
-    document.getElementById("usersAboutMe").textContent = useriZaPrikaz[indexOsobe]["about me"];
-    document.getElementById("usersCountry").textContent = useriZaPrikaz[indexOsobe].country;
-    document.getElementById("usersCity").textContent = useriZaPrikaz[indexOsobe].city;
-    document.getElementById("usersInterests").textContent = useriZaPrikaz[indexOsobe].interests.join(", ");
+    document.getElementById("usersAboutMe").textContent = user["about me"];
+    document.getElementById("usersCountry").textContent = user.country;
+    document.getElementById("usersCity").textContent = user.city;
+    document.getElementById("usersInterests").textContent = user.interests.join(", ");
     document.getElementById("usersLanguages").textContent = languages;
-    document.getElementById("contentsDiv").style.display = "none";
-    document.getElementById("profileDiv").style.display = "block";
-    show(noticeBackground);
+    document.getElementById("addToFavsBtn").name = user.username;
+    document.getElementById("addToFavsBtn").style.display = user.username === myProfileData.username ? "none" : "inherit";
+    show(profileDiv);
 }
-
-function backSaProfila() {
-    document.getElementById("profileDiv").style.display = "none";
-    document.getElementById("contentsDiv").style.display = "block";
-    hide(noticeBackground);
-}
-
