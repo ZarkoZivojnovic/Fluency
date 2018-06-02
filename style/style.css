@@ -10,7 +10,7 @@ src: url(../font/AvenirBold.otf);
 
 html, body {
     box-sizing: border-box;
-    height: 100%;
+    /*height: 100%;*/
     font-family: AvenirNextBold, 'Montserrat', sans-serif;
 }
 *,*:before,*:after {
@@ -23,7 +23,7 @@ html, body {
     width: 100%;
     min-height: 100%;
     padding: 20px;
-    position: fixed;
+    position: absolute;
 }
 
 header{
