@@ -54,6 +54,7 @@ function drawFavsList(appendToElement, arr) {
     appendToElement.innerHTML = "";
     let div = document.createElement("div");
     div.classList.add("favsList");
+    div.classList.add("hideScrollbar");
     for (let fav = 0; fav < arr.length; fav++) {
         let favDiv = document.createElement("div"),
             photoDiv = document.createElement("div"),

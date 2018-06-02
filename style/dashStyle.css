@@ -4,8 +4,6 @@
 }
 
 #sidebar {
-    display: flex;
-    flex-direction: column;
     text-align: center;
     position: fixed;
     top: 0;
@@ -22,7 +20,6 @@
     padding: 3px 30px;
     color: white;
     background-color: rgba(81, 0, 172, 0.3);
-    cursor: pointer;
     transition: transform, top 1s;
 }
 
@@ -75,7 +72,6 @@ a {
     border-radius: 100%;
     border: solid gray 4px;
     box-shadow: 0 0 10px 2px rgb(81, 0, 172);
-    overflow: hidden;
 }
 
 #editProfilePhoto {
@@ -92,7 +88,6 @@ a {
     font-weight: 600;
     text-shadow: 0 0 1px black;
     transition: opacity 600ms;
-    cursor: pointer;
     z-index: 10;
 }
 
@@ -139,18 +134,12 @@ a {
     color: white;
 }
 
-#uploadProfilePhoto label {
-    display: none;
-}
-
 .uploadBtnWrapper {
     position: relative;
-    overflow: hidden;
     display: inline-block;
 }
 
 .chooseFileBtn {
-    width: 100%;
     height: 40px;
     color: white;
     background-color: inherit;
@@ -162,14 +151,12 @@ a {
 }
 
 .uploadBtnWrapper input[type=file] {
-    width: 100%;
     height: 40px;
     font-size: 50px;
     position: absolute;
     left: 0;
     top: 0;
     opacity: 0;
-    cursor: pointer;
 }
 
 .photoAndUsername {
@@ -198,7 +185,6 @@ a {
 }
 
 #lang, #interests {
-    width: 100%;
     max-height: 200px;
     overflow-y: scroll;
     text-align: left;
@@ -210,15 +196,12 @@ a {
 .infoForm {
     text-align: center;
     width: 90%;
-    display: none;
-    overflow: hidden;
 }
 
 .infoFormDiv {
     margin: 0 auto;
     height: 60px;
     transition: height 1s ease-in-out;
-    overflow: hidden;
 }
 
 #personalInfoForm {
@@ -240,10 +223,8 @@ a {
 
 .formName {
     display: block;
-    width: 100%;
     text-align: center;
     color: rgb(81, 0, 172);
-    cursor: pointer;
 }
 
 hr {
@@ -310,7 +291,6 @@ select {
     position: relative;
     right: -150px;
     bottom: -20px;
-    cursor: pointer;
 }
 
 #maxFive {
@@ -319,17 +299,10 @@ select {
     margin: 0;
 }
 
-#channelsDiv{
-    width: 100%;
-}
-
 #channelsDiv > div {
     margin: auto;
     width: 800px;
-    display: flex;
-    flex-direction: row;
     border-radius: 10px;
-    overflow: hidden;
 }
 
 #channelsList {
@@ -338,7 +311,6 @@ select {
     background-color: rgba(0, 0, 0, 0.5);
     border-right: solid rgb(81, 0, 172) 1px;
     color: white;
-    overflow: hidden;
 }
 
 #channelsList form {
@@ -362,7 +334,6 @@ select {
     color: white;
     margin: 10px auto;
     border: solid white 1px;
-    cursor: pointer;
 }
 
 #channelsList input[type="submit"]:hover {
@@ -382,10 +353,16 @@ select {
     cursor: pointer;
 }
 
-#usersList {
-    background-color: rgba(255, 255, 255, 0.1);
+#channelsUsers {
     width: 70%;
     height: 600px;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hideScrollbar {
+    width: 105%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 #channelsDiv > div.searchMenu:hover {
@@ -406,10 +383,7 @@ select {
 }
 
 #levelSelect {
-    display: flex;
-    flex-direction: row;
     flex-flow: wrap;
-    width: 100%;
 }
 
 #showHideChannelsList {
@@ -426,11 +400,6 @@ h3 {
 
 /* ################### ispis liste favorita ################## */
 
-#myFavoritesDiv {
-    width: 100%;
-    display: none;
-}
-
 #favorites {
     margin: auto;
     width: 800px;
@@ -440,8 +409,6 @@ h3 {
 }
 
 #favorites ul {
-    display: flex;
-    flex-direction: row;
     text-align: center;
 }
 
@@ -453,19 +420,16 @@ h3 {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.favList {
-    width: 100%;
+.favsList {
+    height: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
-    align-content: space-between;
     flex-wrap: wrap;
-    overflow: scroll;
 }
 
 .favDiv {
+    margin: 3px;
     padding: 10px;
-    margin: 5px auto;
     width: 150px;
     border: solid gray 1px;
     border-radius: 5px;
@@ -503,11 +467,9 @@ h3 {
 
 #profileDiv {
     padding: 100px;
-    display: none;
     color: white;
     text-align: center;
     position: fixed;
-    width: 100%;
     min-height: 100%;
     background-color: rgba(0, 0, 0, 0.8);
 }
@@ -532,8 +494,6 @@ h3 {
 #genderAndYears {
     position: relative;
     top: -150px;
-    display: flex;
-    flex-direction: row;
 }
 
 .genderAndYears {
@@ -566,16 +526,12 @@ h3 {
 }
 
 #otherInformations {
-    display: flex;
-    flex-direction: column;
     position: relative;
     top: -80px;
 }
 
 #otherInformations div {
     width: 80%;
-    display: flex;
-    flex-direction: row;
     border-bottom: solid rgb(81, 0, 172) 1px;
 }
 
@@ -627,13 +583,8 @@ h3 {
 
 /*lista usera*/
 
-#usersList {
-    overflow-y: scroll;
-}
-
 div.usersPhoto {
     background-color: indianred;
-
 }
 
 .usersPhoto {
@@ -727,7 +678,6 @@ div .callIcon {
 #uploadBackground {
     display: none;
     position: fixed;
-    width: 100%;
     min-height: 100%;
     padding: 150px;
     background-color: rgba(0, 0, 0, 0.8);
@@ -737,6 +687,23 @@ div .callIcon {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.noOverflow {
+    overflow: hidden;
+}
+
+.fullWidth {
+    width: 100%;
 }
 
 @media screen and (max-width: 900px) {
@@ -789,18 +756,3 @@ div .callIcon {
         background: rgba(0, 0, 0, 0.8);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

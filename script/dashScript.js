@@ -496,17 +496,19 @@ function drawProfile(user) {
     if (myProfileData.myFavorites.indexOf(user.username) !== -1) {
         document.getElementById("addToFavsBtn").innerText = "Remove From Favorites"
     }
-    document.getElementById("profilePhoto").style.backgroundImage = "url('" + user.profilePhoto + "')";
-    document.getElementById("profilePhoto").style.backgroundSize = "cover";
-    if (user.username!= undefined) {document.getElementById("usersUsername").textContent = user.username;}
-    if (user.gender!= undefined) {document.getElementById("usersGender").textContent = gender;}
-    if (user.birthday!= undefined) {document.getElementById("usersYears").textContent = birthday;}
-    if (user["about me"]!= undefined) {document.getElementById("usersAboutMe").textContent = user["about me"];}
-    if (user.country!= undefined) {document.getElementById("usersCountry").textContent = user.country;}
-    if (user.city!= undefined) {document.getElementById("usersCity").textContent = user.city;}
-    if (user.interests!= undefined) {document.getElementById("usersInterests").textContent = user.interests.join(", ");}
-    if (user.languages!= undefined) {document.getElementById("usersLanguages").textContent = languages;}
-    if (user.username!= undefined) {document.getElementById("addToFavsBtn").name = user.username;}
-    if (user.username!= undefined) {document.getElementById("addToFavsBtn").style.display = user.username === myProfileData.username ? "none" : "inherit";}
+    if (user.profilePhoto !== undefined) {
+        document.getElementById("profilePhoto").style.backgroundImage = "url('" + user.profilePhoto + "')";
+        document.getElementById("profilePhoto").style.backgroundSize = "cover";
+    }
+    if (user.username !== undefined) document.getElementById("usersUsername").textContent = user.username;
+    if (user.gender !== undefined) document.getElementById("usersGender").textContent = gender;
+    if (user.birthday !== "") document.getElementById("usersYears").textContent = birthday;
+    if (user["about me"] !== undefined) document.getElementById("usersAboutMe").textContent = user["about me"];
+    if (user.country !== undefined) document.getElementById("usersCountry").textContent = user.country;
+    if (user.city !== undefined) document.getElementById("usersCity").textContent = user.city;
+    if (user.interests !== undefined) document.getElementById("usersInterests").textContent = user.interests.join(", ");
+    if (user.languages !== "") document.getElementById("usersLanguages").textContent = languages;
+    if (user.username !== undefined) document.getElementById("addToFavsBtn").name = user.username;
+    if (user.username !== undefined) document.getElementById("addToFavsBtn").style.display = user.username === myProfileData.username ? "none" : "inherit";
     show(profileDiv);
 }

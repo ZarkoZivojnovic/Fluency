@@ -23,10 +23,10 @@
         <div id="myMessagesDiv" class="hide"></div>
         <div id="myProfileDiv" class="hide">
             <div id="profileForms">
-                <div id="personalInfoFormDiv" class="form infoFormDiv">
-                    <h2 class="formName">Personal Info</h2>
+                <div id="personalInfoFormDiv" class="form infoFormDiv noOverflow">
+                    <h2 class="formName fullWidth pointer">Personal Info</h2>
                     <hr>
-                    <form action="?" method="post" id="personalInfoForm" class="infoForm">
+                    <form action="?" method="post" id="personalInfoForm" class="infoForm hide noOverflow">
                         <p>
                             <label for="name">Name:</label><br>
                             <input type="text" name="name" id="name">
@@ -52,18 +52,18 @@
 
                         <input type="submit" value="Save" class="submitBtn">
                     </form>
-                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon">
+                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon pointer">
                 </div>
-                <div id="aboutMeFormDiv" class="form infoFormDiv">
-                    <h2 class="formName">About Me</h2>
+                <div id="aboutMeFormDiv" class="form infoFormDiv noOverflow">
+                    <h2 class="formName fullWidth pointer">About Me</h2>
                     <hr>
-                    <form action="?" method="post" id="aboutMeForm" class="infoForm">
+                    <form action="?" method="post" id="aboutMeForm" class="infoForm hide noOverflow">
                         <p>
                             <label for="aboutMe">About Me:</label><br>
                             <textarea name="aboutMe" id="aboutMe" cols="30" rows="7" maxlength="150"></textarea>
                         </p>
                         <p>Interests:</p>
-                        <div id="interests" class="border">
+                        <div id="interests" class="border fullWidth">
                             <input type="checkbox" name="interests" value="traveling" id="traveling"><label
                                 for="traveling">traveling</label><br>
                             <input type="checkbox" name="interests" value="sports" id="sports"><label for="sports">sports</label><br>
@@ -88,12 +88,12 @@
                         <span id="maxFive">max five</span>
                         <input type="submit" value="Save" class="submitBtn">
                     </form>
-                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon">
+                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon pointer">
                 </div>
-                <div id="languageInfoFormDiv" class="form infoFormDiv">
-                    <h2 class="formName">Language Info</h2>
+                <div id="languageInfoFormDiv" class="form infoFormDiv noOverflow">
+                    <h2 class="formName fullWidth pointer">Language Info</h2>
                     <hr>
-                    <form action="?" method="post" id="languageInfoForm" class="infoForm">
+                    <form action="?" method="post" id="languageInfoForm" class="infoForm hide noOverflow">
                         <p>
                             <label for="nativeLanguage">Native Language:</label><br>
                             <select name="nativeLang" id="nativeLanguage">
@@ -174,7 +174,7 @@
                         </p>
                         <br>
                         <p>Other Languages:</p>
-                        <div id="lang" class="border">
+                        <div id="lang" class="border fullWidth">
                             <input type="checkbox" name="Afrikanns" id="Afrikanns"><label
                                 for="Afrikanns">Afrikanns</label><br>
                             <input type="checkbox" name="Albanian" id="Albanian"><label
@@ -275,23 +275,23 @@
                         </div>
                         <input type="submit" value="Save" class="submitBtn">
                     </form>
-                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon">
+                    <img src="graph/editIcon.png" alt="editIcon" class="editIcon pointer">
                 </div>
             </div>
         </div>
-        <div id="myFavoritesDiv" class="hide">
-            <div id="favorites" class="border shadow">
-                <ul id="favNavigation">
+        <div id="myFavoritesDiv" class="hide fullWidth">
+            <div id="favorites" class="border shadow noOverflow">
+                <ul id="favNavigation" class="flexRow">
                     <li id="aFavs"><a href="#" id="allFavs">All Favorites</a></li>
                     <li id="oFavs"><a href="#" id="onlineFavs">Online Favorites</a></li>
                 </ul>
-                <div id="favoritesList"></div>
+                <div id="favoritesList" class="fullWidth"></div>
             </div>
         </div>
         <div id="myNotesDiv" class="hide"></div>
-        <div id="channelsDiv" class="hide">
-            <div class="shadow border">
-                <div id="channelsList">
+        <div id="channelsDiv" class="hide fullWidth">
+            <div class="shadow border flexRow noOverflow">
+                <div id="channelsList" class="noOverflow">
                     <div id="showHideChannelsList">Channels</div>
                     <form action="?" method="post" id="chooseChannel">
                         <h3>Select language:</h3>
@@ -442,7 +442,7 @@
                                     for="channelXhosa">Xhosa</label></p>
                         </div>
                         <h3>Select level:</h3>
-                        <div id="levelSelect">
+                        <div id="levelSelect" class="flexRow fullWidth">
                             <p>
                                 <input type="radio" name="level" id="elementary"><label
                                     for="elementary">elementary</label>
@@ -457,40 +457,42 @@
                                 <input type="radio" name="level" id="native"><label for="native">native</label>
                             </p>
                         </div>
-                        <input type="submit" value="Search">
+                        <input type="submit" value="Search" class="pointer">
                     </form>
                 </div>
-                <div id="usersList">
+                <div id="channelsUsers">
+                    <div id="usersList" class="hideScrollbar">
 
-                    <!--
-                    profilnu necemo ubacivati kao img nego background
-                    diva #usersPhoto ali to nam jos uvek ne treba xD
-                    -->
+                        <!--
+                        profilnu necemo ubacivati kao img nego background
+                        diva #usersPhoto ali to nam jos uvek ne treba xD
+                        -->
 
-                    <!-- model -->
+                        <!-- model -->
 
-                    <!--    <div class="userDiv" id="username">
-                                <div class="usersPhoto"></div>
-                                <div class="usernameAndStatus">
-                                    <h3 class="username">Zarko</h3>
-                                    <p class="status">online</p>
+                        <!--    <div class="userDiv" id="username">
+                                    <div class="usersPhoto"></div>
+                                    <div class="usernameAndStatus">
+                                        <h3 class="username">Zarko</h3>
+                                        <p class="status">online</p>
+                                    </div>
+                                    <div class="icons">
+                                        <div class="callIcon"></div>
+                                        <div class="msgIcon"></div>
+                                    </div>
                                 </div>
-                                <div class="icons">
-                                    <div class="callIcon"></div>
-                                    <div class="msgIcon"></div>
-                                </div>
-                            </div>
-                    -->
+                        -->
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div id="sidebar">
-        <div id="showHideSidebar" class="showingSidebar border">hide ⇒</div>
+    <div id="sidebar" class="flexColumn">
+        <div id="showHideSidebar" class="showingSidebar border pointer">hide ⇒</div>
         <div class="photoAndUsername">
-            <div id="pictureDiv" class="shadow"></div>
-            <button id="editProfilePhoto">Change Photo</button>
+            <div id="pictureDiv" class="shadow noOverflow"></div>
+            <button id="editProfilePhoto" class="pointer">Change Photo</button>
             <h2 id="usersName">
                 User
             </h2>
@@ -507,42 +509,42 @@
 </div>
 <div id="noticeBackground"></div>
 <div id="notice" class="shadow"></div>
-<div id="uploadBackground" class="center">
-    <div id="uploadProfilePhoto" class="shadow">
+<div id="uploadBackground" class="center fullWidth">
+    <div id="uploadProfilePhoto" class="shadow hide">
         <a class="close shadow" id="closeUploadDiv">X</a>
         <h3 id="uploadStatus"></h3>
         <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
-            <div class="uploadBtnWrapper">
-                <button class="chooseFileBtn shadow" id="chooseFileBtn">Choose a file</button>
+            <div class="uploadBtnWrapper pointer noOverflow">
+                <button class="chooseFileBtn shadow fullWidth" id="chooseFileBtn">Choose a file</button>
                 <label for="profilePhotoFile">Add Photo:</label><input type="file" id="profilePhotoFile"
                                                                        name="profilePhoto"
-                                                                       accept=".jpeg,.gif,.png,.jpg">
+                                                                       accept=".jpeg,.gif,.png,.jpg" class="fullWidth">
             </div>
             <input type="submit" value="Upload" class="shadow">
         </form>
     </div>
 </div>
-<div id="profileDiv">
+<div id="profileDiv" class="fullWidth hide">
     <div id="profile" class="shadow border">
         <div id="profilePhoto" class="shadow"></div>
-        <div id="genderAndYears">
-            <p id="usersGender" class="genderAndYears left">No Info</p>
+        <div id="genderAndYears" class="flexRow">
+            <p id="usersGender" class="genderAndYears left ">No Info</p>
             <p id="usersYears" class="genderAndYears right">🎂 No Info</p>
         </div>
         <div>
             <h2 id="usersUsername" class="usernameAndAboutMe">No Info</h2>
             <p id="usersAboutMe" class="usernameAndAboutMe">No Info</p>
         </div>
-        <div id="otherInformations">
-            <div>
+        <div id="otherInformations" class="flexColumn">
+            <div class="flexRow">
                 <p class="left">Country:</p>
                 <p id="usersCountry" class="right">No Info</p>
             </div>
-            <div>
+            <div class="flexRow">
                 <p class="left">City:</p>
                 <p id="usersCity" class="right">No Info</p>
             </div>
-            <div>
+            <div class="flexRow">
                 <p class="left">Interests:</p>
                 <p id="usersInterests" class="right">No Info</p>
             </div>
