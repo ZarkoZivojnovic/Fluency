@@ -20,7 +20,19 @@
         </div>
     </header>
     <div id="contentsDiv">
-        <div id="myMessagesDiv" class="hide"></div>
+        <div id="myMessagesDiv" class="hide fullWidth">
+            <div id="msgBoard" class="flexRow contentDiv shadow border noOverflow">
+                <div id="conversations" class="flexColumn leftSide"></div>
+                <div id="chatContent" class="flexColumn rightSide">
+                    <div id="videoStreamDiv" class="hide">
+                        <video src="#" id="friendVideo"></video>
+                        <video src="#" id="myVideo"></video>
+                    </div>
+                    <div id="messages"></div>
+                    <label for="typeMsg"><input type="text" name="typeMsg" id="typeMsg" class="fullWidth msgInput"></label>
+                </div>
+            </div>
+        </div>
         <div id="myProfileDiv" class="hide">
             <div id="profileForms">
                 <div id="personalInfoFormDiv" class="form infoFormDiv noOverflow">
@@ -290,8 +302,8 @@
         </div>
         <div id="myNotesDiv" class="hide"></div>
         <div id="channelsDiv" class="hide fullWidth">
-            <div class="shadow border flexRow noOverflow">
-                <div id="channelsList" class="noOverflow">
+            <div class="contentDiv shadow border flexRow noOverflow">
+                <div id="channelsList" class="noOverflow leftSide">
                     <div id="showHideChannelsList">Channels</div>
                     <form action="?" method="post" id="chooseChannel">
                         <h3>Select language:</h3>
@@ -460,7 +472,7 @@
                         <input type="submit" value="Search" class="pointer">
                     </form>
                 </div>
-                <div id="channelsUsers">
+                <div id="channelsUsers" class="rightSide">
                     <div id="usersList" class="hideScrollbar">
 
                         <!--

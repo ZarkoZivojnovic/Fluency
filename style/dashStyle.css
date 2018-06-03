@@ -299,13 +299,13 @@ select {
     margin: 0;
 }
 
-#channelsDiv > div {
+.contentDiv {
     margin: auto;
     width: 800px;
     border-radius: 10px;
 }
 
-#channelsList {
+.leftSide {
     width: 30%;
     height: 600px;
     background-color: rgba(0, 0, 0, 0.5);
@@ -353,7 +353,7 @@ select {
     cursor: pointer;
 }
 
-#channelsUsers {
+.rightSide {
     width: 70%;
     height: 600px;
     background-color: rgba(255, 255, 255, 0.1);
@@ -704,6 +704,13 @@ div .callIcon {
 
 .fullWidth {
     width: 100%;
+}
+
+.msgInput {
+    color: white;
+    text-align: right;
+    text-wrap: normal;
+    background-color: rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 900px) {

@@ -2,6 +2,8 @@ const navigation = document.getElementById("navigation"),
     signOutButton = document.getElementById("signOut"),
     channelsDiv = document.getElementById("channelsDiv"),
     myProfileDiv = document.getElementById("myProfileDiv"),
+    myMsgsDiv = document.getElementById("myMessagesDiv"),
+    myFavoritesDiv = document.getElementById("myFavoritesDiv"),
     profileForms = document.getElementById("profileForms"),
     personalInfoForm = document.getElementById("personalInfoForm"),
     aboutMeForm = document.getElementById("aboutMeForm"),
@@ -13,9 +15,8 @@ const navigation = document.getElementById("navigation"),
     sidebar = document.getElementById("sidebar"),
     myProfileData = getExistingData(userUid),
     usersName = document.getElementById("usersName"),
-    myFavoritesDiv = document.getElementById("myFavoritesDiv"),
-    mainDivs = [myProfileDiv, channelsDiv],
     profileDiv = document.getElementById("profileDiv"),
+    mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv],
     fluencyColor = "rgb(81, 0, 172)";
 
 var listaUseraIzBaze = [];
@@ -74,18 +75,25 @@ navigation.addEventListener("click", event => {
                         clearInterval(waitingForData);
                         showProfileEditForm("disable");
                         hide(channelsDiv);
-                        hide(myFavoritesDiv)
+                        hide(myFavoritesDiv);
+                        hide(myMsgsDiv);
                     }
                 });
             } else if (event.target.id === "channels") {
                 hide(myProfileDiv);
                 hide(myFavoritesDiv);
+                hide(myMsgsDiv);
                 dovuciUsere();
                 channelsDiv.addEventListener("click", selectLangChannel);
             } else if (event.target.id === "myFavorites") {
                 showFavs(myProfileData.myFavorites);
                 hide(myProfileDiv);
-                hide(channelsDiv)
+                hide(channelsDiv);
+                hide(myMsgsDiv);
+            } else if (event.target.id === "myMessages"){
+                hide(myProfileDiv);
+                hide(channelsDiv);
+                hide(myFavoritesDiv);
             }
         }
     }
