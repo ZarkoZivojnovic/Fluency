@@ -215,7 +215,7 @@ a {
 .submitBtn {
     margin: 15px auto;
     padding: 5px;
-    height: 40px;
+    height: auto;
     border-radius: 30px;
     border: solid rgb(81, 0, 172) 1px;
     color: rgb(81, 0, 172);
@@ -257,7 +257,7 @@ textarea {
 }
 
 .form p, label {
-    margin: 7px;
+    margin: 5px;
     font-size: 14px;
 }
 
@@ -386,7 +386,7 @@ select {
     flex-flow: wrap;
 }
 
-#showHideChannelsList {
+.showHideLeftSideBtn {
     display: none;
     padding: 3px 5px;
 }
@@ -501,7 +501,7 @@ h3 {
     margin: 20px;
 }
 
-#usersYears {
+#usersBirthDate {
     font-size: 18px;
 }
 
@@ -676,11 +676,14 @@ div .callIcon {
 }
 
 #uploadBackground {
-    display: none;
     position: fixed;
     min-height: 100%;
     padding: 150px;
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+#conversations {
+    display: block;
 }
 
 .flexRow{
@@ -714,39 +717,39 @@ div .callIcon {
 }
 
 @media screen and (max-width: 900px) {
-    #channelsDiv > div {
+    .contentDiv {
         width: 600px;
     }
 }
 
 @media screen and (max-width: 650px) {
-    #channelsDiv > div {
+    .contentDiv {
         width: 100%;
     }
 
-    #usersList {
+    .smFullWidth {
         width: 100%;
     }
 
-    #showHideChannelsList {
+    .showHideLeftSideBtn {
         display: block;
         text-align: center;
     }
 
-    #channelsList {
+    .hideLeftSide {
         position: absolute;
         max-height: 25px;
-        width: 100px;
+        width: 150px;
         border-radius: 10px;
+        transition: max-height 1s;
     }
 
+    .hideLeftSide:hover {
+    width: 60%;
+    max-height: 100%;
+}
     #langSelect {
         max-height: 300px;
-    }
-
-    #channelsList:hover {
-        width: 60%;
-        max-height: 100%;
     }
 }
 

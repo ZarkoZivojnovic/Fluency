@@ -40,7 +40,39 @@
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
 <script src="script/main.js"></script>
 <script>
+    let allUsernames = getAllUsernames();
+
     registerForm.addEventListener("submit", userRegistration);
+
+    function getAllUsernames() {
+        let tempArr = [];
+        firebase.database().ref('users/').on('child_added', function (data) {
+            tempArr.push(data.val().username);
+        });
+        return tempArr;
+    }
+
+    function userRegistration(event) {
+        event.preventDefault();
+        let email = document.getElementById("email").value,
+            password = document.getElementById("password").value,
+            username = document.getElementById("username").value;
+        if (allUsernames.indexOf(username) !== -1) {
+            alert("username alredy exist");
+        } else {
+            firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+                writeUserDataOnRegistration(username, email);
+                setStatus("online", userId);
+                alert("Registration Successful");
+                setTimeout(() => {
+                    location.assign('./dashboard.html');
+                }, 3e3);
+            }).catch(function (error) {
+                alert(error.code);
+            });
+            registerForm.reset();
+        }
+    }
 </script>
 </body>
 </html>

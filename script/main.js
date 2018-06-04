@@ -73,24 +73,6 @@ function goOffline(event) {
     });
 }
 
-function userRegistration(event) {
-    let email = document.getElementById("email").value,
-        password = document.getElementById("password").value,
-        username = document.getElementById("username").value;
-    firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
-        writeUserDataOnRegistration(username, email);
-        setStatus("online", userId);
-        alert("Registration Successful");
-        setTimeout(() => {
-            location.assign('./dashboard.html');
-        }, 3e3);
-    }).catch(function (error) {
-        alert(error.code);
-    });
-    event.preventDefault();
-    registerForm.reset();
-}
-
 function setStatus(status, userId) {
     if (typeof userId === "undefined") return;
     firebase.database().ref('users/' + userId).update({

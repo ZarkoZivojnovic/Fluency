@@ -90,7 +90,7 @@ navigation.addEventListener("click", event => {
                 hide(myProfileDiv);
                 hide(channelsDiv);
                 hide(myMsgsDiv);
-            } else if (event.target.id === "myMessages"){
+            } else if (event.target.id === "myMessages") {
                 hide(myProfileDiv);
                 hide(channelsDiv);
                 hide(myFavoritesDiv);
@@ -170,23 +170,23 @@ function addExistingData(object) {
     let inputsWithValue = ["name", "country", "city", "birthDate", "aboutMe", "nativeLanguage"],
         inputsWithChecked = ["gender", "interests", "otherLanguages"];
     for (let input = 0; input < inputsWithValue.length; input++) {
-        let key = inputsWithValue[input].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
+        let key = inputsWithValue[input];
         if (typeof object[key] !== "undefined") {
-            document.getElementById(inputsWithValue[input]).value = object[key];
+            document.getElementById(key).value = object[key];
         }
     }
     for (let index = 0; index < inputsWithChecked.length; index++) {
-        let key = inputsWithChecked[index].replace(/([a-z]+)([A-Z])([a-z]+)/, /$1 $2$3/).replace("/", "").replace("/", "").toLowerCase();
+        let key = inputsWithChecked[index];
         if (typeof object[key] !== "undefined") {
-            if (inputsWithChecked[index] === "gender") {
+            if (key === "gender") {
                 document.getElementById(object[key]).checked = true;
-            } else if (inputsWithChecked[index] === "interests") {
+            } else if (key === "interests") {
                 for (let interest = 0; interest < object[key].length; interest++) {
                     let option = object[key][interest];
                     document.getElementById(option).checked = true;
                     document.querySelector("label[for='" + option + "']").style.color = fluencyColor;
                 }
-            } else if (inputsWithChecked[index] === "otherLanguages") {
+            } else if (key === "otherLanguages") {
                 for (let data = 0; data < object[key].length; data++) {
                     let lang = object[key][data][0],
                         lvl = object[key][data][1];
@@ -211,8 +211,8 @@ function getExistingData(userId) {
 function saveLangInfo(event) {
     event.preventDefault();
     const checkboxArray = document.querySelectorAll("input[type='checkbox']");
-    myProfileData["native language"] = document.getElementById("nativeLanguage").value;
-    myProfileData["other languages"] = [];
+    myProfileData["nativeLanguage"] = document.getElementById("nativeLanguage").value;
+    myProfileData["otherLanguages"] = [];
     for (let element = 0; element < checkboxArray.length; element++) {
         let language = checkboxArray[element];
         if (language.checked === true) {
@@ -221,7 +221,7 @@ function saveLangInfo(event) {
                 if (level[type].checked === true) {
                     let lang = level[type].id.split("_")[1],
                         lvl = level[type].id.split("_")[0];
-                    myProfileData["other languages"].push([lang, lvl]);
+                    myProfileData["otherLanguages"].push([lang, lvl]);
                 }
             }
         }
@@ -232,7 +232,7 @@ function saveLangInfo(event) {
 
 function saveAboutMe(event) {
     event.preventDefault();
-    myProfileData["about me"] = document.getElementById("aboutMe").value;
+    myProfileData.aboutMe = document.getElementById("aboutMe").value;
     myProfileData.interests = [];
     let checkboxArr = document.querySelectorAll("input[name='interests']");
     for (let index = 0; index < checkboxArr.length; index++) {
@@ -248,7 +248,7 @@ function savePersonalInfo(event) {
     myProfileData.name = document.getElementById("name").value;
     myProfileData.country = document.getElementById("country").value;
     myProfileData.city = document.getElementById("city").value;
-    myProfileData["birth date"] = document.getElementById("birthDate").value;
+    myProfileData.birthDate = document.getElementById("birthDate").value;
     myProfileData.gender = "";
     for (let element = 0; element < radioInput.length; element++) {
         if (radioInput[element].checked === true) myProfileData.gender = radioInput[element].id;
@@ -263,7 +263,7 @@ function updateInformationsInDatabase(uid, infoObj) {
 }
 
 function showAndHideForms(event) {
-    if (event.target.className === "editIcon") {
+    if (event.target.className.includes("editIcon")) {
         showProfileEditForm("enable");
     }
     if (event.target !== event.currentTarget) {
@@ -405,8 +405,10 @@ function prikaziUsere(nizUsera) {
 
         var usersPhoto = document.createElement("div");
         usersPhoto.classList.add("usersPhoto");
-        usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
-        usersPhoto.style.backgroundSize = "cover";
+        if (korisnik.profilePhoto !== undefined){
+            usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
+            usersPhoto.style.backgroundSize = "cover";
+        }
 
         var usernameAndStatus = document.createElement("div");
         usernameAndStatus.classList.add("usernameAndStatus");
@@ -480,7 +482,8 @@ function udjiNaProfil(event) {
     if (indexOsobe === "") {
         indexOsobe = event.target.parentNode.parentNode.id;
     }
-    drawProfile(useriZaPrikaz[indexOsobe]);
+    let userData = convertUserInfoToString(useriZaPrikaz[indexOsobe]);
+    drawProfile(userData);
 }
 
 function backSaProfila(event) {
@@ -488,35 +491,56 @@ function backSaProfila(event) {
     hide(profileDiv);
 }
 
-function drawProfile(user) {
-    let birthday = user["birth date"] === "" ? "" : "🎂 " + user["birth date"],
+function convertUserInfoToString(user) {
+    let language = user.nativeLanguage,
         gender = "n/a",
-        languages = user["native language"],
-        otherLang = user["other languages"];
+        interests, birthDate;
     if (user.gender === "male") {
         gender = "♂";
     } else if (user.gender === "female") {
         gender = "♀";
     }
-    for (let i = 0; i < otherLang.length; i++) {
-        languages += ", " + otherLang[i][0];
+    if (typeof user.otherLanguages !== "undefined") {
+        for (let lang of user.otherLanguages) {
+            language += ", " + lang[0];
+        }
     }
-    if (myProfileData.myFavorites.indexOf(user.username) !== -1) {
+    if (typeof user.interests !== "undefined") {
+        interests = user.interests.join(", ");
+    }
+    if (typeof user.interests !== "undefined"){
+        birthDate = "🎂 " + user.birthDate;
+    }
+    return {
+        username: user.username,
+        gender: gender,
+        aboutMe: user.aboutMe,
+        birthDate: birthDate,
+        country: user.country,
+        city: user.city,
+        profilePhoto: user.profilePhoto,
+        interests: interests,
+        language: language
+    }
+}
+
+function drawProfile(obj) {
+    for (let data in obj) {
+        if (typeof obj[data] !== "undefined" && obj[data] !== "") {
+            if (data === "profilePhoto") {
+                document.getElementById(data).style.backgroundImage = "url('" + obj[data] + "')";
+                document.getElementById(data).style.backgroundSize = "cover";
+            } else if (data !== "profilePhoto") {
+                let id = "users" + data.substring(0, 1).toUpperCase() + data.substring(1);
+                console.log(id, obj[data]);
+                document.getElementById(id).textContent = obj[data];
+            }
+        }
+    }
+    if (myProfileData.myFavorites.indexOf(obj.username) !== -1) {
         document.getElementById("addToFavsBtn").innerText = "Remove From Favorites"
     }
-    if (user.profilePhoto !== undefined) {
-        document.getElementById("profilePhoto").style.backgroundImage = "url('" + user.profilePhoto + "')";
-        document.getElementById("profilePhoto").style.backgroundSize = "cover";
-    }
-    if (user.username !== undefined) document.getElementById("usersUsername").textContent = user.username;
-    if (user.gender !== undefined) document.getElementById("usersGender").textContent = gender;
-    if (user.birthday !== "") document.getElementById("usersYears").textContent = birthday;
-    if (user["about me"] !== undefined) document.getElementById("usersAboutMe").textContent = user["about me"];
-    if (user.country !== undefined) document.getElementById("usersCountry").textContent = user.country;
-    if (user.city !== undefined) document.getElementById("usersCity").textContent = user.city;
-    if (user.interests !== undefined) document.getElementById("usersInterests").textContent = user.interests.join(", ");
-    if (user.languages !== "") document.getElementById("usersLanguages").textContent = languages;
-    if (user.username !== undefined) document.getElementById("addToFavsBtn").name = user.username;
-    if (user.username !== undefined) document.getElementById("addToFavsBtn").style.display = user.username === myProfileData.username ? "none" : "inherit";
+    document.getElementById("addToFavsBtn").name = obj.username;
+    document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
     show(profileDiv);
 }

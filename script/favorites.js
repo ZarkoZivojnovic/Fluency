@@ -15,7 +15,8 @@ function openProfile(event) {
         if (id===""){
             id = event.target.parentNode.id.split("_")[0]
         }
-        drawProfile(favListArr[id]);
+        let userInfo = convertUserInfoToString(favListArr[id]);
+        drawProfile(userInfo);
     }
 }
 
@@ -62,8 +63,10 @@ function drawFavsList(appendToElement, arr) {
             status = document.createElement("p");
         favDiv.setAttribute("id", arr.indexOf(arr[fav]) + "_id");
         favDiv.classList.add("favDiv");
-        photoDiv.style.backgroundImage = "url('" + arr[fav].profilePhoto + "')";
-        photoDiv.style.backgroundSize = "cover";
+        if (typeof arr[fav].profilePhoto !== "undefined"){
+            photoDiv.style.backgroundImage = "url('" + arr[fav].profilePhoto + "')";
+            photoDiv.style.backgroundSize = "cover";
+        }
         photoDiv.classList.add("favPhoto");
         username.innerText = arr[fav].username;
         username.classList.add("favUsername");

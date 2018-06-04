@@ -22,8 +22,10 @@
     <div id="contentsDiv">
         <div id="myMessagesDiv" class="hide fullWidth">
             <div id="msgBoard" class="flexRow contentDiv shadow border noOverflow">
-                <div id="conversations" class="flexColumn leftSide"></div>
-                <div id="chatContent" class="flexColumn rightSide">
+                <div id="conversations" class="flexColumn leftSide hideLeftSide">
+                    <div class="showHideLeftSideBtn">Conversations</div>
+                </div>
+                <div id="chatContent" class="flexColumn rightSide smFullWidth">
                     <div id="videoStreamDiv" class="hide">
                         <video src="#" id="friendVideo"></video>
                         <video src="#" id="myVideo"></video>
@@ -303,8 +305,8 @@
         <div id="myNotesDiv" class="hide"></div>
         <div id="channelsDiv" class="hide fullWidth">
             <div class="contentDiv shadow border flexRow noOverflow">
-                <div id="channelsList" class="noOverflow leftSide">
-                    <div id="showHideChannelsList">Channels</div>
+                <div id="channelsList" class="noOverflow leftSide hideLeftSide">
+                    <div class="showHideLeftSideBtn">Channels</div>
                     <form action="?" method="post" id="chooseChannel">
                         <h3>Select language:</h3>
                         <div id="langSelect">
@@ -472,7 +474,7 @@
                         <input type="submit" value="Search" class="pointer">
                     </form>
                 </div>
-                <div id="channelsUsers" class="rightSide">
+                <div id="channelsUsers" class="rightSide smFullWidth">
                     <div id="usersList" class="hideScrollbar">
 
                         <!--
@@ -521,8 +523,8 @@
 </div>
 <div id="noticeBackground"></div>
 <div id="notice" class="shadow"></div>
-<div id="uploadBackground" class="center fullWidth">
-    <div id="uploadProfilePhoto" class="shadow hide">
+<div id="uploadBackground" class="center fullWidth hide">
+    <div id="uploadProfilePhoto" class="shadow">
         <a class="close shadow" id="closeUploadDiv">X</a>
         <h3 id="uploadStatus"></h3>
         <form enctype="multipart/form-data" action="?" method="post" id="uploadPhoto">
@@ -541,7 +543,7 @@
         <div id="profilePhoto" class="shadow"></div>
         <div id="genderAndYears" class="flexRow">
             <p id="usersGender" class="genderAndYears left ">No Info</p>
-            <p id="usersYears" class="genderAndYears right">🎂 No Info</p>
+            <p id="usersBirthDate" class="genderAndYears right">🎂 No Info</p>
         </div>
         <div>
             <h2 id="usersUsername" class="usernameAndAboutMe">No Info</h2>
@@ -563,7 +565,7 @@
         </div>
         <div class="usersLangDiv">
             <p>Languages:</p>
-            <p id="usersLanguages">No Info</p>
+            <p id="usersLanguage">No Info</p>
         </div>
         <div class="flexRow">
             <button id="backSaProfila" class="profileBtns">🡐 Back</button>
