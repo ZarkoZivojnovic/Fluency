@@ -709,11 +709,37 @@ div .callIcon {
     width: 100%;
 }
 
+.noVisibility{
+    visibility: hidden;
+}
+
+#sendMsgForm label {
+    display: none;
+}
+
+#sendMsgForm {
+    padding: 0 10px;
+}
+
 .msgInput {
+    width: 90%;
     color: white;
     text-align: right;
     text-wrap: normal;
     background-color: rgba(0, 0, 0, 0.3);
+}
+
+#sendMsgForm>input[type="submit"] {
+    width: 10%;
+    border: 0;
+    color: rgb(81, 0, 172);
+    transition: transform, color 500ms
+}
+
+#sendMsgForm>input[type="submit"]:hover{
+    text-shadow: 2px 2px 1px black;
+    color: white;
+    transform: scale(1.4,1.4);
 }
 
 @media screen and (max-width: 900px) {

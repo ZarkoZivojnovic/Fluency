@@ -25,14 +25,21 @@
                 <div id="conversations" class="flexColumn leftSide hideLeftSide">
                     <div class="showHideLeftSideBtn">Conversations</div>
                 </div>
-                <div id="chatContent" class="flexColumn rightSide smFullWidth">
+
+                <div id="chatContent" class="noVisibility flexColumn rightSide smFullWidth">
                     <div id="videoStreamDiv" class="hide">
                         <video src="#" id="friendVideo"></video>
                         <video src="#" id="myVideo"></video>
                     </div>
                     <div id="messages"></div>
-                    <label for="typeMsg"><input type="text" name="typeMsg" id="typeMsg" class="fullWidth msgInput"></label>
+                    <form action="?" method="post" id="sendMsgForm" class="fullWidth flexRow">
+                        <label for="typeMsg"></label><input type="text" name="typeMsg" id="typeMsg"
+                                                            class="fullWidth msgInput" autocomplete="off">
+                        <input type="submit" value="➤">
+                    </form>
                 </div>
+
+
             </div>
         </div>
         <div id="myProfileDiv" class="hide">
@@ -581,5 +588,6 @@
 <script src="script/dashScript.js"></script>
 <script src="script/uploadingProfilePhoto.js"></script>
 <script src="script/favorites.js"></script>
+<script src="script/messages.js"></script>
 </body>
 </html>
