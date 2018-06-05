@@ -464,9 +464,11 @@ function filtrirajPoJeziku(event) {
     console.log(filterJezik);
 
     for (korisnik of listaUseraIzBaze) {
-        for (korisnikJezik of korisnik["other languages"]) {
-            if (korisnikJezik.toString() == filterJezik.toString()) {
+        for (korisnikJezik of korisnik.otherLanguages) {
+            if (korisnikJezik.toString().includes(filterJezik.toString())) {
                 filtriraniUseri.push(korisnik);
+                console.log(korisnikJezik.toString());
+                console.log(filterJezik.toString());
             }
         }
     }
@@ -508,7 +510,7 @@ function convertUserInfoToString(user) {
     if (typeof user.interests !== "undefined") {
         interests = user.interests.join(", ");
     }
-    if (typeof user.interests !== "undefined"){
+    if (typeof user.birthDate !== "undefined"){
         birthDate = "🎂 " + user.birthDate;
     }
     return {
