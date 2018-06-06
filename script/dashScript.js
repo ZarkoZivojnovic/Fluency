@@ -94,7 +94,6 @@ navigation.addEventListener("click", event => {
                 hide(myProfileDiv);
                 hide(channelsDiv);
                 hide(myFavoritesDiv);
-                runMsgListeners();
             }
         }
     }

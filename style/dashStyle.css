@@ -713,12 +713,28 @@ div .callIcon {
     visibility: hidden;
 }
 
+#conversations label {
+    border-bottom: solid rgb(81,0,172) 1px;
+    display: block;
+    text-align: center;
+    font-size: 22px;
+    background-color: transparent;
+}
+
+#conversations input {
+    display: none;
+}
+
 #sendMsgForm label {
     display: none;
 }
 
 #sendMsgForm {
     padding: 0 10px;
+}
+
+.transparent {
+    background-color: transparent;
 }
 
 .msgInput {
