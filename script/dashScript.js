@@ -258,9 +258,9 @@ function savePersonalInfo(event) {
     showProfileEditForm("disable");
 }
 
-function updateInformationsInDatabase(uid, infoObj) {
+function updateInformationsInDatabase(uid, infoObj, notification = "Informations are Saved") {
     firebase.database().ref('users/' + uid).update(infoObj);
-    alert("Informations are Saved");
+    alert(notification);
 }
 
 function showAndHideForms(event) {
@@ -462,31 +462,42 @@ function filtrirajPoJeziku(event) {
             filterJezik.push(nivo.id);
         }
     }
-    console.log(filterJezik);
+    //console.log(filterJezik);
 
     for (korisnik of listaUseraIzBaze) {
         for (korisnikJezik of korisnik.otherLanguages) {
             if (korisnikJezik.toString().includes(filterJezik.toString())) {
                 filtriraniUseri.push(korisnik);
-                console.log(korisnikJezik.toString());
-                console.log(filterJezik.toString());
+                //console.log(korisnikJezik.toString());
+                //console.log(filterJezik.toString());
             }
         }
     }
-    console.log(filtriraniUseri);
+    //console.log(filtriraniUseri);
     prikaziUsere(filtriraniUseri);
 }
 
 function udjiNaProfil(event) {
-    let indexOsobe = event.target.id;
-    if (indexOsobe === "") {
-        indexOsobe = event.target.parentNode.id;
+    let indexOsobe;
+    if (event.target!==event.currentTarget){
+        if (event.target.className === "msgIcon"){
+            indexOsobe = event.target.parentNode.parentNode.id;
+            let receiver = useriZaPrikaz[indexOsobe].username;
+            openConversationWithThisUser(receiver);
+        } else if (event.target.className === "callIcon"){
+            console.log("call");
+        } else {
+            indexOsobe = event.target.id;
+            if (indexOsobe === "") {
+                indexOsobe = event.target.parentNode.id;
+            }
+            if (indexOsobe === "") {
+                indexOsobe = event.target.parentNode.parentNode.id;
+            }
+            let userData = convertUserInfoToString(useriZaPrikaz[indexOsobe]);
+            drawProfile(userData);
+        }
     }
-    if (indexOsobe === "") {
-        indexOsobe = event.target.parentNode.parentNode.id;
-    }
-    let userData = convertUserInfoToString(useriZaPrikaz[indexOsobe]);
-    drawProfile(userData);
 }
 
 function backSaProfila(event) {

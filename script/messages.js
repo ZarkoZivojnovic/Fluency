@@ -4,23 +4,32 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
     chatContent = document.getElementById("chatContent"),
     listOfConversations = document.getElementById("conversations");
 
-let myConversations;
+let waitForInfo = setInterval(() => {
+    if (typeof myProfileData !== "undefined") {
+        clearInterval(waitForInfo);
+        setTimeout(()=>{
+            if (typeof myProfileData.myConversations !== "undefined") {
+                drawListOfConversations(myProfileData.myConversations);
+            }
+        },1000);
+    }
+}, 200);
 
-setTimeout(() => {
-    myConversations = getListOfConversation();
-    drawListOfConversations(myConversations);
-}, 1500);
-
-function saveInMyConversations(friendsUsername) { /// kad saljemo prvu poruku ili kad procitamo prvu poruku
-    firebase.database().ref('users/' + userUid + "/myConversations").update(friendsUsername);
-}
-
-function getListOfConversation() {
-    let arr = [];
-    firebase.database().ref('users/' + userId + "/myConversations").on('child_added', function (data) {
-        arr.push(data.val());
-    });
-    return arr;
+function openConversationWithThisUser(user) {
+    console.log(user, user.toString());
+    //let conversationKey = createConversationKey(myProfileData.username, user);
+    if (typeof myProfileData.myConversations === "undefined") myProfileData["myConversations"] = [];
+    if (myProfileData.myConversations.indexOf(user) === -1) {
+        myProfileData.myConversations.push(user);
+        updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
+    }
+    for (let div of mainDivs) {
+        hide(div);
+    }
+    drawListOfConversations(myProfileData.myConversations);
+    show(myMsgsDiv);
+    //openConversation(conversationKey);
+    runMsgListeners();
 }
 
 function createConversationKey(myUsername, otherUsername) {
@@ -49,6 +58,7 @@ function newMsgNotification(receiver, conversationKey, newOrNot) { /// ("asdfasd
 }
 
 function drawListOfConversations(arr) {
+    listOfConversations.innerHTML = "";
     let div = document.createElement("div");
     for (let index = 0; index < arr.length; index++) {
         let friend = document.createElement("h3");
@@ -57,7 +67,7 @@ function drawListOfConversations(arr) {
         div.appendChild(friend);
     }
     console.log(div);
-    listOfConversations.insertAdjacentHTML("afterbegin", div.outerHTML);
+    listOfConversations.innerHTML = div.outerHTML;
 }
 
 function runMsgListeners() {
