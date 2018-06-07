@@ -24,8 +24,7 @@ listOfConversations.addEventListener("click", event => {
         conversationKey = createConversationKey(myProfileData.username, receiver);
         openConversation(conversationKey);
     }
-    markSelectedChat();
-    
+    //markSelectedChat();
 });
 
 sendMessageForm.addEventListener("submit", event => {
@@ -43,7 +42,7 @@ function markSelectedChat() {
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
         } else {
-            selectedChat.style.backgroundColor = "inherit";
+            selectedChat.style.backgroundColor = "transparent";
         }
     }
 }
@@ -80,11 +79,11 @@ function sendMessage(receiver, string) {
             date: new Date(),
             seen: false
         };
-    firebase.database().ref('messsages/' + conversationKey + "/" + new Date().getTime() + "/").update(message);
+    firebase.database().ref('messages/' + conversationKey + "/" + new Date().getTime() + "/").update(message);
 }
 
 function markMessageAsSeen(conversationKey, messageKey) {
-    firebase.database().ref('messsages/' + conversationKey + "/" + messageKey).update({"seen": true});
+    firebase.database().ref('messages/' + conversationKey + "/" + messageKey).update({"seen": true});
 }
 
 function newMsgNotification(receiver, conversationKey, newOrNot) { /// ("asdfasdf", "15132164641", true/false)
@@ -94,7 +93,7 @@ function newMsgNotification(receiver, conversationKey, newOrNot) { /// ("asdfasd
 function drawListOfConversations(arr) {
     listOfConversations.innerHTML = "";
     let div = document.createElement("div");
-    div.classList.add("transparent");
+    div.setAttribute("id", "transparent");
     for (let index = 0; index < arr.length; index++) {
         let friend = document.createElement("input"),
             label = document.createElement("label");

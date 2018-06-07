@@ -686,6 +686,10 @@ div .callIcon {
     display: block;
 }
 
+#conversations>div{
+    background-color: transparent;
+}
+
 .flexRow{
     display: flex;
     flex-direction: row;
@@ -731,10 +735,6 @@ div .callIcon {
 
 #sendMsgForm {
     padding: 0 10px;
-}
-
-.transparent {
-    background-color: transparent;
 }
 
 .msgInput {
