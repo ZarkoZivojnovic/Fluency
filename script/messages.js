@@ -141,7 +141,24 @@ ref.once('value', function(snapshot) {
         userOdKogImamPoruke.push(newMsgsSnapshot.val());
         odKogaImamPoruke.push(userOdKogImamPoruke);
         console.log(userOdKogImamPoruke);
+        dovuciPoruke();
     });
 });
+}
+
+function dovuciPoruke() {
+    for (index in odKogaImamPoruke) {
+        if(odKogaImamPoruke[index][1] == true ) {
+            console.log("imam");
+            var imeKonverzacije = createConversationKey(myProfileData.username, odKogaImamPoruke[index][0]);
+            var ref = firebase.database().ref("messages/"+imeKonverzacije);
+ref.once('value', function(snapshot) {
+    snapshot.forEach(function(messageSnapshot) {
+        var porukae = messageSnapshot.val();
+        console.log(poruke);
+    });
+});
+        }
+    }
 }
 
