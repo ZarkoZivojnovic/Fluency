@@ -17,14 +17,13 @@ let waitForInfo = setInterval(() => {
     }
 }, 200);
 
-setInterval(()=>{
+setInterval(() => {
     proveriDaLiImaPoruka(myProfileData.username);
-},10000);
+}, 10000);
 
 let receiver,
     conversationKey;
 
-    
 
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
@@ -129,19 +128,19 @@ function getChat(conversationKey) { //dovuci chat
 
 
 function proveriDaLiImaPoruka(username) {
-    var userOdKogImamPoruke =[];
+    var userOdKogImamPoruke = [];
     console.log("USAO U FUNKCIJU");
     console.log(username);
-    var putanja = "newMsgs/"+username;
+    var putanja = "newMsgs/" + username;
     console.log(putanja);
     var ref = firebase.database().ref(putanja);
-ref.once('value', function(snapshot) {
-    snapshot.forEach(function(newMsgsSnapshot) {
-        userOdKogImamPoruke.push(newMsgsSnapshot.key);
-        userOdKogImamPoruke.push(newMsgsSnapshot.val());
-        odKogaImamPoruke.push(userOdKogImamPoruke);
-        console.log(userOdKogImamPoruke);
+    ref.once('value', function (snapshot) {
+        snapshot.forEach(function (newMsgsSnapshot) {
+            userOdKogImamPoruke.push(newMsgsSnapshot.key);
+            userOdKogImamPoruke.push(newMsgsSnapshot.val());
+            odKogaImamPoruke.push(userOdKogImamPoruke);
+            console.log(userOdKogImamPoruke);
+        });
     });
-});
 }
 
