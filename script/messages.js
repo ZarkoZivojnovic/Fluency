@@ -7,11 +7,11 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         clearInterval(waitForInfo);
-        setTimeout(()=>{
+        setTimeout(() => {
             if (typeof myProfileData.myConversations !== "undefined") {
                 drawListOfConversations(myProfileData.myConversations);
             }
-        },1000);
+        }, 1000);
     }
 }, 200);
 
@@ -20,25 +20,25 @@ let receiver,
 
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
-        receiver = event.target.getAttribute("for");
+        receiver = event.target.id;
         conversationKey = createConversationKey(myProfileData.username, receiver);
         openConversation(conversationKey);
     }
-    //markSelectedChat();
+    markSelectedChat();
 });
 
 sendMessageForm.addEventListener("submit", event => {
     event.preventDefault();
     let message = messageInput.value;
     sendMessage(receiver, message);
-    newMsgNotification(receiver, conversationKey, true);
+    newMsgNotification(receiver, true);
     sendMessageForm.reset();
 });
 
 function markSelectedChat() {
     let allChats = document.querySelectorAll("input[name='selectedChat']");
-    for (let chat = 0; chat<allChats.length; chat++){
-        let selectedChat = document.querySelector("label[for='"+allChats[chat].id+"']");
+    for (let chat = 0; chat < allChats.length; chat++) {
+        let selectedChat = document.querySelector("label[for='" + allChats[chat].id + "']");
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
         } else {
@@ -86,8 +86,8 @@ function markMessageAsSeen(conversationKey, messageKey) {
     firebase.database().ref('messages/' + conversationKey + "/" + messageKey).update({"seen": true});
 }
 
-function newMsgNotification(receiver, conversationKey, newOrNot) { /// ("asdfasdf", "15132164641", true/false)
-    firebase.database().ref('newMsgs/' + receiver).update({[conversationKey]: newOrNot});
+function newMsgNotification(receiver, newOrNot) { /// ("asdfasdf", "15132164641", true/false)
+    firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: newOrNot});
 }
 
 function drawListOfConversations(arr) {
