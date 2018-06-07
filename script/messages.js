@@ -126,6 +126,7 @@ function getChat(conversationKey) { //dovuci chat
 
 
 function proveriDaLiImaPoruka(username) {
+    var userOdKogImamPoruke =[];
     console.log("USAO U FUNKCIJU");
     console.log(username);
     var putanja = "newMsgs/"+username;
@@ -133,9 +134,10 @@ function proveriDaLiImaPoruka(username) {
     var ref = firebase.database().ref(putanja);
 ref.once('value', function(snapshot) {
     snapshot.forEach(function(newMsgsSnapshot) {
-        var newMsgs = newMsgsSnapshot.val();
-        odKogaImamPoruke.push(newMsgs);
-        console.log(newMsgs);
+        userOdKogImamPoruke.push(newMsgsSnapshot.key);
+        userOdKogImamPoruke.push(newMsgsSnapshot.val());
+        odKogaImamPoruke.push(userOdKogImamPoruke);
+        console.log(userOdKogImamPoruke);
     });
 });
 }
