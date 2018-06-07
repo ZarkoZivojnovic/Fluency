@@ -154,7 +154,7 @@ function dovuciPoruke() {
             var ref = firebase.database().ref("messages/"+imeKonverzacije);
 ref.once('value', function(snapshot) {
     snapshot.forEach(function(messageSnapshot) {
-        var porukae = messageSnapshot.val();
+        var poruke = messageSnapshot.val();
         console.log(poruke);
     });
 });
