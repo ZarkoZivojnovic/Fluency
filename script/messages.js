@@ -4,12 +4,15 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
     chatContent = document.getElementById("chatContent"),
     listOfConversations = document.getElementById("conversations");
 
+var odKogaImamPoruke = [];
+
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         clearInterval(waitForInfo);
         setTimeout(()=>{
             if (typeof myProfileData.myConversations !== "undefined") {
                 drawListOfConversations(myProfileData.myConversations);
+                proveriDaLiImaPoruka(myProfileData.username);
             }
         },1000);
     }
@@ -18,13 +21,15 @@ let waitForInfo = setInterval(() => {
 let receiver,
     conversationKey;
 
+    
+
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
         receiver = event.target.getAttribute("for");
         conversationKey = createConversationKey(myProfileData.username, receiver);
         openConversation(conversationKey);
     }
-    //markSelectedChat();
+    markSelectedChat();
 });
 
 sendMessageForm.addEventListener("submit", event => {
@@ -117,5 +122,21 @@ function openConversation(conversationKey) {
 
 function getChat(conversationKey) { //dovuci chat
     return "dfijljafldjlf jdlfjldjfldjlfjd fdjf dfjldj fldjfjdčfjdfj dfjdfja";
+}
+
+
+function proveriDaLiImaPoruka(username) {
+    console.log("USAO U FUNKCIJU");
+    console.log(username);
+    var putanja = "newMsgs/"+username;
+    console.log(putanja);
+    var ref = firebase.database().ref(putanja);
+ref.once('value', function(snapshot) {
+    snapshot.forEach(function(newMsgsSnapshot) {
+        var newMsgs = newMsgsSnapshot.val();
+        odKogaImamPoruke.push(newMsgs);
+        console.log(newMsgs);
+    });
+});
 }
 
