@@ -12,11 +12,14 @@ let waitForInfo = setInterval(() => {
         setTimeout(() => {
             if (typeof myProfileData.myConversations !== "undefined") {
                 drawListOfConversations(myProfileData.myConversations);
-                proveriDaLiImaPoruka(myProfileData.username);
             }
         }, 1000);
     }
 }, 200);
+
+setInterval(()=>{
+    proveriDaLiImaPoruka(myProfileData.username);
+},10000);
 
 let receiver,
     conversationKey;
