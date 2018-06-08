@@ -757,6 +757,31 @@ div .callIcon {
     color: white;
     transform: scale(1.4,1.4);
 }
+#messages {
+    width: 100%;
+}
+#messages>div{
+    text-wrap: normal;
+    min-width: 51%;
+    max-width: 70%;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    box-shadow: 0 0 3px white;
+}
+
+.msgLeft {
+    text-align: left;
+    float: left;
+}
+
+.msgRight {
+    text-align: right;
+    float: right;
+}
 
 @media screen and (max-width: 900px) {
     .contentDiv {
