@@ -210,6 +210,7 @@ function napuniKonverzacije() {
             updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
         }
     }
+	drawListOfConversations(myProfileData.myConversations);
 }
 
 /* if (myProfileData.myConversations.indexOf(user[0]) === -1) {
