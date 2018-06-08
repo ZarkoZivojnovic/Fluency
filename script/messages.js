@@ -204,6 +204,7 @@ function napuniKonverzacije() {
         console.log("ceo user od kog imam poruke", user);
         console.log("OD OVOG IMAM PORUKE", user[0]);
         console.log("MOJE KONVERZACIJE 1", myProfileData.myConversations);
+		if (myProfileData.myConversations === undefined) myProfileData.myConversations=[];
         if (myProfileData.myConversations.indexOf(user[0]) === -1) {
             myProfileData.myConversations.push(user[0]);
             console.log("MOJE KONVERZACIJE 2", myProfileData.myConversations);
