@@ -212,6 +212,8 @@ function napuniKonverzacije() {
     }
 	drawListOfConversations(myProfileData.myConversations);
 }
+//trebalo bi da radi sad
+
 
 /* if (myProfileData.myConversations.indexOf(user[0]) === -1) {
         myProfileData.myConversations.push(user[0]);
