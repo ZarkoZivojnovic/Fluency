@@ -6,6 +6,7 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
 
 var odKogaImamPoruke = [];
 
+
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         clearInterval(waitForInfo);
@@ -17,14 +18,33 @@ let waitForInfo = setInterval(() => {
     }
 }, 200);
 
+
 setInterval(()=>{
+    //proveri da li ima poruka
     proveriDaLiImaPoruka(myProfileData.username);
 },10000);
 
 let receiver,
     conversationKey;
 
-    
+function isArrayInArray(arr, item){
+  var item_as_string = JSON.stringify(item);
+
+  var contains = arr.some(function(ele){
+    return JSON.stringify(ele) === item_as_string;
+  });
+  return contains;
+}
+
+var myArray = [
+  [1, 0],
+  [1, 1],
+  [1, 3],
+  [2, 4]
+]
+var item = [1, 0]
+
+console.log(isArrayInArray(myArray, item));
 
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
@@ -49,6 +69,7 @@ function markSelectedChat() {
         let selectedChat = document.querySelector("label[for='" + allChats[chat].id + "']");
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
+            dovuciPoruke();
         } else {
             selectedChat.style.backgroundColor = "transparent";
         }
@@ -129,36 +150,78 @@ function getChat(conversationKey) { //dovuci chat
 
 
 function proveriDaLiImaPoruka(username) {
-    var userOdKogImamPoruke =[];
     console.log("USAO U FUNKCIJU");
-    console.log(username);
     var putanja = "newMsgs/"+username;
     console.log(putanja);
     var ref = firebase.database().ref(putanja);
 ref.once('value', function(snapshot) {
     snapshot.forEach(function(newMsgsSnapshot) {
+        var userOdKogImamPoruke =[];
         userOdKogImamPoruke.push(newMsgsSnapshot.key);
         userOdKogImamPoruke.push(newMsgsSnapshot.val());
-        odKogaImamPoruke.push(userOdKogImamPoruke);
-        console.log(userOdKogImamPoruke);
-        dovuciPoruke();
-    });
+        console.log("USER OD KOGA IMAM PORUKE", userOdKogImamPoruke, userOdKogImamPoruke.length);
+        console.log("CEO NIZ", odKogaImamPoruke);
+        if (isArrayInArray(odKogaImamPoruke, userOdKogImamPoruke)) {
+         } else {
+            odKogaImamPoruke.push(userOdKogImamPoruke);
+         }});
+    console.log("OD NJIH IMAM PORUKE", odKogaImamPoruke);
+    napuniKonverzacije();
+    
 });
+
+
 }
 
+
+
 function dovuciPoruke() {
-    for (index in odKogaImamPoruke) {
-        if(odKogaImamPoruke[index][1] == true ) {
-            console.log("imam");
-            var imeKonverzacije = createConversationKey(myProfileData.username, odKogaImamPoruke[index][0]);
+    document.getElementById("messages").innerText = "";
+    console.log("POCINJE DOVLACENJE");
+    var poruke = [];
+    var poruka;
+    
+            var imeKonverzacije = createConversationKey(myProfileData.username, receiver);
             var ref = firebase.database().ref("messages/"+imeKonverzacije);
 ref.once('value', function(snapshot) {
     snapshot.forEach(function(messageSnapshot) {
-        var poruke = messageSnapshot.val();
-        console.log(poruke);
+        poruka = messageSnapshot.val();
+        console.log("PORUKA", poruka);
+        poruke.push(poruka);
+
     });
+    console.log("PORUKE", poruke, poruke.length);
+for (element of poruke) {
+    console.log("BODI PORUKE", element.body);
+    var divZaPoruku = document.createElement("div");
+    divZaPoruku.innerHTML = element.body;
+    
+    document.getElementById("messages").appendChild(divZaPoruku);
+}
 });
+
+
+        
+    
+}
+
+function napuniKonverzacije() {
+
+    console.log(odKogaImamPoruke);
+    for (user of odKogaImamPoruke) {
+        console.log("ceo user od kog imam poruke", user);
+        console.log("OD OVOG IMAM PORUKE",user[0]);
+        console.log("MOJE KONVERZACIJE 1", myProfileData.myConversations);
+        if (myProfileData.myConversations.indexOf(user[0]) === -1) {
+        myProfileData.myConversations.push(user[0]);
+        console.log("MOJE KONVERZACIJE 2", myProfileData.myConversations);
+        updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
         }
     }
 }
 
+/* if (myProfileData.myConversations.indexOf(user[0]) === -1) {
+        myProfileData.myConversations.push(user[0]);
+        updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
+        console.log("MOJE KONVERZACIJE", myProfileData.myConversations);
+    } */
