@@ -759,6 +759,7 @@ div .callIcon {
 }
 #messages {
     width: 100%;
+    overflow-y: scroll;
 }
 #messages>div{
     text-wrap: normal;
