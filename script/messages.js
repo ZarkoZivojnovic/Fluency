@@ -190,10 +190,19 @@ function dovuciPoruke() {
         for (element of poruke) {
             //console.log("BODI PORUKE", element.body);
             var divZaPoruku = document.createElement("div");
+            var sadrzajDiv = document.createElement("div");
+            var posiljalac = document.createElement("div");
+            var vreme = document.createElement("div");
             divZaPoruku.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
-            divZaPoruku.innerHTML = element.body;
-
+            posiljalac.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
+            vreme.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
+            sadrzajDiv.innerHTML = element.body;
+            posiljalac.innerHTML = element.sender;
+            vreme.innerHTML = element.date;
+            document.getElementById("messages").appendChild(posiljalac);
+            divZaPoruku.appendChild(sadrzajDiv);
             document.getElementById("messages").appendChild(divZaPoruku);
+            document.getElementById("messages").appendChild(vreme);
             messages.scrollTop = messages.scrollHeight;
         }
     });
