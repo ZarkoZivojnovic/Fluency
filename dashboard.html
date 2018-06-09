@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fluency</title>
     <link rel="icon" type="image/png" href="graph/favicon.png" sizes="16x16">
-    <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/dashStyle.css">
 </head>
 <body>
@@ -25,21 +25,18 @@
                 <div id="conversations" class="flexColumn leftSide hideLeftSide">
                     <div class="showHideLeftSideBtn">Conversations</div>
                 </div>
-
                 <div id="chatContent" class="noVisibility flexColumn rightSide smFullWidth">
                     <div id="videoStreamDiv" class="hide">
                         <video src="#" id="friendVideo"></video>
                         <video src="#" id="myVideo"></video>
                     </div>
-                    <div id="messages"></div>
+                    <div id="messages" class="scrollbar-external"></div>
                     <form action="?" method="post" id="sendMsgForm" class="fullWidth flexRow">
                         <label for="typeMsg"></label><input type="text" name="typeMsg" id="typeMsg"
                                                             class="fullWidth msgInput" autocomplete="off">
                         <input type="submit" value="➤">
                     </form>
                 </div>
-
-
             </div>
         </div>
         <div id="myProfileDiv" class="hide">
