@@ -41,8 +41,8 @@ var myArray = [
     [1, 1],
     [1, 3],
     [2, 4]
-]
-var item = [1, 0]
+];
+var item = [1, 0];
 
 console.log(isArrayInArray(myArray, item));
 
@@ -150,30 +150,30 @@ function getChat(conversationKey) { //dovuci chat
 }
 
 function proveriDaLiImaPoruka(username) {
-    console.log("USAO U FUNKCIJU");
+    //console.log("USAO U FUNKCIJU");
     var putanja = "newMsgs/" + username;
-    console.log(putanja);
+    //console.log(putanja);
     var ref = firebase.database().ref(putanja);
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (newMsgsSnapshot) {
             var userOdKogImamPoruke = [];
             userOdKogImamPoruke.push(newMsgsSnapshot.key);
             userOdKogImamPoruke.push(newMsgsSnapshot.val());
-            console.log("USER OD KOGA IMAM PORUKE", userOdKogImamPoruke, userOdKogImamPoruke.length);
-            console.log("CEO NIZ", odKogaImamPoruke);
+            //console.log("USER OD KOGA IMAM PORUKE", userOdKogImamPoruke, userOdKogImamPoruke.length);
+            //console.log("CEO NIZ", odKogaImamPoruke);
             if (isArrayInArray(odKogaImamPoruke, userOdKogImamPoruke)) {
             } else {
                 odKogaImamPoruke.push(userOdKogImamPoruke);
             }
         });
-        console.log("OD NJIH IMAM PORUKE", odKogaImamPoruke);
+        //console.log("OD NJIH IMAM PORUKE", odKogaImamPoruke);
         napuniKonverzacije();
     });
 }
 
 function dovuciPoruke() {
     document.getElementById("messages").innerText = "";
-    console.log("POCINJE DOVLACENJE");
+    //console.log("POCINJE DOVLACENJE");
     var poruke = [];
     var poruka;
 
@@ -182,13 +182,13 @@ function dovuciPoruke() {
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
             poruka = messageSnapshot.val();
-            console.log("PORUKA", poruka);
+            //console.log("PORUKA", poruka);
             poruke.push(poruka);
 
         });
-        console.log("PORUKE", poruke, poruke.length);
+        //console.log("PORUKE", poruke, poruke.length);
         for (element of poruke) {
-            console.log("BODI PORUKE", element.body);
+            //console.log("BODI PORUKE", element.body);
             var divZaPoruku = document.createElement("div");
             divZaPoruku.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
             divZaPoruku.innerHTML = element.body;
@@ -200,20 +200,21 @@ function dovuciPoruke() {
 }
 
 function napuniKonverzacije() {
-    console.log(odKogaImamPoruke);
+    //console.log(odKogaImamPoruke);
     for (user of odKogaImamPoruke) {
-        console.log("ceo user od kog imam poruke", user);
-        console.log("OD OVOG IMAM PORUKE", user[0]);
-        console.log("MOJE KONVERZACIJE 1", myProfileData.myConversations);
-		if (myProfileData.myConversations === undefined) myProfileData.myConversations=[];
+        //console.log("ceo user od kog imam poruke", user);
+        //console.log("OD OVOG IMAM PORUKE", user[0]);
+        //console.log("MOJE KONVERZACIJE 1", myProfileData.myConversations);
+        if (myProfileData.myConversations === undefined) myProfileData.myConversations = [];
         if (myProfileData.myConversations.indexOf(user[0]) === -1) {
             myProfileData.myConversations.push(user[0]);
-            console.log("MOJE KONVERZACIJE 2", myProfileData.myConversations);
+            //console.log("MOJE KONVERZACIJE 2", myProfileData.myConversations);
             updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
         }
     }
-	drawListOfConversations(myProfileData.myConversations);
+    drawListOfConversations(myProfileData.myConversations);
 }
+
 //trebalo bi da radi sad
 
 

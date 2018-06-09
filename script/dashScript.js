@@ -17,18 +17,23 @@ const navigation = document.getElementById("navigation"),
     usersName = document.getElementById("usersName"),
     profileDiv = document.getElementById("profileDiv"),
     mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv],
-    fluencyColor = "rgb(81, 0, 172)";
-
+    fluencyColor = "rgb(81, 0, 172)",
+    loading = document.getElementById("loadingBackground"),
+    listaUsera = document.getElementById("usersList"),
+    backSaProfilaBtn = document.getElementById("backSaProfila"),
+    chooseChannel = document.getElementById("chooseChannel");
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
 var useriZaPrikaz = [];
 var glavniDiv = document.getElementById("usersList");
 
+onload();
+
 signOutButton.addEventListener("click", goOffline);
 
-document.getElementById("backSaProfila").addEventListener('click', backSaProfila);
-document.getElementById("usersList").addEventListener('click', udjiNaProfil);
-document.getElementById("chooseChannel").addEventListener('submit', filtrirajPoJeziku);
+backSaProfilaBtn.addEventListener('click', backSaProfila);
+listaUsera.addEventListener('click', udjiNaProfil);
+chooseChannel.addEventListener('submit', filtrirajPoJeziku);
 
 profileDiv.addEventListener("click", event => {
     event.stopPropagation();
@@ -36,23 +41,6 @@ profileDiv.addEventListener("click", event => {
         hide(profileDiv);
     }
 });
-
-addRadioInput(); // dok se ne nadje bolje mesto xD
-
-firebase.auth().onAuthStateChanged((user) => {
-    if (!user) {
-        location.assign("./login.html");
-    } else {
-        let getUsername = setInterval(() => {
-            if (myProfileData.username !== undefined) {
-                clearInterval(getUsername);
-                usersName.innerText = myProfileData.username;
-            }
-        }, 100);
-    }
-});
-
-firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
 
 showHideSidebar.addEventListener("click", event => {
     if (sidebar.style.right === "" || sidebar.style.right === "0px") {
@@ -70,36 +58,68 @@ navigation.addEventListener("click", event => {
             let divElement = document.getElementById(event.target.id + "Div");
             show(divElement);
             if (event.target.id === "myProfile") {
-                let waitingForData = setInterval(() => {
-                    if (typeof myProfileData.username !== "undefined") {
-                        clearInterval(waitingForData);
-                        showProfileEditForm("disable");
-                        hide(channelsDiv);
-                        hide(myFavoritesDiv);
-                        hide(myMsgsDiv);
-                    }
-                });
+                showMyProfile();
             } else if (event.target.id === "channels") {
-                hide(myProfileDiv);
-                hide(myFavoritesDiv);
-                hide(myMsgsDiv);
-                dovuciUsere();
-                channelsDiv.addEventListener("click", selectLangChannel);
+                showChannels();
             } else if (event.target.id === "myFavorites") {
-                showFavs(myProfileData.myFavorites);
-                hide(myProfileDiv);
-                hide(channelsDiv);
-                hide(myMsgsDiv);
+                showMyFavorites();
             } else if (event.target.id === "myMessages") {
-                hide(myProfileDiv);
-                hide(channelsDiv);
-                hide(myFavoritesDiv);
-                drawListOfConversations(myProfileData.myConversations)
+                showMyMessages();
             }
         }
     }
     event.preventDefault();
 });
+
+function showMyProfile() {
+    let waitingForData = setInterval(() => {
+        if (typeof myProfileData.username !== "undefined") {
+            clearInterval(waitingForData);
+            showProfileEditForm("disable");
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv);
+            show(myProfileDiv);
+        }
+    });
+}
+
+function showChannels() {
+    dovuciUsere();
+    show(channelsDiv);
+    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv);
+    channelsDiv.addEventListener("click", selectLangChannel);
+}
+
+function showMyFavorites() {
+    showFavs(myProfileData.myFavorites);
+    hide(myProfileDiv, channelsDiv, myMsgsDiv);
+    show(myFavoritesDiv);
+}
+
+function showMyMessages() {
+    drawListOfConversations(myProfileData.myConversations);
+    hide(myProfileDiv, channelsDiv, myFavoritesDiv);
+    show(myMsgsDiv);
+}
+
+function onload() {
+    addRadioInput();
+    show(loading);
+    firebase.auth().onAuthStateChanged((user) => {
+        if (!user) {
+            location.assign("./login.html");
+        } else {
+            let getUsername = setInterval(() => {
+                if (myProfileData.username !== undefined) {
+                    clearInterval(getUsername);
+                    usersName.innerText = myProfileData.username;
+                    hide(loading);
+                    showChannels();
+                }
+            }, 100);
+        }
+    });
+    firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
+}
 
 function setUpSideBar(addClass, removeClass, string) {
     showHideSidebar.classList.remove(removeClass);
@@ -372,8 +392,10 @@ function show(element, property = "inherit") {
     element.style.display = property;
 }
 
-function hide(element) {
-    element.style.display = "none";
+function hide(...elements) {
+    for (let element of elements) {
+        element.style.display = "none";
+    }
 }
 
 function dovuciUsere() {
@@ -406,7 +428,7 @@ function prikaziUsere(nizUsera) {
 
         var usersPhoto = document.createElement("div");
         usersPhoto.classList.add("usersPhoto");
-        if (korisnik.profilePhoto !== undefined){
+        if (korisnik.profilePhoto !== undefined) {
             usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
             usersPhoto.style.backgroundSize = "cover";
         }
@@ -448,43 +470,66 @@ function prikaziUsere(nizUsera) {
 function filtrirajPoJeziku(event) {
     event.preventDefault();
     var filterJezik = [];
-    filtriraniUseri = [];
-    var divUser = document.getElementsByClassName("userDiv");
+    var filtriraniUseri = [];
     var radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']");
     var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
-    for (jezik of radioJezici) {
-        if (jezik.checked == true) {
+    for (let jezik of radioJezici) {
+        if (jezik.checked) {
             filterJezik.push(jezik.value);
         }
     }
-    for (nivo of radioNivoi) {
-        if (nivo.checked == true) {
+    if (filterJezik.length === 0){
+        alert("jezik nije oznacen");
+        return;
+    }
+    for (let nivo of radioNivoi) {
+        if (nivo.checked) {
             filterJezik.push(nivo.id);
         }
     }
-    //console.log(filterJezik);
-
-    for (korisnik of listaUseraIzBaze) {
-        for (korisnikJezik of korisnik.otherLanguages) {
-            if (korisnikJezik.toString().includes(filterJezik.toString())) {
+    if (typeof filterJezik[1] === "undefined") {
+        for (let korisnik of listaUseraIzBaze){
+            console.log(korisnik);
+            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]){
                 filtriraniUseri.push(korisnik);
-                //console.log(korisnikJezik.toString());
-                //console.log(filterJezik.toString());
+            } else if (typeof korisnik.otherLanguages !== "undefined"){
+                for (let jezik of korisnik.otherLanguages){
+                    console.log(jezik[0], filterJezik[0]);
+                    if (filterJezik[0] === jezik[0]){
+                        filtriraniUseri.push(korisnik);
+                    }
+                }
+            }
+        }
+    } else if (typeof filterJezik[1] !== "undefined" && filterJezik[1] === "native") {
+        for (let korisnik of listaUseraIzBaze) {
+            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
+                filtriraniUseri.push(korisnik);
+            }
+        }
+    } else if (typeof filterJezik[1] !== "undefined"){
+        for (korisnik of listaUseraIzBaze) {
+            if (typeof korisnik.otherLanguages !== "undefined"){
+                for (korisnikJezik of korisnik.otherLanguages) {
+                    if (korisnikJezik.toString().includes(filterJezik.toString())) {
+                        filtriraniUseri.push(korisnik);
+                    }
+                }
             }
         }
     }
-    //console.log(filtriraniUseri);
     prikaziUsere(filtriraniUseri);
+    chooseChannel.reset();
 }
 
 function udjiNaProfil(event) {
     let indexOsobe;
-    if (event.target!==event.currentTarget){
-        if (event.target.className === "msgIcon"){
+    if (event.target !== event.currentTarget) {
+        if (event.target.className === "msgIcon") {
             indexOsobe = event.target.parentNode.parentNode.id;
             let receiver = useriZaPrikaz[indexOsobe].username;
             openConversationWithThisUser(receiver);
-        } else if (event.target.className === "callIcon"){
+        } else if (event.target.className === "callIcon") {
             console.log("call");
         } else {
             indexOsobe = event.target.id;
@@ -494,7 +539,7 @@ function udjiNaProfil(event) {
             if (indexOsobe === "") {
                 indexOsobe = event.target.parentNode.parentNode.id;
             }
-            let userData = convertUserInfoToString(useriZaPrikaz[indexOsobe]);
+            let userData = convertUserInfoForProfileDraw(useriZaPrikaz[indexOsobe]);
             drawProfile(userData);
         }
     }
@@ -505,7 +550,7 @@ function backSaProfila(event) {
     hide(profileDiv);
 }
 
-function convertUserInfoToString(user) {
+function convertUserInfoForProfileDraw(user) {
     let language = user.nativeLanguage,
         gender = "n/a",
         interests, birthDate;
@@ -522,7 +567,7 @@ function convertUserInfoToString(user) {
     if (typeof user.interests !== "undefined") {
         interests = user.interests.join(", ");
     }
-    if (typeof user.birthDate !== "undefined"){
+    if (typeof user.birthDate !== "undefined") {
         birthDate = "🎂 " + user.birthDate;
     }
     return {
@@ -557,4 +602,5 @@ function drawProfile(obj) {
     document.getElementById("addToFavsBtn").name = obj.username;
     document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
     show(profileDiv);
+
 }
