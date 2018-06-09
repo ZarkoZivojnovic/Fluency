@@ -194,6 +194,7 @@ function dovuciPoruke() {
             divZaPoruku.innerHTML = element.body;
 
             document.getElementById("messages").appendChild(divZaPoruku);
+            messages.scrollTop = messages.scrollHeight;
         }
     });
 }
@@ -221,3 +222,4 @@ function napuniKonverzacije() {
         updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
         console.log("MOJE KONVERZACIJE", myProfileData.myConversations);
     } */
+

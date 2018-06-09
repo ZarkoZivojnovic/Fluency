@@ -757,12 +757,22 @@ div .callIcon {
     color: white;
     transform: scale(1.4,1.4);
 }
+#sendMsgForm>input[type="submit"]:focus{
+    box-shadow: none;
+    outline: 0;
+}
 #messages {
+    position: relative;
+    height: 100%;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+    padding: 10px;
 }
 #messages>div{
     text-wrap: normal;
-    min-width: 51%;
+    min-width: 30%;
     max-width: 70%;
     height: auto;
     background-color: rgba(0, 0, 0, 0.3);
@@ -775,12 +785,13 @@ div .callIcon {
 
 .msgLeft {
     text-align: left;
-    float: left;
+    align-self: flex-start;
+
 }
 
 .msgRight {
+    align-self: flex-end;
     text-align: right;
-    float: right;
 }
 
 @media screen and (max-width: 900px) {
