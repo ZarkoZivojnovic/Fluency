@@ -84,7 +84,7 @@ function showMyProfile() {
 }
 
 function showChannels() {
-    dovuciUsere();
+    dovuciUsere("online");
     show(channelsDiv);
     hide(myProfileDiv, myFavoritesDiv, myMsgsDiv);
     channelsDiv.addEventListener("click", selectLangChannel);
@@ -399,13 +399,19 @@ function hide(...elements) {
     }
 }
 
-function dovuciUsere() {
+function dovuciUsere(filter, string) {
     listaUseraIzBaze = [];
     firebase.database().ref('users/').once('value').then(function (snapshot) {
         snapshot.forEach(function (userSnapshot) {
-            var userFromBase = userSnapshot.val();
-            if (userFromBase.status == "online") {
-                listaUseraIzBaze.push(userFromBase);
+            let userFromBase = userSnapshot.val();
+            if (filter ==="online"){
+                if (userFromBase.status === "online") {
+                    listaUseraIzBaze.push(userFromBase);
+                }
+            } else if (filter==="searchByUsername"){
+                if (userFromBase.username.includes(string)) {
+                    listaUseraIzBaze.push(userFromBase);
+                }
             }
         });
         prikaziUsere(listaUseraIzBaze);
@@ -475,7 +481,7 @@ function filtrirajPoJeziku(event) {
             filterJezik.push(jezik.value);
         }
     }
-    if (filterJezik.length === 0){
+    if (filterJezik.length === 0) {
         alert("jezik nije oznacen");
         return;
     }
@@ -485,14 +491,14 @@ function filtrirajPoJeziku(event) {
         }
     }
     if (typeof filterJezik[1] === "undefined") {
-        for (let korisnik of listaUseraIzBaze){
+        for (let korisnik of listaUseraIzBaze) {
             console.log(korisnik);
-            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]){
+            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
                 filtriraniUseri.push(korisnik);
-            } else if (typeof korisnik.otherLanguages !== "undefined"){
-                for (let jezik of korisnik.otherLanguages){
+            } else if (typeof korisnik.otherLanguages !== "undefined") {
+                for (let jezik of korisnik.otherLanguages) {
                     console.log(jezik[0], filterJezik[0]);
-                    if (filterJezik[0] === jezik[0]){
+                    if (filterJezik[0] === jezik[0]) {
                         filtriraniUseri.push(korisnik);
                     }
                 }
@@ -504,9 +510,9 @@ function filtrirajPoJeziku(event) {
                 filtriraniUseri.push(korisnik);
             }
         }
-    } else if (typeof filterJezik[1] !== "undefined"){
+    } else if (typeof filterJezik[1] !== "undefined") {
         for (korisnik of listaUseraIzBaze) {
-            if (typeof korisnik.otherLanguages !== "undefined"){
+            if (typeof korisnik.otherLanguages !== "undefined") {
                 for (korisnikJezik of korisnik.otherLanguages) {
                     if (korisnikJezik.toString().includes(filterJezik.toString())) {
                         filtriraniUseri.push(korisnik);

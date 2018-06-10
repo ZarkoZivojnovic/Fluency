@@ -2,31 +2,44 @@ const searchDiv = document.getElementById("search"),
     searchBar = document.getElementById("searchBar"),
     searchForm = document.getElementById("searchForm"),
     showSearchBtn = document.getElementById("showSearchBtn");
-let results;
 
 showSearchBtn.addEventListener("click", event => {
-    console.log(searchDiv.offsetHeight);
-   if (searchDiv.offsetHeight===20){
-       searchDiv.style.maxHeight= "620px";
-   } else {
-       searchDiv.style.maxHeight= "20px";
-   }
+    event.preventDefault();
+    if (searchDiv.offsetHeight === 20) {
+        searchTransform("big");
+    } else {
+        searchTransform("small");
+    }
 });
 
 searchForm.addEventListener("submit", event => {
     event.preventDefault();
     let string = getStringForSearch();
-    searchInBase(string);
+    dovuciUsere("searchByUsername", string);
     show(loading);
-    let interval = setInterval(()=>{
-       if (results !== undefined)  {
-           searchForm.reset();
-           searchDiv.style.maxHeight= "20px";
-           hide(loading);
-           clearInterval(interval);
-       }
-    },1000);
+    let interval = setInterval(() => {
+        if (listaUseraIzBaze !== undefined) {
+            searchForm.reset();
+            searchTransform("small");
+            hide(loading);
+            clearInterval(interval);
+        }
+    }, 1000);
 });
+
+function searchTransform(property) {
+    if (property === "small"){
+        searchDiv.style.transform = "scale(1,1)";
+        setTimeout(() => {
+            searchDiv.style.maxHeight = "20px";
+        }, 500)
+    } else if (property==="big"){
+        searchDiv.style.maxHeight = "300px";
+        setTimeout(() => {
+            searchDiv.style.transform = "scale(1.2,1.2)";
+        }, 500)
+    }
+}
 
 function getStringForSearch() {
     const string = searchBar.value;
@@ -35,17 +48,4 @@ function getStringForSearch() {
         return;
     }
     return string;
-}
-
-function searchInBase(string) {
-    results = [];
-    firebase.database().ref('users/').once('value').then(function (snapshot) {
-        snapshot.forEach(function (userSnapshot) {
-            let  user = userSnapshot.val();
-            if (user.username.includes(string)) {
-                results.push(user);
-            }
-        });
-        prikaziUsere(results);
-    });
 }

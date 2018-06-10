@@ -824,12 +824,13 @@ div .callIcon {
 #search {
     position: absolute;
     top: -20px;
-    left: 50%;
+    left: 55%;
     width: 300px;
     margin: 0 auto;
     max-height: 20px;
-    transition: max-height 700ms;
+    transition: all 700ms;
     overflow: hidden;
+    border-radius: 100px 100px 20px 20px;
 }
 
 #search form {
@@ -838,7 +839,6 @@ div .callIcon {
     display: flex;
     flex-direction: row;
     border-radius: 0 0 10px 10px;
-    border-top: 0;
 }
 
 #search input[type="search"]{
@@ -852,8 +852,7 @@ div .callIcon {
 }
 
 #showSearchBtn {
-    border-radius: 50% 50% 0 0;
-    border-bottom: 0;
+   /* border-radius: 50% 50% 0 0;*/
 }
 
 .searchBar {
