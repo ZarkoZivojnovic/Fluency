@@ -785,7 +785,7 @@ div .callIcon {
     max-width: 70%;
     height: auto;
     padding: 10px;
-    margin: 5px;
+    margin: 0 5px;
 }
 
 .msgBody {
@@ -800,6 +800,7 @@ div .callIcon {
 #messages span{
     color: white;
     font-size: 12px;
+    margin: 0 10px;
 }
 
 #messages .time {
@@ -814,6 +815,10 @@ div .callIcon {
 .msgRight {
     align-self: flex-end;
     text-align: right;
+}
+
+.noMessages {
+    color: white;
 }
 
 #loadingBackground{

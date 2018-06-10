@@ -10,8 +10,8 @@ src: url(../font/AvenirBold.otf);
 
 html, body {
     box-sizing: border-box;
-    /*height: 100%;*/
     font-family: AvenirNextBold, 'Montserrat', sans-serif;
+    overflow-x: hidden;
 }
 *,*:before,*:after {
     box-sizing: inherit;

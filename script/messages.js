@@ -20,7 +20,6 @@ let waitForInfo = setInterval(() => {
 
 
 setInterval(() => {
-    //proveri da li ima poruka
     proveriDaLiImaPoruka(myProfileData.username);
 }, 10000);
 
@@ -53,6 +52,11 @@ listOfConversations.addEventListener("click", event => {
         openConversation(conversationKey);
     }
     markSelectedChat();
+    show(loading);
+    setTimeout(()=>{
+        dovuciPoruke(conversationKey);
+        hide(loading);
+    },500);
 });
 
 sendMessageForm.addEventListener("submit", event => {
@@ -64,12 +68,12 @@ sendMessageForm.addEventListener("submit", event => {
 });
 
 function markSelectedChat() {
+    document.getElementById(receiver).checked = true;
     let allChats = document.querySelectorAll("input[name='selectedChat']");
     for (let chat = 0; chat < allChats.length; chat++) {
         let selectedChat = document.querySelector("label[for='" + allChats[chat].id + "']");
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
-            dovuciPoruke();
         } else {
             selectedChat.style.backgroundColor = "transparent";
         }
@@ -89,9 +93,13 @@ function openConversationWithThisUser(user) {
     }
     show(myMsgsDiv);
     drawListOfConversations(myProfileData.myConversations);
-    document.getElementById(receiver).checked = true;
-    markSelectedChat();
     openConversation(conversationKey);
+    show(loading);
+    setTimeout(()=>{
+        markSelectedChat();
+        dovuciPoruke(conversationKey);
+        hide(loading);
+    },500);
 }
 
 function createConversationKey(myUsername, otherUsername) {
@@ -109,7 +117,7 @@ function sendMessage(receiver, string) {
             seen: false
         };
     firebase.database().ref('messages/' + conversationKey + "/" + new Date().getTime() + "/").update(message);
-    dovuciPoruke();
+    dovuciPoruke(conversationKey);
 }
 
 function markMessageAsSeen(conversationKey, messageKey) {
@@ -138,52 +146,43 @@ function drawListOfConversations(arr) {
     listOfConversations.innerHTML = div.outerHTML;
 }
 
-
-function openConversation(conversationKey) {
-    messages.innerText = getChat(conversationKey); /// ispis chat-a
+function openConversation() {
     chatContent.style.visibility = "visible";
-
-}
-
-function getChat(conversationKey) { //dovuci chat
-    return "dfijljafldjlf jdlfjldjfldjlfjd fdjf dfjldj fldjfjdčfjdfj dfjdfja";
 }
 
 function proveriDaLiImaPoruka(username) {
-    //console.log("USAO U FUNKCIJU");
-    var putanja = "newMsgs/" + username;
-    //console.log(putanja);
-    var ref = firebase.database().ref(putanja);
+    const ref = firebase.database().ref("newMsgs/" + username);
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (newMsgsSnapshot) {
-            var userOdKogImamPoruke = [];
+            let userOdKogImamPoruke = [];
             userOdKogImamPoruke.push(newMsgsSnapshot.key);
             userOdKogImamPoruke.push(newMsgsSnapshot.val());
-            //console.log("USER OD KOGA IMAM PORUKE", userOdKogImamPoruke, userOdKogImamPoruke.length);
-            //console.log("CEO NIZ", odKogaImamPoruke);
-            if (isArrayInArray(odKogaImamPoruke, userOdKogImamPoruke)) {
+            if (!isArrayInArray(odKogaImamPoruke, userOdKogImamPoruke)) {
             } else {
                 odKogaImamPoruke.push(userOdKogImamPoruke);
             }
         });
-        //console.log("OD NJIH IMAM PORUKE", odKogaImamPoruke);
         napuniKonverzacije();
     });
 }
 
-function dovuciPoruke() {
-    document.getElementById("messages").innerText = "";
-    //console.log("POCINJE DOVLACENJE");
-    var poruke = [];
-    var poruka;
-
-    var imeKonverzacije = createConversationKey(myProfileData.username, receiver);
-    var ref = firebase.database().ref("messages/" + imeKonverzacije);
+function dovuciPoruke(imeKonverzacije) {
+    const ref = firebase.database().ref("messages/" + imeKonverzacije);
+    let poruke = [];
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
-            poruka = messageSnapshot.val();
+            let poruka = messageSnapshot.val();
             poruke.push(poruka);
         });
+        drawChatContent(poruke);
+    });
+}
+
+function drawChatContent(poruke) {
+    messages.innerHTML = "";
+    if (poruke.length === 0) {
+        messages.innerHTML = "<div class='noMessages'><h2>no messages yet</h2></div>";
+    } else {
         for (element of poruke) {
             let divZaPoruku = document.createElement("div"),
                 sadrzajDiv = document.createElement("div"),
@@ -193,17 +192,16 @@ function dovuciPoruke() {
             divZaPoruku.className = element.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku";
             sadrzajDiv.textContent = element.body;
             sadrzajDiv.className = "msgBody";
-            posiljalac.textContent = element.sender;
-            posiljalac.className = "sender";
+            posiljalac.textContent = element.sender === myProfileData.username ? "me:" : element.sender+":";
             vreme.textContent = time;
             vreme.className = "time";
             divZaPoruku.appendChild(sadrzajDiv);
             sadrzajDiv.insertAdjacentHTML("beforebegin", posiljalac.outerHTML);
             sadrzajDiv.insertAdjacentHTML("afterend", vreme.outerHTML);
-            messages.appendChild(divZaPoruku);
+            document.getElementById("messages").appendChild(divZaPoruku);
             messages.scrollTop = messages.scrollHeight;
         }
-    });
+    }
 }
 
 function formatTime(time) {
@@ -220,27 +218,13 @@ function dodajNulu(broj) {
 }
 
 function napuniKonverzacije() {
-    //console.log(odKogaImamPoruke);
     for (user of odKogaImamPoruke) {
-        //console.log("ceo user od kog imam poruke", user);
-        //console.log("OD OVOG IMAM PORUKE", user[0]);
-        //console.log("MOJE KONVERZACIJE 1", myProfileData.myConversations);
         if (myProfileData.myConversations === undefined) myProfileData.myConversations = [];
         if (myProfileData.myConversations.indexOf(user[0]) === -1) {
             myProfileData.myConversations.push(user[0]);
-            //console.log("MOJE KONVERZACIJE 2", myProfileData.myConversations);
             updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
         }
     }
     drawListOfConversations(myProfileData.myConversations);
+    markSelectedChat();
 }
-
-//trebalo bi da radi sad
-
-
-/* if (myProfileData.myConversations.indexOf(user[0]) === -1) {
-        myProfileData.myConversations.push(user[0]);
-        updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
-        console.log("MOJE KONVERZACIJE", myProfileData.myConversations);
-    } */
-
