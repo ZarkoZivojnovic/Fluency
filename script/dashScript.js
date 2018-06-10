@@ -22,6 +22,7 @@ const navigation = document.getElementById("navigation"),
     listaUsera = document.getElementById("usersList"),
     backSaProfilaBtn = document.getElementById("backSaProfila"),
     chooseChannel = document.getElementById("chooseChannel");
+
 var listaUseraIzBaze = [];
 var filtriraniUseri = [];
 var useriZaPrikaz = [];
@@ -403,22 +404,18 @@ function dovuciUsere() {
     firebase.database().ref('users/').once('value').then(function (snapshot) {
         snapshot.forEach(function (userSnapshot) {
             var userFromBase = userSnapshot.val();
-            console.log(userFromBase);
             if (userFromBase.status == "online") {
                 listaUseraIzBaze.push(userFromBase);
             }
         });
-        console.log("USERI");
-        console.log("lista", listaUseraIzBaze, "length", listaUseraIzBaze.length);
         prikaziUsere(listaUseraIzBaze);
     });
 }
 
 function prikaziUsere(nizUsera) {
     useriZaPrikaz = [];
-    console.log("prikazi");
     glavniDiv.innerHTML = "";
-    for (korisnik of nizUsera) {
+    for (let korisnik of nizUsera) {
         useriZaPrikaz.push(korisnik);
         var userDiv = document.createElement("div");
         //userDiv.id = "useriZaPrikaz["+nizUsera.indexOf(korisnik)+"]";
@@ -428,7 +425,7 @@ function prikaziUsere(nizUsera) {
 
         var usersPhoto = document.createElement("div");
         usersPhoto.classList.add("usersPhoto");
-        if (korisnik.profilePhoto !== undefined) {
+        if (korisnik.profilePhoto !== undefined && korisnik.profilePhoto !== "") {
             usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
             usersPhoto.style.backgroundSize = "cover";
         }
@@ -470,7 +467,7 @@ function prikaziUsere(nizUsera) {
 function filtrirajPoJeziku(event) {
     event.preventDefault();
     var filterJezik = [];
-    var filtriraniUseri = [];
+    filtriraniUseri = [];
     var radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']");
     var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
     for (let jezik of radioJezici) {

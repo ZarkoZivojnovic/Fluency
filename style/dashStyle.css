@@ -83,7 +83,7 @@ a {
     width: 150px;
     opacity: 0;
     position: relative;
-    top: -170px;
+    top: -50px;
     background: rgba(0, 0, 0, 0.7);
     padding: 10px;
     border: 0;
@@ -369,6 +369,8 @@ select {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
+#channelsDiv {position: relative}
 
 #channelsDiv > div.searchMenu:hover {
     background-color: rgb(81, 0, 172);
@@ -751,29 +753,31 @@ div .callIcon {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-#sendMsgForm>input[type="submit"] {
+#sendMsgForm>input[type="submit"],.sendArrow {
     width: 10%;
     border: 0;
     color: rgb(81, 0, 172);
     transition: transform, color 500ms
 }
 
-#sendMsgForm>input[type="submit"]:hover{
+#sendMsgForm>input[type="submit"]:hover,
+.sendArrow:hover{
     text-shadow: 2px 2px 1px black;
     color: white;
     transform: scale(1.4,1.4);
 }
-#sendMsgForm>input[type="submit"]:focus{
+#sendMsgForm>input[type="submit"]:focus,
+.sendArrow:focus{
     box-shadow: none;
     outline: 0;
 }
 #messages {
     height: 100%;
-    width: 107%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 10px 30px 10px 10px;
-    overflow-y: scroll;
+    padding: 10px;
+    overflow-y: auto;
 }
 #messages>div{
     text-wrap: normal;
@@ -816,6 +820,49 @@ div .callIcon {
     border-radius: 100%;
     animation: rotiranje 1s linear infinite;
 }
+
+#search {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    width: 300px;
+    margin: 0 auto;
+    max-height: 20px;
+    transition: max-height 700ms;
+    overflow: hidden;
+}
+
+#search form {
+    padding: 20px 15px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    border-radius: 0 0 10px 10px;
+    border-top: 0;
+}
+
+#search input[type="search"]{
+    width: 250px;
+    background-color: white;
+}
+
+#search input[type="submit"]{
+    width: 30px;
+    border: 0;
+}
+
+#showSearchBtn {
+    border-radius: 50% 50% 0 0;
+    border-bottom: 0;
+}
+
+.searchBar {
+    width: 300px;
+    text-align: center;
+    color: #d4d4d4;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 
 @keyframes rotiranje {
     from {transform: rotate(0deg)}

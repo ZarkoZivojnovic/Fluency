@@ -308,6 +308,13 @@
         </div>
         <div id="myNotesDiv" class="hide"></div>
         <div id="channelsDiv" class="hide fullWidth">
+            <div id="search">
+                <div id="showSearchBtn" class="searchBar border">search by username</div>
+                <form action="?" method="post" id="searchForm" class="searchBar border">
+                    <input type="search" title="search" name="searchInput" id="searchBar" autocomplete="off" placeholder="search">
+                    <input type="submit" value="➤" class="sendArrow">
+                </form>
+            </div>
             <div class="contentDiv shadow border flexRow noOverflow">
                 <div id="channelsList" class="noOverflow leftSide hideLeftSide">
                     <div class="showHideLeftSideBtn">Channels</div>
@@ -480,27 +487,6 @@
                 </div>
                 <div id="channelsUsers" class="rightSide smFullWidth">
                     <div id="usersList" class="hideScrollbar">
-
-                        <!--
-                        profilnu necemo ubacivati kao img nego background
-                        diva #usersPhoto ali to nam jos uvek ne treba xD
-                        -->
-
-                        <!-- model -->
-
-                        <!--    <div class="userDiv" id="username">
-                                    <div class="usersPhoto"></div>
-                                    <div class="usernameAndStatus">
-                                        <h3 class="username">Zarko</h3>
-                                        <p class="status">online</p>
-                                    </div>
-                                    <div class="icons">
-                                        <div class="callIcon"></div>
-                                        <div class="msgIcon"></div>
-                                    </div>
-                                </div>
-                        -->
-
                     </div>
                 </div>
             </div>
@@ -589,5 +575,6 @@
 <script src="script/uploadingProfilePhoto.js"></script>
 <script src="script/favorites.js"></script>
 <script src="script/messages.js"></script>
+<script src="script/search.js"></script>
 </body>
 </html>
