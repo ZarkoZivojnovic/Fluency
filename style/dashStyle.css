@@ -779,23 +779,36 @@ div .callIcon {
     padding: 10px;
     overflow-y: auto;
 }
-#messages>div{
+.divZaPoruku{
     text-wrap: normal;
     min-width: 30%;
     max-width: 70%;
     height: auto;
+    padding: 10px;
+    margin: 5px;
+}
+
+.msgBody {
+    width: 100%;
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 5px;
     color: white;
     padding: 10px;
-    margin: 5px;
     box-shadow: 0 0 3px white;
+}
+
+#messages span{
+    color: white;
+    font-size: 12px;
+}
+
+#messages .time {
+    font-size: 10px;
 }
 
 .msgLeft {
     text-align: left;
     align-self: flex-start;
-
 }
 
 .msgRight {

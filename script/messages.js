@@ -182,30 +182,41 @@ function dovuciPoruke() {
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
             poruka = messageSnapshot.val();
-            //console.log("PORUKA", poruka);
             poruke.push(poruka);
-
         });
-        //console.log("PORUKE", poruke, poruke.length);
         for (element of poruke) {
-            //console.log("BODI PORUKE", element.body);
-            var divZaPoruku = document.createElement("div");
-            var sadrzajDiv = document.createElement("div");
-            var posiljalac = document.createElement("div");
-            var vreme = document.createElement("div");
-            divZaPoruku.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
-            posiljalac.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
-            vreme.className = element.sender === myProfileData.username ? "msgRight" : "msgLeft";
-            sadrzajDiv.innerHTML = element.body;
-            posiljalac.innerHTML = element.sender;
-            vreme.innerHTML = element.date;
-            document.getElementById("messages").appendChild(posiljalac);
+            let divZaPoruku = document.createElement("div"),
+                sadrzajDiv = document.createElement("div"),
+                posiljalac = document.createElement("span"),
+                vreme = document.createElement("span"),
+                time = formatTime(element.date);
+            divZaPoruku.className = element.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku";
+            sadrzajDiv.textContent = element.body;
+            sadrzajDiv.className = "msgBody";
+            posiljalac.textContent = element.sender;
+            posiljalac.className = "sender";
+            vreme.textContent = time;
+            vreme.className = "time";
             divZaPoruku.appendChild(sadrzajDiv);
-            document.getElementById("messages").appendChild(divZaPoruku);
-            document.getElementById("messages").appendChild(vreme);
+            sadrzajDiv.insertAdjacentHTML("beforebegin", posiljalac.outerHTML);
+            sadrzajDiv.insertAdjacentHTML("afterend", vreme.outerHTML);
+            messages.appendChild(divZaPoruku);
             messages.scrollTop = messages.scrollHeight;
         }
     });
+}
+
+function formatTime(time) {
+    let datum = new Date(time);
+    return dodajNulu(datum.getHours())
+        + ':' + dodajNulu(datum.getMinutes())
+        + " " + dodajNulu(1 + datum.getDate())
+        + '-' + dodajNulu(datum.getMonth())
+        + "-" + datum.getFullYear();
+}
+
+function dodajNulu(broj) {
+    return broj < 10 ? '0' + broj : broj;
 }
 
 function napuniKonverzacije() {
