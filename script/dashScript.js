@@ -84,7 +84,7 @@ function showMyProfile() {
 }
 
 function showChannels() {
-    dovuciUsere("online");
+    dovuciUsere();
     show(channelsDiv);
     hide(myProfileDiv, myFavoritesDiv, myMsgsDiv);
     channelsDiv.addEventListener("click", selectLangChannel);
@@ -399,19 +399,13 @@ function hide(...elements) {
     }
 }
 
-function dovuciUsere(filter, string) {
+function dovuciUsere() {
     listaUseraIzBaze = [];
     firebase.database().ref('users/').once('value').then(function (snapshot) {
         snapshot.forEach(function (userSnapshot) {
             let userFromBase = userSnapshot.val();
-            if (filter ==="online"){
-                if (userFromBase.status === "online") {
-                    listaUseraIzBaze.push(userFromBase);
-                }
-            } else if (filter==="searchByUsername"){
-                if (userFromBase.username.includes(string)) {
-                    listaUseraIzBaze.push(userFromBase);
-                }
+            if (userFromBase.status === "online") {
+                listaUseraIzBaze.push(userFromBase);
             }
         });
         prikaziUsere(listaUseraIzBaze);
