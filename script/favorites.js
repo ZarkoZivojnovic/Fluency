@@ -12,7 +12,7 @@ favoritesList.addEventListener("click", openProfile);
 function openProfile(event) {
     if (event.target !== event.currentTarget) {
         let id = event.target.id.split("_")[0];
-        if (id===""){
+        if (id === "") {
             id = event.target.parentNode.id.split("_")[0]
         }
         let userInfo = convertUserInfoForProfileDraw(favListArr[id]);
@@ -23,23 +23,23 @@ function openProfile(event) {
 function refreshFavorites(event) {
     event.preventDefault();
     if (event.target !== event.currentTarget) {
-        let allFavs = document.getElementById("aFavs"),
+        const allFavs = document.getElementById("aFavs"),
             onlineFavs = document.getElementById("oFavs"),
-            favorites;
+            darkColor = "rgba(0, 0, 0, 0.4)",
+            whiteColor = "rgba(255, 255, 255, 0.1)";
+        let favorites;
         if (event.target.id === "allFavs") {
-            allFavs.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-            onlineFavs.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            [allFavs.style.backgroundColor, onlineFavs.style.backgroundColor] = [darkColor, whiteColor];
             favorites = new Array(dovuciUsere("favs"));
         } else if (event.target.id === "onlineFavs") {
-            allFavs.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-            onlineFavs.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-            favorites = new Array(dovuciUsere("favs","", "online"));
+            [allFavs.style.backgroundColor, onlineFavs.style.backgroundColor] = [whiteColor, darkColor];
+            favorites = new Array(dovuciUsere("favs", "", "online"));
         }
         show(loading);
         setTimeout(function () {
             drawFavsList(favoritesList, favorites[0]);
             hide(loading);
-        },500);
+        }, 500);
     }
 }
 
@@ -72,7 +72,7 @@ function drawFavsList(appendToElement, arr) {
             status = document.createElement("p");
         favDiv.setAttribute("id", arr.indexOf(arr[fav]) + "_id");
         favDiv.classList.add("favDiv");
-        if (typeof arr[fav].profilePhoto !== "undefined"){
+        if (typeof arr[fav].profilePhoto !== "undefined") {
             photoDiv.style.backgroundImage = "url('" + arr[fav].profilePhoto + "')";
             photoDiv.style.backgroundSize = "cover";
         }
