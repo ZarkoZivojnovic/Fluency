@@ -4,8 +4,7 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
     chatContent = document.getElementById("chatContent"),
     listOfConversations = document.getElementById("conversations");
 
-var odKogaImamPoruke = [];
-
+let odKogaImamPoruke = [];
 
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
@@ -35,16 +34,6 @@ function isArrayInArray(arr, item) {
     return contains;
 }
 
-var myArray = [
-    [1, 0],
-    [1, 1],
-    [1, 3],
-    [2, 4]
-];
-var item = [1, 0];
-
-console.log(isArrayInArray(myArray, item));
-
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
         receiver = event.target.id;
@@ -53,10 +42,10 @@ listOfConversations.addEventListener("click", event => {
     }
     markSelectedChat();
     show(loading);
-    setTimeout(()=>{
+    setTimeout(() => {
         dovuciPoruke(conversationKey);
         hide(loading);
-    },500);
+    }, 500);
 });
 
 sendMessageForm.addEventListener("submit", event => {
@@ -68,6 +57,7 @@ sendMessageForm.addEventListener("submit", event => {
 });
 
 function markSelectedChat() {
+    if (document.getElementById(receiver) === null)return;
     document.getElementById(receiver).checked = true;
     let allChats = document.querySelectorAll("input[name='selectedChat']");
     for (let chat = 0; chat < allChats.length; chat++) {
@@ -95,11 +85,11 @@ function openConversationWithThisUser(user) {
     drawListOfConversations(myProfileData.myConversations);
     openConversation(conversationKey);
     show(loading);
-    setTimeout(()=>{
+    setTimeout(() => {
         markSelectedChat();
         dovuciPoruke(conversationKey);
         hide(loading);
-    },500);
+    }, 500);
 }
 
 function createConversationKey(myUsername, otherUsername) {
@@ -181,7 +171,7 @@ function dovuciPoruke(imeKonverzacije) {
 function drawChatContent(poruke) {
     messages.innerHTML = "";
     if (poruke.length === 0) {
-        messages.innerHTML = "<div class='noMessages'><h2>no messages yet</h2></div>";
+        messages.innerHTML = "<div class='noContentMsg'><h2>no messages yet</h2></div>";
     } else {
         for (element of poruke) {
             let divZaPoruku = document.createElement("div"),
@@ -192,7 +182,7 @@ function drawChatContent(poruke) {
             divZaPoruku.className = element.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku";
             sadrzajDiv.textContent = element.body;
             sadrzajDiv.className = "msgBody";
-            posiljalac.textContent = element.sender === myProfileData.username ? "me:" : element.sender+":";
+            posiljalac.textContent = element.sender === myProfileData.username ? "me:" : element.sender + ":";
             vreme.textContent = time;
             vreme.className = "time";
             divZaPoruku.appendChild(sadrzajDiv);

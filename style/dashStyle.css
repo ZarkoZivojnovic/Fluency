@@ -817,7 +817,9 @@ div .callIcon {
     text-align: right;
 }
 
-.noMessages {
+.noContentMsg {
+    margin: 50px auto;
+    text-align: center;
     color: white;
 }
 

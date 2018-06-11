@@ -17,33 +17,34 @@ const navigation = document.getElementById("navigation"),
     usersName = document.getElementById("usersName"),
     profileDiv = document.getElementById("profileDiv"),
     mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv],
-    fluencyColor = "rgb(81, 0, 172)",
     loading = document.getElementById("loadingBackground"),
     listaUsera = document.getElementById("usersList"),
     backSaProfilaBtn = document.getElementById("backSaProfila"),
-    chooseChannel = document.getElementById("chooseChannel");
+    chooseChannel = document.getElementById("chooseChannel"),
+    glavniDiv = document.getElementById("usersList"),
+    fluencyColor = "rgb(81, 0, 172)";
 
-var listaUseraIzBaze = [];
-var filtriraniUseri = [];
-var useriZaPrikaz = [];
-var glavniDiv = document.getElementById("usersList");
+let useriZaPrikaz = [];
 
 onload();
 
 signOutButton.addEventListener("click", goOffline);
-
 backSaProfilaBtn.addEventListener('click', backSaProfila);
 listaUsera.addEventListener('click', udjiNaProfil);
 chooseChannel.addEventListener('submit', filtrirajPoJeziku);
+profileDiv.addEventListener("click", hideProfileDiv);
+showHideSidebar.addEventListener("click", moveSidebar);
+navigation.addEventListener("click", mainNavigation);
 
-profileDiv.addEventListener("click", event => {
+function hideProfileDiv(event) {
     event.stopPropagation();
     if (event.target === event.currentTarget) {
         hide(profileDiv);
     }
-});
+}
 
-showHideSidebar.addEventListener("click", event => {
+function moveSidebar(event) {
+    event.preventDefault();
     if (sidebar.style.right === "" || sidebar.style.right === "0px") {
         sidebar.style.right = "-300px";
         setUpSideBar("hiddenSidebar", "showingSidebar", "show ⇑");
@@ -51,9 +52,9 @@ showHideSidebar.addEventListener("click", event => {
         sidebar.style.right = "0";
         setUpSideBar("showingSidebar", "hiddenSidebar", "hide ⇒");
     }
-});
+}
 
-navigation.addEventListener("click", event => {
+function mainNavigation(event) {
     if (event.target !== event.currentTarget) {
         if (event.target.nodeName === "A") {
             let divElement = document.getElementById(event.target.id + "Div");
@@ -70,7 +71,7 @@ navigation.addEventListener("click", event => {
         }
     }
     event.preventDefault();
-});
+}
 
 function showMyProfile() {
     let waitingForData = setInterval(() => {
@@ -84,16 +85,26 @@ function showMyProfile() {
 }
 
 function showChannels() {
-    dovuciUsere();
-    show(channelsDiv);
+    let listaUsera = new Array(dovuciUsere());
+    show(loading);
     hide(myProfileDiv, myFavoritesDiv, myMsgsDiv);
-    channelsDiv.addEventListener("click", selectLangChannel);
+    setTimeout(() => {
+        prikaziUsere(listaUsera[0]);
+        show(channelsDiv);
+        channelsDiv.addEventListener("click", selectLangChannel);
+        hide(loading);
+    }, 500);
 }
 
 function showMyFavorites() {
-    showFavs(myProfileData.myFavorites);
+    let favorites = new Array(dovuciUsere("favs"));
+    show(loading);
     hide(myProfileDiv, channelsDiv, myMsgsDiv);
-    show(myFavoritesDiv);
+    setTimeout(() => {
+        drawFavsList(favoritesList, favorites[0]);
+        hide(loading);
+        show(myFavoritesDiv);
+    }, 500);
 }
 
 function showMyMessages() {
@@ -129,7 +140,6 @@ function setUpSideBar(addClass, removeClass, string) {
 }
 
 function selectLangChannel(event) {
-    if (event.target.nodeName === "INPUT") console.log(event.target.value);
     const radioInputs = document.querySelectorAll("input[type='radio']");
     for (let element = 0; element < radioInputs.length; element++) {
         if (radioInputs[element].checked) {
@@ -399,77 +409,119 @@ function hide(...elements) {
     }
 }
 
-function dovuciUsere() {
-    listaUseraIzBaze = [];
+function dovuciUsere(uslov, string, dodatniUslov) {
+    let tempArr = [];
     firebase.database().ref('users/').once('value').then(function (snapshot) {
         snapshot.forEach(function (userSnapshot) {
-            let userFromBase = userSnapshot.val();
-            if (userFromBase.status === "online") {
-                listaUseraIzBaze.push(userFromBase);
+            let user = userSnapshot.val();
+            if (!uslov) {
+                if (user.status === "online") {
+                    tempArr.push(user);
+                }
+            } else if (uslov === "search") {
+                if (user.username.includes(string)) {
+                    tempArr.push(user);
+                }
+            } else if (uslov === "favs") {
+                if (myProfileData.myFavorites.indexOf(user.username) !== -1) {
+                    if (!dodatniUslov) {
+                        tempArr.push(user);
+                    } else {
+                        if (user.status === "online") {
+                            tempArr.push(user);
+                        }
+                    }
+                }
             }
         });
-        prikaziUsere(listaUseraIzBaze);
     });
+    return tempArr;
 }
 
 function prikaziUsere(nizUsera) {
     useriZaPrikaz = [];
     glavniDiv.innerHTML = "";
+    if (nizUsera.length === 0) {
+        glavniDiv.innerHTML = "<div class='noContentMsg'><h2>no matches</h2></div>";
+        return;
+    }
     for (let korisnik of nizUsera) {
         useriZaPrikaz.push(korisnik);
-        var userDiv = document.createElement("div");
-        //userDiv.id = "useriZaPrikaz["+nizUsera.indexOf(korisnik)+"]";
+        let userDiv = document.createElement("div"),
+            usersPhoto = document.createElement("div"),
+            usernameAndStatus = document.createElement("div"),
+            usernameP = document.createElement("h3"),
+            statusP = document.createElement("p"),
+            iconsDiv = document.createElement("div"),
+            callIcon = document.createElement("div"),
+            msgIcon = document.createElement("div");
         userDiv.id = nizUsera.indexOf(korisnik);
-        console.log(userDiv.id);
         userDiv.classList.add("userDiv");
-
-        var usersPhoto = document.createElement("div");
         usersPhoto.classList.add("usersPhoto");
         if (korisnik.profilePhoto !== undefined && korisnik.profilePhoto !== "") {
             usersPhoto.style.backgroundImage = "url('" + korisnik.profilePhoto + "')";
             usersPhoto.style.backgroundSize = "cover";
         }
-
-        var usernameAndStatus = document.createElement("div");
         usernameAndStatus.classList.add("usernameAndStatus");
-
-        var usernameP = document.createElement("h3");
         usernameP.classList.add("username");
         usernameP.innerHTML = korisnik.username;
-
-        var statusP = document.createElement("p");
         statusP.classList.add("status");
         statusP.innerHTML = korisnik.status;
-
         usernameAndStatus.appendChild(usernameP);
         usernameAndStatus.appendChild(statusP);
-
-        var iconsDiv = document.createElement("div");
         iconsDiv.classList.add("icons");
-
-        var callIcon = document.createElement("div");
         callIcon.classList.add("callIcon");
-
-        var msgIcon = document.createElement("div");
         msgIcon.classList.add("msgIcon");
-
         iconsDiv.appendChild(callIcon);
         iconsDiv.appendChild(msgIcon);
-
         userDiv.appendChild(usersPhoto);
         userDiv.appendChild(usernameAndStatus);
         userDiv.appendChild(iconsDiv);
-
         glavniDiv.appendChild(userDiv);
     }
 }
 
+function pronadjiPoklapanjaJezika(filterJezik, onlineUseri) {
+    let filtriraniUseri = [];
+    if (typeof filterJezik[1] === "undefined") {
+        for (let korisnik of onlineUseri[0]) {
+            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
+                filtriraniUseri.push(korisnik);
+            } else if (typeof korisnik.otherLanguages !== "undefined") {
+                for (let jezik of korisnik.otherLanguages) {
+                    if (filterJezik[0] === jezik[0]) {
+                        filtriraniUseri.push(korisnik);
+                    }
+                }
+            }
+        }
+    } else if (typeof filterJezik[1] !== "undefined" && filterJezik[1] === "native") {
+        for (let korisnik of onlineUseri[0]) {
+            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
+                filtriraniUseri.push(korisnik);
+            }
+        }
+    } else if (typeof filterJezik[1] !== "undefined") {
+        for (korisnik of onlineUseri[0]) {
+            if (typeof korisnik.otherLanguages !== "undefined") {
+                for (korisnikJezik of korisnik.otherLanguages) {
+                    if (korisnikJezik.toString().includes(filterJezik.toString())) {
+                        filtriraniUseri.push(korisnik);
+                    }
+                }
+            }
+        }
+    }
+    return filtriraniUseri;
+}
+
 function filtrirajPoJeziku(event) {
     event.preventDefault();
-    var filterJezik = [];
-    filtriraniUseri = [];
-    var radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']");
-    var radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
+    let onlineUseri = new Array(dovuciUsere()),
+        filterJezik = [],
+        filtriraniUseri = [],
+        radioJezici = document.getElementById("langSelect").querySelectorAll("input[name='langChannel']"),
+        radioNivoi = document.getElementById("levelSelect").querySelectorAll("input[name='level']");
     for (let jezik of radioJezici) {
         if (jezik.checked) {
             filterJezik.push(jezik.value);
@@ -484,39 +536,13 @@ function filtrirajPoJeziku(event) {
             filterJezik.push(nivo.id);
         }
     }
-    if (typeof filterJezik[1] === "undefined") {
-        for (let korisnik of listaUseraIzBaze) {
-            console.log(korisnik);
-            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
-                filtriraniUseri.push(korisnik);
-            } else if (typeof korisnik.otherLanguages !== "undefined") {
-                for (let jezik of korisnik.otherLanguages) {
-                    console.log(jezik[0], filterJezik[0]);
-                    if (filterJezik[0] === jezik[0]) {
-                        filtriraniUseri.push(korisnik);
-                    }
-                }
-            }
-        }
-    } else if (typeof filterJezik[1] !== "undefined" && filterJezik[1] === "native") {
-        for (let korisnik of listaUseraIzBaze) {
-            if (korisnik.nativeLanguage !== "undefined" && korisnik.nativeLanguage === filterJezik[0]) {
-                filtriraniUseri.push(korisnik);
-            }
-        }
-    } else if (typeof filterJezik[1] !== "undefined") {
-        for (korisnik of listaUseraIzBaze) {
-            if (typeof korisnik.otherLanguages !== "undefined") {
-                for (korisnikJezik of korisnik.otherLanguages) {
-                    if (korisnikJezik.toString().includes(filterJezik.toString())) {
-                        filtriraniUseri.push(korisnik);
-                    }
-                }
-            }
-        }
-    }
-    prikaziUsere(filtriraniUseri);
-    chooseChannel.reset();
+    show(loading);
+    setTimeout(() => {
+        filtriraniUseri = pronadjiPoklapanjaJezika(filterJezik, onlineUseri);
+        prikaziUsere(filtriraniUseri);
+        chooseChannel.reset();
+        hide(loading);
+    }, 1000)
 }
 
 function udjiNaProfil(event) {
@@ -588,7 +614,6 @@ function drawProfile(obj) {
                 document.getElementById(data).style.backgroundSize = "cover";
             } else if (data !== "profilePhoto") {
                 let id = "users" + data.substring(0, 1).toUpperCase() + data.substring(1);
-                console.log(id, obj[data]);
                 document.getElementById(id).textContent = obj[data];
             }
         }
@@ -599,5 +624,4 @@ function drawProfile(obj) {
     document.getElementById("addToFavsBtn").name = obj.username;
     document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
     show(profileDiv);
-
 }

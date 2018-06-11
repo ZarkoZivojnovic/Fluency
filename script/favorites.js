@@ -15,24 +15,31 @@ function openProfile(event) {
         if (id===""){
             id = event.target.parentNode.id.split("_")[0]
         }
-        let userInfo = convertUserInfoToString(favListArr[id]);
+        let userInfo = convertUserInfoForProfileDraw(favListArr[id]);
         drawProfile(userInfo);
     }
 }
 
 function refreshFavorites(event) {
     event.preventDefault();
-    console.log(event.target.id);
     if (event.target !== event.currentTarget) {
+        let allFavs = document.getElementById("aFavs"),
+            onlineFavs = document.getElementById("oFavs"),
+            favorites;
         if (event.target.id === "allFavs") {
-            document.getElementById("aFavs").style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-            document.getElementById("oFavs").style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-            showFavs(myProfileData.myFavorites);
+            allFavs.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+            onlineFavs.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            favorites = new Array(dovuciUsere("favs"));
         } else if (event.target.id === "onlineFavs") {
-            document.getElementById("aFavs").style.backgroundColor = "rgba(255, 255, 255, 0.1)";
-            document.getElementById("oFavs").style.backgroundColor = "rgba(0, 0, 0, 0.4)";
-            showFavs(myProfileData.myFavorites, "online");
+            allFavs.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+            onlineFavs.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+            favorites = new Array(dovuciUsere("favs","", "online"));
         }
+        show(loading);
+        setTimeout(function () {
+            drawFavsList(favoritesList, favorites[0]);
+            hide(loading);
+        },500);
     }
 }
 
@@ -53,10 +60,12 @@ function addOrRemoveFromFavs(event) {
 
 function drawFavsList(appendToElement, arr) {
     appendToElement.innerHTML = "";
+    favListArr = [];
     let div = document.createElement("div");
     div.classList.add("favsList");
     div.classList.add("hideScrollbar");
     for (let fav = 0; fav < arr.length; fav++) {
+        favListArr.push(arr[fav]);
         let favDiv = document.createElement("div"),
             photoDiv = document.createElement("div"),
             username = document.createElement("h3"),
@@ -84,24 +93,4 @@ function drawFavsList(appendToElement, arr) {
         div.appendChild(favDiv);
     }
     appendToElement.appendChild(div);
-}
-
-function showFavs(arr, extraCondition) {
-    favListArr = [];
-    firebase.database().ref('users/').once('value').then(snapshot => {
-        snapshot.forEach(userSnapshot => {
-            let userFromBase = userSnapshot.val();
-            if (arr.indexOf(userFromBase.username) !== -1) {
-                if (!extraCondition) {
-                    favListArr.push(userFromBase);
-                } else {
-                    if (userFromBase.status === extraCondition) {
-                        favListArr.push(userFromBase);
-                    }
-                }
-            }
-        });
-        console.log(favListArr);
-        drawFavsList(favoritesList, favListArr);
-    });
 }
