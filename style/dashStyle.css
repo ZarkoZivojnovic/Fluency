@@ -70,16 +70,21 @@ a {
     position: relative;
 }
 
+div#pictureDiv{
+    background-color: indianred;
+}
+
 #pictureDiv {
     position: absolute;
     top: -50px;
     margin-bottom: 20px;
     width: 150px;
     height: 150px;
-    background-color: rgb(81, 0, 172);
     border-radius: 100%;
     border: solid gray 4px;
     box-shadow: 0 0 10px 2px rgb(81, 0, 172);
+    background: url("../graph/favicon.png");
+    background-size: 25%;
 }
 
 #editProfilePhoto {
@@ -453,11 +458,17 @@ h3 {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
+div.favPhoto {
+    background-color: indianred;
+}
+
 .favPhoto {
     width: 70px;
     height: 70px;
     border: solid 2px gray;
     border-radius: 100%;
+    background: url("../graph/favicon.png");
+    background-size: 40%;
 }
 
 .favUsername {

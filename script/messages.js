@@ -8,12 +8,12 @@ let receiver,
     conversationKey,
     odKogaImamPoruke = [],
     novePoruke;
+
 waitingForNewMsgs();
 
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         odKogaImamPoruke = proveriDaLiImaPoruka(myProfileData.username);
-        //clearInterval(waitForInfo);
         setTimeout(() => {
             novePoruke = countNewMessages();
             newMessageNotification(novePoruke[1]);
