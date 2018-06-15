@@ -2,23 +2,22 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
     messageInput = document.getElementById("typeMsg"),
     messages = document.getElementById("messages"),
     chatContent = document.getElementById("chatContent"),
-    listOfConversations = document.getElementById("conversations"),
-    conversations = myProfileData.myConversations;
+    listOfConversations = document.getElementById("conversations");
 
 let receiver,
     conversationKey,
     odKogaImamPoruke = [],
     novePoruke;
+waitingForNewMsgs();
 
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         odKogaImamPoruke = proveriDaLiImaPoruka(myProfileData.username);
-        clearInterval(waitForInfo);
+        //clearInterval(waitForInfo);
         setTimeout(() => {
             novePoruke = countNewMessages();
             newMessageNotification(novePoruke[1]);
-            waitingForNewMsgs();
-        }, 1000);
+        }, 500);
     }
 }, 1000);
 
@@ -29,14 +28,15 @@ listOfConversations.addEventListener("click", event => {
         let interval = setInterval(() => {
             if (receiver !== "") {
                 const poruke = dovuciPoruke(conversationKey);
+                console.log(poruke);
+                clearInterval(interval);
                 markSelectedChat();
                 show(loading);
-                drawChatContent(poruke, conversationKey);
                 setTimeout(() => {
+                    drawChatContent(poruke, conversationKey);
                     showHideChatContent("visible");
                     hide(loading);
                 }, 1200);
-                clearInterval(interval)
             }
         }, 500);
     }
@@ -48,7 +48,7 @@ sendMessageForm.addEventListener("submit", event => {
     sendMessage(receiver, message);
     sendNotificationToReceiver(receiver);
     sortMyConvesations(receiver);
-    drawListOfConversations(conversations);
+    drawListOfConversations(myProfileData.myConversations);
     markSelectedChat();
     sendMessageForm.reset();
 });
@@ -70,9 +70,9 @@ function markSelectedChat() {
 function openConversationWithThisUser(user) {
     receiver = user;
     conversationKey = createConversationKey(myProfileData.username, user);
-    if (typeof conversations === "undefined") myProfileData["myConversations"] = [];
-    if (conversations.indexOf(user) === -1) {
-        conversations.unshift(user);
+    if (typeof myProfileData.myConversations === "undefined") myProfileData["myConversations"] = [];
+    if (myProfileData.myConversations.indexOf(user) === -1) {
+        myProfileData.myConversations.unshift(user);
         updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
     }
     for (let div of mainDivs) {
@@ -81,7 +81,7 @@ function openConversationWithThisUser(user) {
     const poruke = dovuciPoruke(conversationKey);
     show(myMsgsDiv);
     show(loading);
-    drawListOfConversations(conversations);
+    drawListOfConversations(myProfileData.myConversations);
     setTimeout(() => {
         markSelectedChat();
         drawChatContent(poruke, conversationKey);
@@ -180,13 +180,16 @@ function drawChatContent(poruke, imeKonverzacije) {
     } else {
         let sender = "";
         for (let element in poruke) {
+            console.log(sender);
             let poruka = poruke[element][0],
                 brojPoruke = poruke[element][1],
                 div;
-            if (poruka.sender !== myProfileData.username) markMessageAsSeen(imeKonverzacije, brojPoruke);
+            if (poruka.sender !== myProfileData.username && !poruka.seen) markMessageAsSeen(imeKonverzacije, brojPoruke);
             if (sender === poruka.sender) {
-                div = drawMessage(poruka, brojPoruke);
+                console.log("sender === poruka.sender", sender === poruka.sender);
+                div = drawMessage(poruka, brojPoruke, "");
             } else {
+                console.log("else", sender === poruka.sender);
                 div = drawMessage(poruka, brojPoruke, sender);
                 sender = poruka.sender;
             }
@@ -200,13 +203,14 @@ function drawChatContent(poruke, imeKonverzacije) {
 }
 
 function drawMessage(message, msgNumber, sender) {
+    console.log("draw msg sender", sender);
     let messageDivClass = message.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku",
         time = typeof message.date !== "undefined" ? formatTime(message.date) : "",
         msgSender = message.sender === myProfileData.username ? "me:" : message.sender + ":",
         msgStatus = message.seen ? " seen" : " sent";
     if (message.receiver === myProfileData.username) msgStatus = "";
     let print = `<div id="${msgNumber}" class="${messageDivClass}">`;
-    if (sender) {
+    if (sender!=="") {
         print += `<span>${msgSender}</span>`
     }
     print += `<div class="msgBody">${message.body}</div><span class="time">${time + msgStatus}</span></div>`;
@@ -227,15 +231,15 @@ function dodajNulu(broj) {
 }
 
 function napuniKonverzacije(user) {
-    if (conversations === undefined) myProfileData["myConversations"] = [];
-    if (conversations.indexOf(user) === -1) {
-        conversations.unshift(user);
+    if (myProfileData.myConversations === undefined) myProfileData["myConversations"] = [];
+    if (myProfileData.myConversations.indexOf(user) === -1) {
+        myProfileData.myConversations.unshift(user);
     } else {
         sortMyConvesations(user)
     }
     updateInformationsInDatabase(userUid, myProfileData);
     if (myMsgsDiv.style.display !== "none") {
-        drawListOfConversations(conversations);
+        drawListOfConversations(myProfileData.myConversations);
         markSelectedChat();
     }
 }
@@ -271,6 +275,8 @@ function addMessageToChat(snapshot) {
     let msgNumber = snapshot.key,
         msgContent = snapshot.val();
     setTimeout(() => {
+        if (document.getElementById(msgNumber) !== null) return;
+        console.log("snapshot ne treba");
         let msg = drawMessage(msgContent, msgNumber, msgContent.sender);
         messages.insertAdjacentHTML("beforeend", msg);
         if (msgContent.receiver === myProfileData.username) {
@@ -340,9 +346,10 @@ function countNewMessages() {
 }
 
 function sortMyConvesations(user) {
-    let indexOfUser = conversations.indexOf(user);
-    conversations.splice(indexOfUser, 1);
-    conversations.unshift(user);
+    console.log(user);
+    let indexOfUser = myProfileData.myConversations.indexOf(user);
+    myProfileData.myConversations.splice(indexOfUser, 1);
+    myProfileData.myConversations.unshift(user);
 }
 
 function newMsgInChat(user, value) {
