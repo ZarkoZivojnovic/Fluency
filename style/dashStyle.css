@@ -923,10 +923,17 @@ div .callIcon {
     .contentDiv {
         width: 600px;
     }
+    #favorites {
+        width: 650px;
+    }
 }
 
 @media screen and (max-width: 650px) {
     .contentDiv {
+        width: 100%;
+    }
+
+    #favorites {
         width: 100%;
     }
 
