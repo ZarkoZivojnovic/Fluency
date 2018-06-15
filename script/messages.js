@@ -2,62 +2,59 @@ const sendMessageForm = document.getElementById("sendMsgForm"),
     messageInput = document.getElementById("typeMsg"),
     messages = document.getElementById("messages"),
     chatContent = document.getElementById("chatContent"),
-    listOfConversations = document.getElementById("conversations");
+    listOfConversations = document.getElementById("conversations"),
+    conversations = myProfileData.myConversations;
 
-let odKogaImamPoruke = [];
+let receiver,
+    conversationKey,
+    odKogaImamPoruke = [],
+    novePoruke;
 
 let waitForInfo = setInterval(() => {
     if (typeof myProfileData !== "undefined") {
+        odKogaImamPoruke = proveriDaLiImaPoruka(myProfileData.username);
         clearInterval(waitForInfo);
         setTimeout(() => {
-            if (typeof myProfileData.myConversations !== "undefined") {
-                drawListOfConversations(myProfileData.myConversations);
-            }
+            novePoruke = countNewMessages();
+            newMessageNotification(novePoruke[1]);
+            waitingForNewMsgs();
         }, 1000);
     }
-}, 200);
-
-
-setInterval(() => {
-    proveriDaLiImaPoruka(myProfileData.username);
-}, 10000);
-
-let receiver,
-    conversationKey;
-
-function isArrayInArray(arr, item) {
-    var item_as_string = JSON.stringify(item);
-
-    var contains = arr.some(function (ele) {
-        return JSON.stringify(ele) === item_as_string;
-    });
-    return contains;
-}
+}, 1000);
 
 listOfConversations.addEventListener("click", event => {
-    if (event.target !== event.currentTarget) {
+    if (event.target !== event.currentTarget && event.target.nodeName === "INPUT") {
         receiver = event.target.id;
         conversationKey = createConversationKey(myProfileData.username, receiver);
-        openConversation(conversationKey);
+        let interval = setInterval(() => {
+            if (receiver !== "") {
+                const poruke = dovuciPoruke(conversationKey);
+                markSelectedChat();
+                show(loading);
+                drawChatContent(poruke, conversationKey);
+                setTimeout(() => {
+                    showHideChatContent("visible");
+                    hide(loading);
+                }, 1200);
+                clearInterval(interval)
+            }
+        }, 500);
     }
-    markSelectedChat();
-    show(loading);
-    setTimeout(() => {
-        dovuciPoruke(conversationKey);
-        hide(loading);
-    }, 500);
 });
 
 sendMessageForm.addEventListener("submit", event => {
     event.preventDefault();
     let message = messageInput.value;
     sendMessage(receiver, message);
-    newMsgNotification(receiver, true);
+    sendNotificationToReceiver(receiver);
+    sortMyConvesations(receiver);
+    drawListOfConversations(conversations);
+    markSelectedChat();
     sendMessageForm.reset();
 });
 
 function markSelectedChat() {
-    if (document.getElementById(receiver) === null)return;
+    if (document.getElementById(receiver) === null) return;
     document.getElementById(receiver).checked = true;
     let allChats = document.querySelectorAll("input[name='selectedChat']");
     for (let chat = 0; chat < allChats.length; chat++) {
@@ -73,21 +70,22 @@ function markSelectedChat() {
 function openConversationWithThisUser(user) {
     receiver = user;
     conversationKey = createConversationKey(myProfileData.username, user);
-    if (typeof myProfileData.myConversations === "undefined") myProfileData["myConversations"] = [];
-    if (myProfileData.myConversations.indexOf(user) === -1) {
-        myProfileData.myConversations.push(user);
+    if (typeof conversations === "undefined") myProfileData["myConversations"] = [];
+    if (conversations.indexOf(user) === -1) {
+        conversations.unshift(user);
         updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
     }
     for (let div of mainDivs) {
         hide(div);
     }
+    const poruke = dovuciPoruke(conversationKey);
     show(myMsgsDiv);
-    drawListOfConversations(myProfileData.myConversations);
-    openConversation(conversationKey);
     show(loading);
+    drawListOfConversations(conversations);
     setTimeout(() => {
         markSelectedChat();
-        dovuciPoruke(conversationKey);
+        drawChatContent(poruke, conversationKey);
+        showHideChatContent("visible");
         hide(loading);
     }, 500);
 }
@@ -98,24 +96,26 @@ function createConversationKey(myUsername, otherUsername) {
 }
 
 function sendMessage(receiver, string) {
-    let conversationKey = createConversationKey(myProfileData.username, receiver),
-        message = {
-            body: string,
-            sender: myProfileData.username,
-            receiver: receiver,
-            date: new Date(),
-            seen: false
-        };
-    firebase.database().ref('messages/' + conversationKey + "/" + new Date().getTime() + "/").update(message);
-    dovuciPoruke(conversationKey);
+    let message = {
+        body: string,
+        sender: myProfileData.username,
+        receiver: receiver,
+        date: new Date(),
+        seen: false
+    };
+    firebase.database().ref('messages/' + conversationKey + "/" + message.date.getTime() + "/").update(message);
 }
 
 function markMessageAsSeen(conversationKey, messageKey) {
     firebase.database().ref('messages/' + conversationKey + "/" + messageKey).update({"seen": true});
 }
 
-function newMsgNotification(receiver, newOrNot) { /// ("asdfasdf", "15132164641", true/false)
-    firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: newOrNot});
+function sendNotificationToReceiver(receiver) {
+    firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: true});
+}
+
+function markChatAsSeen(sender) {
+    firebase.database().ref('newMsgs/' + myProfileData.username).update({[sender]: false});
 }
 
 function drawListOfConversations(arr) {
@@ -124,36 +124,38 @@ function drawListOfConversations(arr) {
     div.setAttribute("id", "transparent");
     for (let index = 0; index < arr.length; index++) {
         let friend = document.createElement("input"),
-            label = document.createElement("label");
+            label = document.createElement("label"),
+            notificationBox = document.createElement("span");
         friend.setAttribute("type", "radio");
         friend.setAttribute("name", "selectedChat");
         friend.setAttribute("id", arr[index]);
         label.setAttribute("for", arr[index]);
         label.textContent = arr[index];
+        notificationBox.setAttribute("id", arr[index] + "_new");
+        notificationBox.className = "newMsgInConversation";
+        label.appendChild(notificationBox);
         div.appendChild(friend);
         div.appendChild(label);
     }
-    listOfConversations.innerHTML = div.outerHTML;
+    listOfConversations.appendChild(div);
+    for (let user of novePoruke[0]) {
+        newMsgInChat(user, true);
+    }
 }
 
-function openConversation() {
-    chatContent.style.visibility = "visible";
+function showHideChatContent(property) {
+    chatContent.style.visibility = property;
 }
 
 function proveriDaLiImaPoruka(username) {
     const ref = firebase.database().ref("newMsgs/" + username);
-    ref.once('value', function (snapshot) {
-        snapshot.forEach(function (newMsgsSnapshot) {
-            let userOdKogImamPoruke = [];
-            userOdKogImamPoruke.push(newMsgsSnapshot.key);
-            userOdKogImamPoruke.push(newMsgsSnapshot.val());
-            if (!isArrayInArray(odKogaImamPoruke, userOdKogImamPoruke)) {
-            } else {
-                odKogaImamPoruke.push(userOdKogImamPoruke);
-            }
+    let tempArr = [];
+    ref.once('value', snapshot => {
+        snapshot.forEach(newMsgsSnapshot => {
+            tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
         });
-        napuniKonverzacije();
     });
+    return tempArr;
 }
 
 function dovuciPoruke(imeKonverzacije) {
@@ -162,36 +164,53 @@ function dovuciPoruke(imeKonverzacije) {
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
             let poruka = messageSnapshot.val();
-            poruke.push(poruka);
+            poruke.push([poruka, messageSnapshot.key]);
         });
-        drawChatContent(poruke);
     });
+    return poruke;
 }
 
-function drawChatContent(poruke) {
+function drawChatContent(poruke, imeKonverzacije) {
+    let user = imeKonverzacije.split(myProfileData.username).join("");
+    markChatAsSeen(user);
+    trackActiveConversation(imeKonverzacije);
     messages.innerHTML = "";
     if (poruke.length === 0) {
         messages.innerHTML = "<div class='noContentMsg'><h2>no messages yet</h2></div>";
     } else {
-        for (element of poruke) {
-            let divZaPoruku = document.createElement("div"),
-                sadrzajDiv = document.createElement("div"),
-                posiljalac = document.createElement("span"),
-                vreme = document.createElement("span"),
-                time = formatTime(element.date);
-            divZaPoruku.className = element.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku";
-            sadrzajDiv.textContent = element.body;
-            sadrzajDiv.className = "msgBody";
-            posiljalac.textContent = element.sender === myProfileData.username ? "me:" : element.sender + ":";
-            vreme.textContent = time;
-            vreme.className = "time";
-            divZaPoruku.appendChild(sadrzajDiv);
-            sadrzajDiv.insertAdjacentHTML("beforebegin", posiljalac.outerHTML);
-            sadrzajDiv.insertAdjacentHTML("afterend", vreme.outerHTML);
-            document.getElementById("messages").appendChild(divZaPoruku);
-            messages.scrollTop = messages.scrollHeight;
+        let sender = "";
+        for (let element in poruke) {
+            let poruka = poruke[element][0],
+                brojPoruke = poruke[element][1],
+                div;
+            if (poruka.sender !== myProfileData.username) markMessageAsSeen(imeKonverzacije, brojPoruke);
+            if (sender === poruka.sender) {
+                div = drawMessage(poruka, brojPoruke);
+            } else {
+                div = drawMessage(poruka, brojPoruke, sender);
+                sender = poruka.sender;
+            }
+            messages.insertAdjacentHTML("beforeend", div);
         }
+        messages.scrollTop = messages.scrollHeight;
     }
+    setTimeout(() => {
+        newMsgInChat(user, false);
+    }, 200);
+}
+
+function drawMessage(message, msgNumber, sender) {
+    let messageDivClass = message.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku",
+        time = typeof message.date !== "undefined" ? formatTime(message.date) : "",
+        msgSender = message.sender === myProfileData.username ? "me:" : message.sender + ":",
+        msgStatus = message.seen ? " seen" : " sent";
+    if (message.receiver === myProfileData.username) msgStatus = "";
+    let print = `<div id="${msgNumber}" class="${messageDivClass}">`;
+    if (sender) {
+        print += `<span>${msgSender}</span>`
+    }
+    print += `<div class="msgBody">${message.body}</div><span class="time">${time + msgStatus}</span></div>`;
+    return print;
 }
 
 function formatTime(time) {
@@ -207,14 +226,125 @@ function dodajNulu(broj) {
     return broj < 10 ? '0' + broj : broj;
 }
 
-function napuniKonverzacije() {
-    for (user of odKogaImamPoruke) {
-        if (myProfileData.myConversations === undefined) myProfileData.myConversations = [];
-        if (myProfileData.myConversations.indexOf(user[0]) === -1) {
-            myProfileData.myConversations.push(user[0]);
-            updateInformationsInDatabase(userUid, myProfileData, "new conversation created");
+function napuniKonverzacije(user) {
+    if (conversations === undefined) myProfileData["myConversations"] = [];
+    if (conversations.indexOf(user) === -1) {
+        conversations.unshift(user);
+    } else {
+        sortMyConvesations(user)
+    }
+    updateInformationsInDatabase(userUid, myProfileData);
+    if (myMsgsDiv.style.display !== "none") {
+        drawListOfConversations(conversations);
+        markSelectedChat();
+    }
+}
+
+function trackActiveConversation(conversationKey) {
+    let databaseRef = firebase.database().ref("messages/" + conversationKey);
+    databaseRef.on("child_changed", changeMsgStatus);
+    databaseRef.on("child_added", addMessageToChat);
+    let interval = setInterval(() => {
+        const key = whichChatIsActive();
+        if (myMsgsDiv.style.display === "none" || conversationKey !== key) {
+            databaseRef.off("child_changed", changeMsgStatus);
+            databaseRef.off("child_added", addMessageToChat);
+            setTimeout(() => {
+                showHideChatContent("hidden");
+                clearInterval(interval);
+            }, 100);
+        }
+    }, 1000);
+}
+
+function whichChatIsActive() {
+    let allChats = document.querySelectorAll("input[name='selectedChat']");
+    for (let chat of allChats) {
+        if (chat.checked) {
+            return createConversationKey(myProfileData.username, chat.id);
         }
     }
-    drawListOfConversations(myProfileData.myConversations);
-    markSelectedChat();
+    return false;
+}
+
+function addMessageToChat(snapshot) {
+    let msgNumber = snapshot.key,
+        msgContent = snapshot.val();
+    setTimeout(() => {
+        let msg = drawMessage(msgContent, msgNumber, msgContent.sender);
+        messages.insertAdjacentHTML("beforeend", msg);
+        if (msgContent.receiver === myProfileData.username) {
+            markChatAsSeen(msgContent.sender);
+            newMsgInChat(msgContent.sender, false);
+            markMessageAsSeen(conversationKey, msgNumber);
+        }
+        if (messages.scrollHeight - messages.scrollTop < 800) messages.scrollTop = messages.scrollHeight;
+    }, 300);
+}
+
+function changeMsgStatus(snapshot) {
+    let msgNumber = snapshot.key,
+        msgContent = snapshot.val(),
+        element = document.getElementById(msgNumber);
+    if (msgContent.sender === myProfileData.username && element !== null) {
+        let status = element.lastChild.innerText.split(" ");
+        status[status.length - 1] = "seen";
+        element.lastChild.innerText = status.join(" ");
+    }
+}
+
+function waitingForNewMsgs() {
+    firebase.database().ref("newMsgs/" + myProfileData.username).on("child_changed", snapshot => {
+        let user = snapshot.key,
+            value = snapshot.val();
+        if (value) {
+            napuniKonverzacije(user);
+        }
+        let tempArr = [];
+        for (let korisnik of odKogaImamPoruke) {
+            tempArr.push(korisnik[0]);
+            if (korisnik[0] === user && korisnik[1] !== value) {
+                korisnik[1] = value;
+            }
+        }
+        if (tempArr.indexOf(user) === -1) {
+            odKogaImamPoruke.push([user, value]);
+        }
+        updateNotifications();
+    });
+}
+
+function updateNotifications() {
+    setTimeout(() => {
+        novePoruke = countNewMessages();
+        newMessageNotification(novePoruke[1]);
+        for (let user of novePoruke[0]) {
+            newMsgInChat(user, true);
+        }
+    }, 1000);
+}
+
+function newMessageNotification(number) {
+    setTimeout(() => {
+        document.querySelector(".newMessageNum").innerText = number === 0 ? "" : number;
+    }, 1000);
+}
+
+function countNewMessages() {
+    let newMsgs = odKogaImamPoruke.filter((value, index) => value[1]);
+    let arr = [];
+    for (let index in newMsgs) {
+        arr.push(newMsgs[index][0]);
+    }
+    return [arr, arr.length];
+}
+
+function sortMyConvesations(user) {
+    let indexOfUser = conversations.indexOf(user);
+    conversations.splice(indexOfUser, 1);
+    conversations.unshift(user);
+}
+
+function newMsgInChat(user, value) {
+    if (document.getElementById(user + "_new") !== null) document.getElementById(user + "_new").innerText = value ? "new" : "";
 }

@@ -258,7 +258,7 @@ function saveLangInfo(event) {
             }
         }
     }
-    updateInformationsInDatabase(userUid, myProfileData);
+    updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
     showProfileEditForm("disable");
 }
 
@@ -270,7 +270,7 @@ function saveAboutMe(event) {
     for (let index = 0; index < checkboxArr.length; index++) {
         if (checkboxArr[index].checked) myProfileData.interests.push(checkboxArr[index].value)
     }
-    updateInformationsInDatabase(userUid, myProfileData);
+    updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
     showProfileEditForm("disable");
 }
 
@@ -285,13 +285,15 @@ function savePersonalInfo(event) {
     for (let element = 0; element < radioInput.length; element++) {
         if (radioInput[element].checked === true) myProfileData.gender = radioInput[element].id;
     }
-    updateInformationsInDatabase(userUid, myProfileData);
+    updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
     showProfileEditForm("disable");
 }
 
-function updateInformationsInDatabase(uid, infoObj, notification = "Informations are Saved") {
+function updateInformationsInDatabase(uid, infoObj, notification) {
     firebase.database().ref('users/' + uid).update(infoObj);
-    alert(notification);
+    if (notification){
+        alert(notification);
+    }
 }
 
 function showAndHideForms(event) {

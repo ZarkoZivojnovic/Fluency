@@ -66,6 +66,10 @@ a {
     padding: 10px;
 }
 
+#sidebar li {
+    position: relative;
+}
+
 #pictureDiv {
     position: absolute;
     top: -50px;
@@ -696,6 +700,7 @@ div .callIcon {
 
 #conversations>div{
     background-color: transparent;
+    position: relative;
 }
 
 .flexRow{
@@ -795,6 +800,7 @@ div .callIcon {
     color: white;
     padding: 10px;
     box-shadow: 0 0 3px white;
+    word-wrap: break-word;
 }
 
 #messages span{
@@ -821,6 +827,24 @@ div .callIcon {
     margin: 50px auto;
     text-align: center;
     color: white;
+}
+
+.newMessageNum{
+    color: red;
+    position: absolute;
+    top: 5px;
+    left: 175px;
+    margin: 0;
+}
+
+.newMsgInConversation{
+    margin-left: 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+    color: red;
+    position: absolute;
+    font-size: 12px;
 }
 
 #loadingBackground{
