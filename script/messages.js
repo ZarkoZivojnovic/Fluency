@@ -45,6 +45,10 @@ listOfConversations.addEventListener("click", event => {
 sendMessageForm.addEventListener("submit", event => {
     event.preventDefault();
     let message = messageInput.value;
+    if (message.length === 0 || message.length > 5000){
+        alert(message.length === 0 ? "message is empty" : "message is too long");
+        return;
+    }
     sendMessage(receiver, message);
     sendNotificationToReceiver(receiver);
     sortMyConvesations(receiver);
@@ -87,7 +91,7 @@ function openConversationWithThisUser(user) {
         drawChatContent(poruke, conversationKey);
         showHideChatContent("visible");
         hide(loading);
-    }, 500);
+    }, 1000);
 }
 
 function createConversationKey(myUsername, otherUsername) {
@@ -273,7 +277,8 @@ function whichChatIsActive() {
 
 function addMessageToChat(snapshot) {
     let msgNumber = snapshot.key,
-        msgContent = snapshot.val();
+        msgContent = snapshot.val(),
+        scroll = messages.scrollHeight - messages.scrollTop;
     setTimeout(() => {
         if (document.getElementById(msgNumber) !== null) return;
         console.log("snapshot ne treba");
@@ -284,7 +289,7 @@ function addMessageToChat(snapshot) {
             newMsgInChat(msgContent.sender, false);
             markMessageAsSeen(conversationKey, msgNumber);
         }
-        if (messages.scrollHeight - messages.scrollTop < 800) messages.scrollTop = messages.scrollHeight;
+        if (scroll < 800) messages.scrollTop = messages.scrollHeight;
     }, 300);
 }
 
