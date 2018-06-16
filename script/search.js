@@ -17,10 +17,17 @@ searchForm.addEventListener("submit", event => {
     event.preventDefault();
     let string = getStringForSearch();
     let matchArr = new Array(dovuciUsere("search", string));
+    if (!string){
+        return;
+    }
     show(loading);
     setTimeout(() => {
         searchTransform("small");
-        prikaziUsere(matchArr[0]);
+        if (string === "all"){
+            showChannels();
+        } else {
+            prikaziUsere(matchArr[0]);
+        }
         searchForm.reset();
         hide(loading);
     }, 1000);
@@ -42,9 +49,13 @@ function searchTransform(property) {
 
 function getStringForSearch() {
     const string = searchBar.value;
+    if (string.length===0){
+        alert("all online users");
+        return "all";
+    }
     if (string.length < 3) {
         alert("word length can not be less than 3");
-        return;
+        return false;
     }
     return string;
 }
