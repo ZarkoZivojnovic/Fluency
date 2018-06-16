@@ -731,6 +731,7 @@ div .callIcon {
 
 .noOverflow {
     overflow: hidden;
+    position: relative;
 }
 
 .fullWidth {
@@ -911,6 +912,14 @@ div .callIcon {
     text-align: center;
     color: #d4d4d4;
     background-color: rgba(0, 0, 0, 0.8);
+}
+
+#trash {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+    visibility: hidden;
 }
 
 

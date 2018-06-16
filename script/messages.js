@@ -21,6 +21,17 @@ let waitForInfo = setInterval(() => {
     }
 }, 1000);
 
+document.getElementById("trash").addEventListener("click", event => {
+    console.log(myProfileData.myConversations);
+    var indeks = myProfileData.myConversations.indexOf(receiver);
+    myProfileData.myConversations.splice(indeks, 1);
+    console.log(myProfileData.myConversations);
+    updateInformationsInDatabase(userUid, myProfileData,"");
+    document.getElementById("trash").style.visibility = "hidden";
+    drawListOfConversations(myProfileData.myConversations);
+
+});
+
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget && event.target.nodeName === "INPUT") {
         receiver = event.target.id;
@@ -38,6 +49,7 @@ listOfConversations.addEventListener("click", event => {
                     hide(loading);
                 }, 1200);
             }
+            document.getElementById("trash").style.visibility = "visible";
         }, 500);
     }
 });
@@ -359,4 +371,19 @@ function sortMyConvesations(user) {
 
 function newMsgInChat(user, value) {
     if (document.getElementById(user + "_new") !== null) document.getElementById(user + "_new").innerText = value ? "new" : "";
+}
+
+function removeElem(tag,atr,vl)
+{
+    var els = document.getElementsByTagName(tag);
+    vl=vl.toLowercase();
+    for (var i = 0; i<els.length; i++) {
+    var elem=els[i];
+    if(elem.getAttribute(atr)){
+    if ( elem.getAttribute(atr).toString().toLowercase()==vl){
+    elem.remove();
+    return;
+    }
+    }
+    }
 }

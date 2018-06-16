@@ -66,6 +66,7 @@ function mainNavigation(event) {
             } else if (event.target.id === "myFavorites") {
                 showMyFavorites();
             } else if (event.target.id === "myMessages") {
+                document.getElementById("trash").style.visibility = "hidden";
                 showMyMessages();
             }
         }
