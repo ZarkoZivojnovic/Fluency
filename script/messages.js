@@ -9,29 +9,28 @@ let receiver,
     odKogaImamPoruke = [],
     novePoruke;
 
-waitingForNewMsgs();
-
-let waitForInfo = setInterval(() => {
+setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         odKogaImamPoruke = proveriDaLiImaPoruka(myProfileData.username);
         setTimeout(() => {
+            for (let user of odKogaImamPoruke){
+                if (user[1]) napuniKonverzacije(user[0]);
+            }
             novePoruke = countNewMessages();
             newMessageNotification(novePoruke[1]);
         }, 500);
     }
-}, 1000);
+}, 1500);
 
 document.getElementById("trash").addEventListener("click", event => {
     console.log(myProfileData.myConversations);
     var indeks = myProfileData.myConversations.indexOf(receiver);
     myProfileData.myConversations.splice(indeks, 1);
     console.log(myProfileData.myConversations);
-    updateInformationsInDatabase(userUid, myProfileData,"");
+    updateInformationsInDatabase(userUid, myProfileData, "");
     document.getElementById("trash").style.visibility = "hidden";
     drawListOfConversations(myProfileData.myConversations);
-
 });
-
 
 
 listOfConversations.addEventListener("click", event => {
@@ -59,7 +58,7 @@ listOfConversations.addEventListener("click", event => {
 sendMessageForm.addEventListener("submit", event => {
     event.preventDefault();
     let message = messageInput.value;
-    if (message.length === 0 || message.length > 5000){
+    if (message.length === 0 || message.length > 5000) {
         alert(message.length === 0 ? "message is empty" : "message is too long");
         return;
     }
@@ -73,32 +72,32 @@ sendMessageForm.addEventListener("submit", event => {
 
 document.getElementById("zvezdice").addEventListener("click", event => {
     var ocena;
-    if (event.target !==event.currentTarget){
-    if (event.target.id == "jednaZvezdica") {
-         console.log(event.target.id);
-         ocena = 5;
+    if (event.target !== event.currentTarget) {
+        if (event.target.id == "jednaZvezdica") {
+            console.log(event.target.id);
+            ocena = 5;
+        }
+        if (event.target.id == "dveZvezdice") {
+            console.log(event.target.id);
+            ocena = 4;
+        }
+        if (event.target.id == "triZvezdice") {
+            console.log(event.target.id);
+            ocena = 3;
+        }
+        if (event.target.id == "cetiriZvezdice") {
+            console.log(event.target.id);
+            ocena = 2;
+        }
+        if (event.target.id == "petZvezdica") {
+            console.log(event.target.id);
+            ocena = 1;
+        }
+        console.log(ocena);
+        firebase.database().ref(`ratings/${receiver}`).update({[myProfileData.username]: ocena});
+        document.getElementById("zvezdicePoruka").textContent = "Thanks for your rating!";
+        document.getElementById("zvezdice").style.display = "none";
     }
-    if (event.target.id == "dveZvezdice") {
-        console.log(event.target.id);
-        ocena = 4;
-    }
-    if (event.target.id == "triZvezdice") {
-        console.log(event.target.id);
-        ocena = 3;
-    }
-    if (event.target.id == "cetiriZvezdice") {
-        console.log(event.target.id);
-        ocena = 2;
-    }
-    if (event.target.id == "petZvezdica") {
-        console.log(event.target.id);
-        ocena = 1;
-    }
-    console.log(ocena);
-    firebase.database().ref(`ratings/${receiver}`).update({[myProfileData.username]: ocena});
-    document.getElementById("zvezdicePoruka").textContent = "Thanks for your rating!";
-    document.getElementById("zvezdice").style.display = "none";
-}
 
 });
 
@@ -171,30 +170,30 @@ function markChatAsSeen(sender) {
 
 function drawListOfConversations(arr) {
     console.log(myProfileData.myConversations);
-    if (myProfileData.myConversations != undefined) {
-    listOfConversations.innerHTML = "";
-    let div = document.createElement("div");
-    div.setAttribute("id", "transparent");
-    for (let index = 0; index < arr.length; index++) {
-        let friend = document.createElement("input"),
-            label = document.createElement("label"),
-            notificationBox = document.createElement("span");
-        friend.setAttribute("type", "radio");
-        friend.setAttribute("name", "selectedChat");
-        friend.setAttribute("id", arr[index]);
-        label.setAttribute("for", arr[index]);
-        label.textContent = arr[index];
-        notificationBox.setAttribute("id", arr[index] + "_new");
-        notificationBox.className = "newMsgInConversation";
-        label.appendChild(notificationBox);
-        div.appendChild(friend);
-        div.appendChild(label);
+    if (myProfileData.myConversations !== undefined) {
+        listOfConversations.innerHTML = "";
+        let div = document.createElement("div");
+        div.setAttribute("id", "transparent");
+        for (let index = 0; index < arr.length; index++) {
+            let friend = document.createElement("input"),
+                label = document.createElement("label"),
+                notificationBox = document.createElement("span");
+            friend.setAttribute("type", "radio");
+            friend.setAttribute("name", "selectedChat");
+            friend.setAttribute("id", arr[index]);
+            label.setAttribute("for", arr[index]);
+            label.textContent = arr[index];
+            notificationBox.setAttribute("id", arr[index] + "_new");
+            notificationBox.className = "newMsgInConversation";
+            label.appendChild(notificationBox);
+            div.appendChild(friend);
+            div.appendChild(label);
+        }
+        listOfConversations.appendChild(div);
+        for (let user of novePoruke[0]) {
+            newMsgInChat(user, true);
+        }
     }
-    listOfConversations.appendChild(div);
-    for (let user of novePoruke[0]) {
-        newMsgInChat(user, true);
-    }
-}
 }
 
 function showHideChatContent(property) {
@@ -209,6 +208,7 @@ function proveriDaLiImaPoruka(username) {
             tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
         });
     });
+    console.log("proveri",tempArr);
     return tempArr;
 }
 
@@ -264,7 +264,7 @@ function drawMessage(message, msgNumber, sender) {
         msgStatus = message.seen ? " seen" : " sent";
     if (message.receiver === myProfileData.username) msgStatus = "";
     let print = `<div id="${msgNumber}" class="${messageDivClass}">`;
-    if (sender!=="") {
+    if (sender !== "") {
         print += `<span>${msgSender}</span>`
     }
     print += `<div class="msgBody">${message.body}</div><span class="time">${time + msgStatus}</span></div>`;
@@ -285,15 +285,16 @@ function dodajNulu(broj) {
 }
 
 function napuniKonverzacije(user) {
-    if (myProfileData.myConversations === undefined) myProfileData["myConversations"] = [];
-    if (myProfileData.myConversations.indexOf(user) === -1) {
-        myProfileData.myConversations.unshift(user);
+    const conversationArr = myProfileData.myConversations;
+    if (conversationArr === undefined) myProfileData["myConversations"] = [];
+    if (conversationArr.indexOf(user) === -1) {
+        conversationArr.unshift(user);
     } else {
         sortMyConvesations(user)
     }
     updateInformationsInDatabase(userUid, myProfileData);
     if (myMsgsDiv.style.display !== "none") {
-        drawListOfConversations(myProfileData.myConversations);
+        drawListOfConversations(conversationArr);
         markSelectedChat();
     }
 }
@@ -354,37 +355,6 @@ function changeMsgStatus(snapshot) {
     }
 }
 
-function waitingForNewMsgs() {
-    firebase.database().ref("newMsgs/" + myProfileData.username).on("child_changed", snapshot => {
-        let user = snapshot.key,
-            value = snapshot.val();
-        if (value) {
-            napuniKonverzacije(user);
-        }
-        let tempArr = [];
-        for (let korisnik of odKogaImamPoruke) {
-            tempArr.push(korisnik[0]);
-            if (korisnik[0] === user && korisnik[1] !== value) {
-                korisnik[1] = value;
-            }
-        }
-        if (tempArr.indexOf(user) === -1) {
-            odKogaImamPoruke.push([user, value]);
-        }
-        updateNotifications();
-    });
-}
-
-function updateNotifications() {
-    setTimeout(() => {
-        novePoruke = countNewMessages();
-        newMessageNotification(novePoruke[1]);
-        for (let user of novePoruke[0]) {
-            newMsgInChat(user, true);
-        }
-    }, 1000);
-}
-
 function newMessageNotification(number) {
     setTimeout(() => {
         document.querySelector(".newMessageNum").innerText = number === 0 ? "" : number;
@@ -411,17 +381,16 @@ function newMsgInChat(user, value) {
     if (document.getElementById(user + "_new") !== null) document.getElementById(user + "_new").innerText = value ? "new" : "";
 }
 
-function removeElem(tag,atr,vl)
-{
+function removeElem(tag, atr, vl) {
     var els = document.getElementsByTagName(tag);
-    vl=vl.toLowercase();
-    for (var i = 0; i<els.length; i++) {
-    var elem=els[i];
-    if(elem.getAttribute(atr)){
-    if ( elem.getAttribute(atr).toString().toLowercase()==vl){
-    elem.remove();
-    return;
-    }
-    }
+    vl = vl.toLowercase();
+    for (var i = 0; i < els.length; i++) {
+        var elem = els[i];
+        if (elem.getAttribute(atr)) {
+            if (elem.getAttribute(atr).toString().toLowercase() == vl) {
+                elem.remove();
+                return;
+            }
+        }
     }
 }
