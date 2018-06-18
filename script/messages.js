@@ -13,7 +13,7 @@ setInterval(() => {
     if (typeof myProfileData !== "undefined") {
         odKogaImamPoruke = proveriDaLiImaPoruka(myProfileData.username);
         setTimeout(() => {
-            for (let user of odKogaImamPoruke){
+            for (let user of odKogaImamPoruke) {
                 if (user[1]) napuniKonverzacije(user[0]);
             }
             novePoruke = countNewMessages();
@@ -23,10 +23,8 @@ setInterval(() => {
 }, 1500);
 
 document.getElementById("trash").addEventListener("click", event => {
-    console.log(myProfileData.myConversations);
     var indeks = myProfileData.myConversations.indexOf(receiver);
     myProfileData.myConversations.splice(indeks, 1);
-    console.log(myProfileData.myConversations);
     updateInformationsInDatabase(userUid, myProfileData, "");
     document.getElementById("trash").style.visibility = "hidden";
     drawListOfConversations(myProfileData.myConversations);
@@ -40,7 +38,6 @@ listOfConversations.addEventListener("click", event => {
         let interval = setInterval(() => {
             if (receiver !== "") {
                 const poruke = dovuciPoruke(conversationKey);
-                console.log(poruke);
                 clearInterval(interval);
                 markSelectedChat();
                 show(loading);
@@ -169,30 +166,31 @@ function markChatAsSeen(sender) {
 }
 
 function drawListOfConversations(arr) {
-    console.log(myProfileData.myConversations);
-    if (myProfileData.myConversations !== undefined) {
-        listOfConversations.innerHTML = "";
-        let div = document.createElement("div");
-        div.setAttribute("id", "transparent");
-        for (let index = 0; index < arr.length; index++) {
-            let friend = document.createElement("input"),
-                label = document.createElement("label"),
-                notificationBox = document.createElement("span");
-            friend.setAttribute("type", "radio");
-            friend.setAttribute("name", "selectedChat");
-            friend.setAttribute("id", arr[index]);
-            label.setAttribute("for", arr[index]);
-            label.textContent = arr[index];
-            notificationBox.setAttribute("id", arr[index] + "_new");
-            notificationBox.className = "newMsgInConversation";
-            label.appendChild(notificationBox);
-            div.appendChild(friend);
-            div.appendChild(label);
-        }
-        listOfConversations.appendChild(div);
-        for (let user of novePoruke[0]) {
-            newMsgInChat(user, true);
-        }
+    if (typeof myProfileData.myConversations === "undefined") {
+        listOfConversations.innerHTML = "<div><p style='text-align:center'>No conversations</p></div>";
+        return;
+    }
+    listOfConversations.innerHTML = "";
+    let div = document.createElement("div");
+    div.setAttribute("id", "transparent");
+    for (let index = 0; index < arr.length; index++) {
+        let friend = document.createElement("input"),
+            label = document.createElement("label"),
+            notificationBox = document.createElement("span");
+        friend.setAttribute("type", "radio");
+        friend.setAttribute("name", "selectedChat");
+        friend.setAttribute("id", arr[index]);
+        label.setAttribute("for", arr[index]);
+        label.textContent = arr[index];
+        notificationBox.setAttribute("id", arr[index] + "_new");
+        notificationBox.className = "newMsgInConversation";
+        label.appendChild(notificationBox);
+        div.appendChild(friend);
+        div.appendChild(label);
+    }
+    listOfConversations.appendChild(div);
+    for (let user of novePoruke[0]) {
+        newMsgInChat(user, true);
     }
 }
 
@@ -208,7 +206,6 @@ function proveriDaLiImaPoruka(username) {
             tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
         });
     });
-    console.log("proveri",tempArr);
     return tempArr;
 }
 
@@ -234,16 +231,13 @@ function drawChatContent(poruke, imeKonverzacije) {
     } else {
         let sender = "";
         for (let element in poruke) {
-            console.log(sender);
             let poruka = poruke[element][0],
                 brojPoruke = poruke[element][1],
                 div;
             if (poruka.sender !== myProfileData.username && !poruka.seen) markMessageAsSeen(imeKonverzacije, brojPoruke);
             if (sender === poruka.sender) {
-                console.log("sender === poruka.sender", sender === poruka.sender);
                 div = drawMessage(poruka, brojPoruke, "");
             } else {
-                console.log("else", sender === poruka.sender);
                 div = drawMessage(poruka, brojPoruke, sender);
                 sender = poruka.sender;
             }
@@ -257,7 +251,6 @@ function drawChatContent(poruke, imeKonverzacije) {
 }
 
 function drawMessage(message, msgNumber, sender) {
-    console.log("draw msg sender", sender);
     let messageDivClass = message.sender === myProfileData.username ? "msgRight divZaPoruku" : "msgLeft divZaPoruku",
         time = typeof message.date !== "undefined" ? formatTime(message.date) : "",
         msgSender = message.sender === myProfileData.username ? "me:" : message.sender + ":",
@@ -332,7 +325,6 @@ function addMessageToChat(snapshot) {
         scroll = messages.scrollHeight - messages.scrollTop;
     setTimeout(() => {
         if (document.getElementById(msgNumber) !== null) return;
-        console.log("snapshot ne treba");
         let msg = drawMessage(msgContent, msgNumber, msgContent.sender);
         messages.insertAdjacentHTML("beforeend", msg);
         if (msgContent.receiver === myProfileData.username) {
@@ -371,7 +363,6 @@ function countNewMessages() {
 }
 
 function sortMyConvesations(user) {
-    console.log(user);
     let indexOfUser = myProfileData.myConversations.indexOf(user);
     myProfileData.myConversations.splice(indexOfUser, 1);
     myProfileData.myConversations.unshift(user);

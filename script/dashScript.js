@@ -611,7 +611,17 @@ function convertUserInfoForProfileDraw(user) {
     }
 }
 
+function clearData() {
+    const data = ["usersGender", "usersBirthDate","usersAboutMe","usersCountry","usersCity","usersInterests","usersLanguage"];
+    for (let info of data){
+        document.getElementById(info).innerText = "no info";
+    }
+    document.getElementById("profilePhoto").style.backgroundImage = "inherit";
+    document.getElementById("usersRating").innerText = "Not Rated Yet";
+}
+
 function drawProfile(obj) {
+    clearData();
     for (let data in obj) {
         if (typeof obj[data] !== "undefined" && obj[data] !== "") {
             if (data === "profilePhoto") {
