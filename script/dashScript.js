@@ -628,5 +628,26 @@ function drawProfile(obj) {
     }
     document.getElementById("addToFavsBtn").name = obj.username;
     document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
+    sracunajOcenu(obj.username);
     show(profileDiv);
+}
+
+function sracunajOcenu(korisnik) {
+    let ocene=[];
+    let prosecnaOcena;
+    var sumaOcena;
+    firebase.database().ref(`ratings/${korisnik}`).once('value').then(function (snapshot) {
+        snapshot.forEach(function (ocenaSnapshot) {
+            let ocena = ocenaSnapshot.val();
+            console.log(ocena); 
+            ocene.push(ocena);
+        });
+        console.log(ocene);
+        sumaOcena = ocene.reduce((a, b) => a + b, 0);
+        console.log(sumaOcena);
+        prosecnaOcena = sumaOcena / ocene.length;
+        console.log(prosecnaOcena);
+        document.getElementById("usersRating").textContent = prosecnaOcena;
+    });
+
 }

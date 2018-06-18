@@ -490,6 +490,7 @@ div.favPhoto {
 /* ################# pregled profila ################### */
 
 #profileDiv {
+    z-index: 900;
     color: white;
     text-align: center;
     position: fixed;
@@ -567,13 +568,25 @@ div.favPhoto {
 
 .usersLangDiv {
     position: relative;
-    top: -60px;
+    top: -70px;
     border-bottom: solid rgb(81, 0, 172) 1px;
     width: 80%;
     margin: 10px auto;
 }
 
+
 .usersLangDiv p {
+    padding: 5px;
+}
+
+.usersRatingDiv {
+    position: relative;
+    top: -60px;
+    border-bottom: solid rgb(81, 0, 172) 1px;
+    width: 80%;
+    margin: 10px auto;
+}
+.usersRatingDiv p {
     padding: 5px;
 }
 
