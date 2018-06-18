@@ -939,6 +939,7 @@ div .callIcon {
     line-height: 50px;
 }
 .zvezdice {
+    text-align: center;
     height: 50px;
     line-height: 20px;
     z-index: 90;
@@ -952,6 +953,10 @@ div .callIcon {
     font-size: 30px;
     color: #313131;
     transition: 0.3s all;
+}
+
+.zvezdice span {
+    display: block;
 }
 
 .zvezdice a:hover {

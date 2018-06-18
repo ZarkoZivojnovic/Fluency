@@ -67,6 +67,8 @@ function mainNavigation(event) {
                 showMyFavorites();
             } else if (event.target.id === "myMessages") {
                 document.getElementById("trash").style.visibility = "hidden";
+                document.getElementById("zvezdice").style.display = "flex";
+                document.getElementById("zvezdicePoruka").textContent = "Rate this user:";
                 showMyMessages();
             }
         }

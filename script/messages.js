@@ -32,6 +32,8 @@ document.getElementById("trash").addEventListener("click", event => {
 
 });
 
+
+
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget && event.target.nodeName === "INPUT") {
         receiver = event.target.id;
@@ -69,6 +71,36 @@ sendMessageForm.addEventListener("submit", event => {
     sendMessageForm.reset();
 });
 
+document.getElementById("zvezdice").addEventListener("click", event => {
+    var ocena;
+    if (event.target !==event.currentTarget){
+    if (event.target.id == "jednaZvezdica") {
+         console.log(event.target.id);
+         ocena = 1;
+    }
+    if (event.target.id == "dveZvezdice") {
+        console.log(event.target.id);
+        ocena = 2;
+    }
+    if (event.target.id == "triZvezdice") {
+        console.log(event.target.id);
+        ocena = 3;
+    }
+    if (event.target.id == "cetiriZvezdice") {
+        console.log(event.target.id);
+        ocena = 4;
+    }
+    if (event.target.id == "petZvezdica") {
+        console.log(event.target.id);
+        ocena = 5;
+    }
+    console.log(ocena);
+    document.getElementById("zvezdicePoruka").textContent = "Thanks for your rating!";
+    document.getElementById("zvezdice").style.display = "none";
+}
+
+});
+
 function markSelectedChat() {
     if (document.getElementById(receiver) === null) return;
     document.getElementById(receiver).checked = true;
@@ -77,6 +109,8 @@ function markSelectedChat() {
         let selectedChat = document.querySelector("label[for='" + allChats[chat].id + "']");
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
+            document.getElementById("zvezdice").style.display = "flex";
+            document.getElementById("zvezdicePoruka").textContent = "Rate this user:";
         } else {
             selectedChat.style.backgroundColor = "transparent";
         }
