@@ -643,11 +643,14 @@ function sracunajOcenu(korisnik) {
             ocene.push(ocena);
         });
         console.log(ocene);
+        if (ocene.length > 0) {
         sumaOcena = ocene.reduce((a, b) => a + b, 0);
         console.log(sumaOcena);
         prosecnaOcena = Math.round((sumaOcena / ocene.length)*100)/100;
         console.log(prosecnaOcena);
         document.getElementById("usersRating").textContent = prosecnaOcena + " based on " + ocene.length + " ratings";
-    });
+    } else {
+        document.getElementById("usersRating").textContent = "Not Rated Yet";
+    }});
 
 }
