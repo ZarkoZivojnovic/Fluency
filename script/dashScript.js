@@ -618,6 +618,7 @@ function clearData() {
     }
     document.getElementById("profilePhoto").style.backgroundImage = "inherit";
     document.getElementById("usersRating").innerText = "Not Rated Yet";
+    document.getElementById("addToFavsBtn").innerText = "Add To Favorites";
 }
 
 function drawProfile(obj) {
