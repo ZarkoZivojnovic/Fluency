@@ -76,11 +76,11 @@ document.getElementById("zvezdice").addEventListener("click", event => {
     if (event.target !==event.currentTarget){
     if (event.target.id == "jednaZvezdica") {
          console.log(event.target.id);
-         ocena = 1;
+         ocena = 5;
     }
     if (event.target.id == "dveZvezdice") {
         console.log(event.target.id);
-        ocena = 2;
+        ocena = 4;
     }
     if (event.target.id == "triZvezdice") {
         console.log(event.target.id);
@@ -88,13 +88,14 @@ document.getElementById("zvezdice").addEventListener("click", event => {
     }
     if (event.target.id == "cetiriZvezdice") {
         console.log(event.target.id);
-        ocena = 4;
+        ocena = 2;
     }
     if (event.target.id == "petZvezdica") {
         console.log(event.target.id);
-        ocena = 5;
+        ocena = 1;
     }
     console.log(ocena);
+    firebase.database().ref(`ratings/${receiver}`).update({[myProfileData.username]: ocena});
     document.getElementById("zvezdicePoruka").textContent = "Thanks for your rating!";
     document.getElementById("zvezdice").style.display = "none";
 }
