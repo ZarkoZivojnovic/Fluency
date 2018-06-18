@@ -645,9 +645,9 @@ function sracunajOcenu(korisnik) {
         console.log(ocene);
         sumaOcena = ocene.reduce((a, b) => a + b, 0);
         console.log(sumaOcena);
-        prosecnaOcena = sumaOcena / ocene.length;
+        prosecnaOcena = Math.round((sumaOcena / ocene.length)*100)/100;
         console.log(prosecnaOcena);
-        document.getElementById("usersRating").textContent = prosecnaOcena;
+        document.getElementById("usersRating").textContent = prosecnaOcena + " based on " + ocene.length + " ratings";
     });
 
 }
