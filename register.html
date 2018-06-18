@@ -67,10 +67,10 @@
                 setTimeout(() => {
                     location.assign('./dashboard.html');
                 }, 3e3);
+                registerForm.reset();
             }).catch(function (error) {
                 alert(error.code);
             });
-            registerForm.reset();
         }
     }
 </script>
