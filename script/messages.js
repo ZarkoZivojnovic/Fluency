@@ -135,6 +135,8 @@ function markChatAsSeen(sender) {
 }
 
 function drawListOfConversations(arr) {
+    console.log(myProfileData.myConversations);
+    if (myProfileData.myConversations != undefined) {
     listOfConversations.innerHTML = "";
     let div = document.createElement("div");
     div.setAttribute("id", "transparent");
@@ -157,6 +159,7 @@ function drawListOfConversations(arr) {
     for (let user of novePoruke[0]) {
         newMsgInChat(user, true);
     }
+}
 }
 
 function showHideChatContent(property) {
