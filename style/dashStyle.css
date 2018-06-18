@@ -1,3 +1,5 @@
+
+
 #logo {
     width: 60px;
     height: 60px;
@@ -929,6 +931,48 @@ div .callIcon {
 	background-color: rgb(80,21,169);
 }
 
+#divZaZvezdice {
+    padding-left: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+}
+.zvezdice {
+    height: 50px;
+    line-height: 20px;
+    z-index: 90;
+    display: flex;
+    flex-direction: row;
+    float: right;
+    direction: rtl;
+}
+
+.zvezdice a {
+    font-size: 30px;
+    color: #313131;
+    transition: 0.3s all;
+}
+
+.zvezdice a:hover {
+    color: rgb(80,21,169);
+}
+
+.b1:hover ~ a {
+    color: rgb(80,21,169);
+}
+.b2:hover ~ a {
+    color: rgb(80,21,169);
+}
+.b3:hover ~ a {
+    color: rgb(80,21,169);
+}
+.b4:hover ~ a {
+    color: rgb(80,21,169);
+}
+.b5:hover ~ a {
+    color: rgb(80,21,169);
+}
 
 @keyframes rotiranje {
     from {transform: rotate(0deg)}
