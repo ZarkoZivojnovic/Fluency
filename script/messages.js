@@ -182,6 +182,7 @@ function drawListOfConversations(arr) {
         friend.setAttribute("id", arr[index]);
         label.setAttribute("for", arr[index]);
         label.textContent = arr[index];
+        label.className = "pointer";
         notificationBox.setAttribute("id", arr[index] + "_new");
         notificationBox.className = "newMsgInConversation";
         label.appendChild(notificationBox);

@@ -641,6 +641,7 @@ div.usersPhoto {
     flex-direction: row;
     border-bottom: solid rgb(81, 0, 172) 1px;
     padding: 10px;
+    cursor: pointer;
 }
 
 .usernameAndStatus {
@@ -738,10 +739,6 @@ div .callIcon {
 .flexColumn {
     display: flex;
     flex-direction: column;
-}
-
-.pointer{
-    cursor: pointer;
 }
 
 .noOverflow {

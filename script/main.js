@@ -15,6 +15,10 @@ let database = firebase.database(),
     user = firebase.auth().currentUser,
     userId;
 
+document.querySelector("header").addEventListener("click", event=>{
+   location.assign("index.html");
+});
+
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
         userId = firebase.auth().currentUser.uid;
