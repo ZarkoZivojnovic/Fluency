@@ -268,8 +268,8 @@ function formatTime(time) {
     let datum = new Date(time);
     return dodajNulu(datum.getHours())
         + ':' + dodajNulu(datum.getMinutes())
-        + " " + dodajNulu(1 + datum.getDate())
-        + '-' + dodajNulu(datum.getMonth())
+        + " " + dodajNulu(datum.getDate())
+        + '-' + dodajNulu(1 + datum.getMonth())
         + "-" + datum.getFullYear();
 }
 
