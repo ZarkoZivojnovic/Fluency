@@ -84,7 +84,7 @@ function showMyBlockList(){
     show(loading);
     hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv);
     setTimeout(() => {
-        drawBlockList(blockList, blockedUsers[0]);
+        drawList(blockList, blockedUsers[0], "block");
         hide(loading);
         show(myBlockListDiv);
     }, 500);
@@ -118,7 +118,7 @@ function showMyFavorites() {
     show(loading);
     hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
     setTimeout(() => {
-        drawFavsList(favoritesList, favorites[0]);
+        drawList(favoritesList, favorites[0], "fav");
         hide(loading);
         show(myFavoritesDiv);
     }, 500);

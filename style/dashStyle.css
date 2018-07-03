@@ -431,7 +431,7 @@ h3 {
     max-height: 400px;
  }
 
-.noBlockedUsersMsg, .noFavoritesMsg {
+.noUsersMsg {
     color: white;
     margin: 10px auto;
     border: none;
@@ -457,8 +457,7 @@ h3 {
     background-color: rgba(0, 0, 0, 0.4);
 }
 
-.favsList, .blockList {
-    height: 100%;
+.favList, .blockList {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
