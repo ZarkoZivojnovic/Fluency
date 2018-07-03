@@ -320,7 +320,12 @@
                 <div id="favoritesList" class="fullWidth"></div>
             </div>
         </div>
-        <div id="myNotesDiv" class="hide"></div>
+        <div id="myBlockListDiv" class="hide fullWidth">
+            <div id="blockedUsers" class="contentDiv shadow border noOverflow flexColumn">
+                <div class="blockedListLabel">List of Blocked Users</div>
+                <div id="blockedList" class="fullWidth"></div>
+            </div>
+        </div>
         <div id="channelsDiv" class="hide fullWidth">
             <div id="search" class="border shadow">
                 <div id="showSearchBtn" class="searchBar pointer">search by username</div>
@@ -519,7 +524,7 @@
             <li><a href="#" id="myMessages" class="">My Messages</a><span class="newMessageNum"></span></li>
             <li><a href="#" id="myProfile" class="">My Profile</a></li>
             <li><a href="#" id="myFavorites" class="">My Favorites</a></li>
-            <li><a href="#" id="myNotes" class="">My Notes</a></li>
+            <li><a href="#" id="myBlockList" class="">My Block List</a></li>
             <li><a href="#" id="channels" class="">Channels</a></li>
         </ul>
         <h2><a href="#" id="signOut">Sign Out</a></h2>
@@ -578,6 +583,7 @@
         <div class="flexRow">
             <button id="backSaProfila" class="profileBtns">🡐 Back</button>
             <button class="profileBtns" id="addToFavsBtn">Add To Favorites</button>
+            <button class="profileBtns" id="blockBtn">Block</button>
         </div>
     </div>
 </div>
@@ -592,6 +598,7 @@
 <script src="script/dashScript.js"></script>
 <script src="script/uploadingProfilePhoto.js"></script>
 <script src="script/favorites.js"></script>
+<script src="script/blockUser.js"></script>
 <script src="script/messages.js"></script>
 <script src="script/search.js"></script>
 </body>

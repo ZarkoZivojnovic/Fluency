@@ -4,6 +4,7 @@ const navigation = document.getElementById("navigation"),
     myProfileDiv = document.getElementById("myProfileDiv"),
     myMsgsDiv = document.getElementById("myMessagesDiv"),
     myFavoritesDiv = document.getElementById("myFavoritesDiv"),
+    myBlockListDiv = document.getElementById("myBlockListDiv"),
     profileForms = document.getElementById("profileForms"),
     personalInfoForm = document.getElementById("personalInfoForm"),
     aboutMeForm = document.getElementById("aboutMeForm"),
@@ -16,7 +17,7 @@ const navigation = document.getElementById("navigation"),
     myProfileData = getExistingData(userUid),
     usersName = document.getElementById("usersName"),
     profileDiv = document.getElementById("profileDiv"),
-    mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv],
+    mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv, myBlockListDiv],
     loading = document.getElementById("loadingBackground"),
     listaUsera = document.getElementById("usersList"),
     backSaProfilaBtn = document.getElementById("backSaProfila"),
@@ -70,10 +71,23 @@ function mainNavigation(event) {
                 document.getElementById("zvezdice").style.display = "flex";
                 document.getElementById("zvezdicePoruka").textContent = "Rate this user:";
                 showMyMessages();
+            } else if (event.target.id === "myBlockList"){
+                showMyBlockList();
             }
         }
     }
     event.preventDefault();
+}
+
+function showMyBlockList(){
+    let blockedUsers = new Array(dovuciUsere("block"));
+    show(loading);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv);
+    setTimeout(() => {
+        drawBlockList(blockList, blockedUsers[0]);
+        hide(loading);
+        show(myBlockListDiv);
+    }, 500);
 }
 
 function showMyProfile() {
@@ -81,7 +95,7 @@ function showMyProfile() {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm("disable");
-            hide(channelsDiv, myFavoritesDiv, myMsgsDiv);
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv);
             show(myProfileDiv);
         }
     });
@@ -90,7 +104,7 @@ function showMyProfile() {
 function showChannels() {
     let listaUsera = new Array(dovuciUsere());
     show(loading);
-    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv);
+    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv);
     setTimeout(() => {
         prikaziUsere(listaUsera[0]);
         show(channelsDiv);
@@ -102,7 +116,7 @@ function showChannels() {
 function showMyFavorites() {
     let favorites = new Array(dovuciUsere("favs"));
     show(loading);
-    hide(myProfileDiv, channelsDiv, myMsgsDiv);
+    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
     setTimeout(() => {
         drawFavsList(favoritesList, favorites[0]);
         hide(loading);
@@ -112,7 +126,7 @@ function showMyFavorites() {
 
 function showMyMessages() {
     drawListOfConversations(myProfileData.myConversations);
-    hide(myProfileDiv, channelsDiv, myFavoritesDiv);
+    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv);
     show(myMsgsDiv);
 }
 
@@ -437,6 +451,10 @@ function dovuciUsere(uslov, string, dodatniUslov) {
                         }
                     }
                 }
+            } else if (uslov === "block"){
+                if (myProfileData.myBlockList.indexOf(user.username) !== -1){
+                    tempArr.push(user)
+                }
             }
         });
     });
@@ -619,6 +637,7 @@ function clearData() {
     document.getElementById("profilePhoto").style.backgroundImage = "inherit";
     document.getElementById("usersRating").innerText = "Not Rated Yet";
     document.getElementById("addToFavsBtn").innerText = "Add To Favorites";
+    document.getElementById("blockBtn").innerText = "Block";
 }
 
 function drawProfile(obj) {
@@ -634,10 +653,16 @@ function drawProfile(obj) {
             }
         }
     }
+    console.log(myProfileData.myBlockList);
     if (myProfileData.myFavorites.indexOf(obj.username) !== -1) {
-        document.getElementById("addToFavsBtn").innerText = "Remove From Favorites"
+        document.getElementById("addToFavsBtn").innerText = "Remove From Favorites";
     }
+    if (typeof myProfileData.myBlockList !== "undefined" && myProfileData.myBlockList.indexOf(obj.username) !== -1) {
+        document.getElementById("blockBtn").innerText = "Unblock";
+    }
+
     document.getElementById("addToFavsBtn").name = obj.username;
+    document.getElementById("blockBtn").name = obj.username;
     document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
     sracunajOcenu(obj.username);
     show(profileDiv);

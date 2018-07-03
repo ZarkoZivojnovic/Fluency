@@ -51,9 +51,10 @@ function addOrRemoveFromFavs(event) {
         myProfileData.myFavorites.push(user);
         addToFavsBtn.textContent = "Remove From Favorites";
     } else {
-        let index = myProfileData.myFavorites.indexOf(myProfileData.myFavorites[user]);
+        let index = myProfileData.myFavorites.indexOf(user);
         myProfileData.myFavorites.splice(index, 1);
         addToFavsBtn.textContent = "Add To Favorites";
+        showMyFavorites();
     }
     updateInformationsInDatabase(userUid, myProfileData);
 }
