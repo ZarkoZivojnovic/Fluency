@@ -25,7 +25,7 @@ function addOrRemoveFromBlockList(event) {
         myProfileData.myBlockList.push(user);
         blockBtn.textContent = "Unblock";
     } else {
-        let index = myProfileData.myFavorites.indexOf(user);
+        let index = myProfileData.myBlockList.indexOf(user);
         myProfileData.myBlockList.splice(index, 1);
         blockBtn.textContent = "Block";
         showMyBlockList();
