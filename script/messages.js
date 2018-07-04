@@ -69,7 +69,7 @@ sendMessageForm.addEventListener("submit", event => {
 
 zvezdice.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
-        let ocena = event.target.id.split("_")[1];
+        let ocena = parseInt(event.target.id.split("_")[1]);
         firebase.database().ref(`ratings/${receiver}`).update({[myProfileData.username]: ocena});
         zvezdicePoruka.textContent = "Thanks for your rating!";
         zvezdice.style.display = "none";
