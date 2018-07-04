@@ -22,11 +22,11 @@ setInterval(() => {
     }
 }, 1500);
 
-document.getElementById("trash").addEventListener("click", event => {
-    var indeks = myProfileData.myConversations.indexOf(receiver);
+trash.addEventListener("click", event => {
+    let indeks = myProfileData.myConversations.indexOf(receiver);
     myProfileData.myConversations.splice(indeks, 1);
     updateInformationsInDatabase(userUid, myProfileData, "");
-    document.getElementById("trash").style.visibility = "hidden";
+    trash.style.visibility = "hidden";
     drawListOfConversations(myProfileData.myConversations);
 });
 
@@ -47,7 +47,7 @@ listOfConversations.addEventListener("click", event => {
                     hide(loading);
                 }, 1200);
             }
-            document.getElementById("trash").style.visibility = "visible";
+            trash.style.visibility = "visible";
         }, 500);
     }
 });
@@ -67,35 +67,13 @@ sendMessageForm.addEventListener("submit", event => {
     sendMessageForm.reset();
 });
 
-document.getElementById("zvezdice").addEventListener("click", event => {
-    var ocena;
+zvezdice.addEventListener("click", event => {
     if (event.target !== event.currentTarget) {
-        if (event.target.id == "jednaZvezdica") {
-            console.log(event.target.id);
-            ocena = 5;
-        }
-        if (event.target.id == "dveZvezdice") {
-            console.log(event.target.id);
-            ocena = 4;
-        }
-        if (event.target.id == "triZvezdice") {
-            console.log(event.target.id);
-            ocena = 3;
-        }
-        if (event.target.id == "cetiriZvezdice") {
-            console.log(event.target.id);
-            ocena = 2;
-        }
-        if (event.target.id == "petZvezdica") {
-            console.log(event.target.id);
-            ocena = 1;
-        }
-        console.log(ocena);
+        let ocena = event.target.id.split("_")[1];
         firebase.database().ref(`ratings/${receiver}`).update({[myProfileData.username]: ocena});
-        document.getElementById("zvezdicePoruka").textContent = "Thanks for your rating!";
-        document.getElementById("zvezdice").style.display = "none";
+        zvezdicePoruka.textContent = "Thanks for your rating!";
+        zvezdice.style.display = "none";
     }
-
 });
 
 function markSelectedChat() {
@@ -106,8 +84,8 @@ function markSelectedChat() {
         let selectedChat = document.querySelector("label[for='" + allChats[chat].id + "']");
         if (allChats[chat].checked) {
             selectedChat.style.backgroundColor = fluencyColor;
-            document.getElementById("zvezdice").style.display = "flex";
-            document.getElementById("zvezdicePoruka").textContent = "Rate this user:";
+            zvezdice.style.display = "flex";
+            zvezdicePoruka.textContent = "Rate this user:";
         } else {
             selectedChat.style.backgroundColor = "transparent";
         }
@@ -355,8 +333,8 @@ function newMessageNotification(number) {
 }
 
 function countNewMessages() {
-    let newMsgs = odKogaImamPoruke.filter((value, index) => value[1]);
-    let arr = [];
+    let newMsgs = odKogaImamPoruke.filter((value, index) => value[1]),
+        arr = [];
     for (let index in newMsgs) {
         arr.push(newMsgs[index][0]);
     }
@@ -371,18 +349,4 @@ function sortMyConvesations(user) {
 
 function newMsgInChat(user, value) {
     if (document.getElementById(user + "_new") !== null) document.getElementById(user + "_new").innerText = value ? "new" : "";
-}
-
-function removeElem(tag, atr, vl) {
-    var els = document.getElementsByTagName(tag);
-    vl = vl.toLowercase();
-    for (var i = 0; i < els.length; i++) {
-        var elem = els[i];
-        if (elem.getAttribute(atr)) {
-            if (elem.getAttribute(atr).toString().toLowercase() == vl) {
-                elem.remove();
-                return;
-            }
-        }
-    }
 }

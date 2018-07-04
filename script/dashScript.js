@@ -23,6 +23,11 @@ const navigation = document.getElementById("navigation"),
     backSaProfilaBtn = document.getElementById("backSaProfila"),
     chooseChannel = document.getElementById("chooseChannel"),
     glavniDiv = document.getElementById("usersList"),
+    usersRating = document.getElementById("usersRating"),
+    usersProfilePhoto = document.getElementById("profilePhoto"),
+    trash = document.getElementById("trash"),
+    zvezdice = document.getElementById("zvezdice"),
+    zvezdicePoruka = document.getElementById("zvezdicePoruka"),
     fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
@@ -67,11 +72,8 @@ function mainNavigation(event) {
             } else if (event.target.id === "myFavorites") {
                 showMyFavorites();
             } else if (event.target.id === "myMessages") {
-                document.getElementById("trash").style.visibility = "hidden";
-                document.getElementById("zvezdice").style.display = "flex";
-                document.getElementById("zvezdicePoruka").textContent = "Rate this user:";
                 showMyMessages();
-            } else if (event.target.id === "myBlockList"){
+            } else if (event.target.id === "myBlockList") {
                 showMyBlockList();
             }
         }
@@ -79,7 +81,7 @@ function mainNavigation(event) {
     event.preventDefault();
 }
 
-function showMyBlockList(){
+function showMyBlockList() {
     let blockedUsers = new Array(dovuciUsere("block"));
     show(loading);
     hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv);
@@ -128,6 +130,9 @@ function showMyMessages() {
     drawListOfConversations(myProfileData.myConversations);
     hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv);
     show(myMsgsDiv);
+    trash.style.visibility = "hidden";
+    zvezdice.style.display = "flex";
+    zvezdicePoruka.textContent = "Rate this user:";
 }
 
 function onload() {
@@ -308,7 +313,7 @@ function savePersonalInfo(event) {
 
 function updateInformationsInDatabase(uid, infoObj, notification) {
     firebase.database().ref('users/' + uid).update(infoObj);
-    if (notification){
+    if (notification) {
         alert(notification);
     }
 }
@@ -451,8 +456,8 @@ function dovuciUsere(uslov, string, dodatniUslov) {
                         }
                     }
                 }
-            } else if (uslov === "block"){
-                if (myProfileData.myBlockList.indexOf(user.username) !== -1){
+            } else if (uslov === "block") {
+                if (myProfileData.myBlockList.indexOf(user.username) !== -1) {
                     tempArr.push(user)
                 }
             }
@@ -576,6 +581,7 @@ function udjiNaProfil(event) {
             let receiver = useriZaPrikaz[indexOsobe].username;
             openConversationWithThisUser(receiver);
         } else if (event.target.className === "callIcon") {
+            /* TODO */
             console.log("call");
         } else {
             indexOsobe = event.target.id;
@@ -630,14 +636,14 @@ function convertUserInfoForProfileDraw(user) {
 }
 
 function clearData() {
-    const data = ["usersGender", "usersBirthDate","usersAboutMe","usersCountry","usersCity","usersInterests","usersLanguage"];
-    for (let info of data){
+    const data = ["usersGender", "usersBirthDate", "usersAboutMe", "usersCountry", "usersCity", "usersInterests", "usersLanguage"];
+    for (let info of data) {
         document.getElementById(info).innerText = "no info";
     }
-    document.getElementById("profilePhoto").style.backgroundImage = "inherit";
-    document.getElementById("usersRating").innerText = "Not Rated Yet";
-    document.getElementById("addToFavsBtn").innerText = "Add To Favorites";
-    document.getElementById("blockBtn").innerText = "Block";
+    usersProfilePhoto.style.backgroundImage = "inherit";
+    usersRating.innerText = "Not Rated Yet";
+    addToFavsBtn.innerText = "Add To Favorites";
+    blockBtn.innerText = "Block";
 }
 
 function drawProfile(obj) {
@@ -653,40 +659,34 @@ function drawProfile(obj) {
             }
         }
     }
-    console.log(myProfileData.myBlockList);
     if (myProfileData.myFavorites.indexOf(obj.username) !== -1) {
-        document.getElementById("addToFavsBtn").innerText = "Remove From Favorites";
+        addToFavsBtn.innerText = "Remove From Favorites";
     }
     if (typeof myProfileData.myBlockList !== "undefined" && myProfileData.myBlockList.indexOf(obj.username) !== -1) {
-        document.getElementById("blockBtn").innerText = "Unblock";
+        blockBtn.innerText = "Unblock";
     }
-
-    document.getElementById("addToFavsBtn").name = obj.username;
-    document.getElementById("blockBtn").name = obj.username;
-    document.getElementById("addToFavsBtn").style.display = obj.username === myProfileData.username ? "none" : "inherit";
+    blockBtn.name = obj.username;
+    addToFavsBtn.name = obj.username;
+    addToFavsBtn.style.display = obj.username === myProfileData.username ? "none" : "inherit";
     sracunajOcenu(obj.username);
     show(profileDiv);
 }
 
 function sracunajOcenu(korisnik) {
-    let ocene=[];
-    let prosecnaOcena;
-    var sumaOcena;
-    firebase.database().ref(`ratings/${korisnik}`).once('value').then(function (snapshot) {
-        snapshot.forEach(function (ocenaSnapshot) {
+    let ocene = [],
+        prosecnaOcena,
+        sumaOcena;
+    firebase.database().ref(`ratings/${korisnik}`).once('value').then(snapshot => {
+        snapshot.forEach(ocenaSnapshot => {
             let ocena = ocenaSnapshot.val();
-            console.log(ocena); 
             ocene.push(ocena);
         });
-        console.log(ocene);
         if (ocene.length > 0) {
-        sumaOcena = ocene.reduce((a, b) => a + b, 0);
-        console.log(sumaOcena);
-        prosecnaOcena = Math.round((sumaOcena / ocene.length)*100)/100;
-        console.log(prosecnaOcena);
-        document.getElementById("usersRating").textContent = prosecnaOcena + " based on " + ocene.length + " ratings";
-    } else {
-        document.getElementById("usersRating").textContent = "Not Rated Yet";
-    }});
-
+            sumaOcena = ocene.reduce((a, b) => a + b, 0);
+            prosecnaOcena = Math.round((sumaOcena / ocene.length) * 100) / 100;
+            usersRating.textContent = prosecnaOcena + " based on " + ocene.length + " ratings";
+        } else {
+            usersRating.textContent = "Not Rated Yet";
+        }
+    });
 }

@@ -28,32 +28,45 @@ function openProfile(event) {
 
 function addOrRemoveFromList(event) {
     event.stopPropagation();
-    let favOrBlock = event.target.id === "blockBtn" ? myProfileData.myBlockList : myProfileData.myFavorites;
-    let user = event.target.name;
+    let  user = event.target.name,
+        btn = [event.target.id],
+        favOrBlock = btn === blockBtn ? myProfileData.myBlockList : myProfileData.myFavorites;
+
     if (favOrBlock.indexOf(user) === -1) {
-        favOrBlock.push(user);
-        if (favOrBlock === myProfileData.myBlockList) {
-            blockBtn.textContent = "Unblock";
-        } else {
-            addToFavsBtn.textContent = "Remove From Favorites";
-        }
+        addToList(favOrBlock, user);
     } else {
-        let index = favOrBlock.indexOf(user);
-        favOrBlock.splice(index, 1);
-        if (favOrBlock === myProfileData.myBlockList) {
-            blockBtn.textContent = "Block";
-            showMyBlockList();
-        } else {
-            addToFavsBtn.textContent = "Add To Favorites";
-            showMyFavorites();
-        }
+        removeFromList(favOrBlock, user);
     }
     updateInformationsInDatabase(userUid, myProfileData);
 }
 
+function addToList(favOrBlock, user) {
+    favOrBlock.push(user);
+    if (favOrBlock === myProfileData.myBlockList) {
+        blockBtn.textContent = "Unblock";
+    } else {
+        addToFavsBtn.textContent = "Remove From Favorites";
+    }
+}
+
+function removeFromList(favOrBlock, user) {
+    let index = favOrBlock.indexOf(user);
+    favOrBlock.splice(index, 1);
+    if (favOrBlock === myProfileData.myBlockList) {
+        blockBtn.textContent = "Block";
+        showMyBlockList();
+    } else {
+        addToFavsBtn.textContent = "Add To Favorites";
+        showMyFavorites();
+    }
+}
+
 function drawList(appendToElement, arr, string) {
     appendToElement.innerHTML = "";
-    if (arr.length === 0) appendToElement.innerHTML = "<h3 class='noUsersMsg'>Empty List</h3>";
+    if (arr.length === 0) {
+        appendToElement.innerHTML = "<h3 class='noUsersMsg'>Empty List</h3>";
+        return;
+    }
     listArr = [];
     let div = document.createElement("div");
     div.classList.add(string + "List");
