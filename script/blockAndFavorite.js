@@ -119,7 +119,7 @@ function refreshFavorites(event) {
         }
         show(loading);
         setTimeout(function () {
-            drawList(favoritesList, favorites[0]);
+            drawList(favoritesList, favorites[0], "fav");
             hide(loading);
         }, 500);
     }
