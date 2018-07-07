@@ -29,9 +29,8 @@ function openProfile(event) {
 function addOrRemoveFromList(event) {
     event.stopPropagation();
     let  user = event.target.name,
-        btn = [event.target.id],
+        btn = event.target.id === "blockBtn" ? blockBtn:addToFavsBtn,
         favOrBlock = btn === blockBtn ? myProfileData.myBlockList : myProfileData.myFavorites;
-
     if (favOrBlock.indexOf(user) === -1) {
         addToList(favOrBlock, user);
     } else {

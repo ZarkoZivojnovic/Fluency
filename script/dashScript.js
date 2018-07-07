@@ -474,6 +474,7 @@ function prikaziUsere(nizUsera) {
         return;
     }
     for (let korisnik of nizUsera) {
+        if (myProfileData.myBlockList.indexOf(korisnik.username)!==-1) continue;
         useriZaPrikaz.push(korisnik);
         let userDiv = document.createElement("div"),
             usersPhoto = document.createElement("div"),
@@ -581,7 +582,10 @@ function udjiNaProfil(event) {
             let receiver = useriZaPrikaz[indexOsobe].username;
             openConversationWithThisUser(receiver);
         } else if (event.target.className === "callIcon") {
-            /* TODO */
+            indexOsobe = event.target.parentNode.parentNode.id;
+            let receiver = useriZaPrikaz[indexOsobe].username;
+            openConversationWithThisUser(receiver);
+            show(document.getElementById("videoStreamDiv"));
             console.log("call");
         } else {
             indexOsobe = event.target.id;

@@ -11,7 +11,7 @@ firebase.initializeApp(config);
 const loginForm = document.getElementById("loginForm"),
     registerForm = document.getElementById("registerForm");
 
-let database = firebase.database(),
+let database = firebase.database().ref(),
     user = firebase.auth().currentUser,
     userId;
 

@@ -135,8 +135,8 @@ function markMessageAsSeen(conversationKey, messageKey) {
     firebase.database().ref('messages/' + conversationKey + "/" + messageKey).update({"seen": true});
 }
 
-function sendNotificationToReceiver(receiver) {
-    firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: true});
+function sendNotificationToReceiver(receiver, msg = true) {
+    firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: msg});
 }
 
 function markChatAsSeen(sender) {
@@ -182,7 +182,11 @@ function proveriDaLiImaPoruka(username) {
     let tempArr = [];
     ref.once('value', snapshot => {
         snapshot.forEach(newMsgsSnapshot => {
-            tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
+            if (myProfileData.myBlockList.indexOf(newMsgsSnapshot.key)===-1){
+                tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
+            } else if (newMsgsSnapshot.val() === true){
+                markChatAsSeen(newMsgsSnapshot.key);
+            }
         });
     });
     return tempArr;
