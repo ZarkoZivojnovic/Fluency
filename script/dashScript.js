@@ -577,16 +577,14 @@ function filtrirajPoJeziku(event) {
 function udjiNaProfil(event) {
     let indexOsobe;
     if (event.target !== event.currentTarget) {
+        indexOsobe = event.target.parentNode.parentNode.id;
+        let receiver = useriZaPrikaz[indexOsobe].username;
         if (event.target.className === "msgIcon") {
-            indexOsobe = event.target.parentNode.parentNode.id;
-            let receiver = useriZaPrikaz[indexOsobe].username;
             openConversationWithThisUser(receiver);
         } else if (event.target.className === "callIcon") {
-            indexOsobe = event.target.parentNode.parentNode.id;
-            let receiver = useriZaPrikaz[indexOsobe].username;
             openConversationWithThisUser(receiver);
-            show(document.getElementById("videoStreamDiv"));
-            console.log("call");
+            videoCallRequest(receiver);
+            show(videoStreamDiv);
         } else {
             indexOsobe = event.target.id;
             if (indexOsobe === "") {

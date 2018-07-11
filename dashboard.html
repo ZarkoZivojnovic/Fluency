@@ -14,6 +14,10 @@
           integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 </head>
 <body>
+<div style="position: absolute">
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+</div>
 <div id="wrap">
     <header class="pointer">
         <img src="graph/logoForBoard.png" alt="logo" id="logo" class="pointer">
@@ -41,9 +45,9 @@
                             <a id="zvezdica_1" class="icon ion-md-star b5"></a>
                         </div>
                     </div>
-                    <div id="videoStreamDiv" class="">
+                    <div id="videoStreamDiv" class="hide">
                         <video id="friendsVideo" width="320" height="240" autoplay></video>
-                        <video id="yourVideo" width="240" height="160" autoplay></video>
+                        <video id="yourVideo" width="240" height="160" autoplay muted></video>
                     </div>
                     <div id="messages" class="scrollbar-external"></div>
                     <form action="?" method="post" id="sendMsgForm" class="fullWidth flexRow">
@@ -597,13 +601,13 @@
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-storage.js"></script>
 <script src="script/main.js"></script>
-<!--<script src="node_modules/webrtc-adapter/out/adapter.js"></script>-->
+<script src="node_modules/webrtc-adapter/out/adapter.js"></script>
 <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js'></script>
 <script src="script/dashScript.js"></script>
 <script src="script/blockAndFavorite.js"></script>
 <script src="script/uploadingProfilePhoto.js"></script>
 <script src="script/messages.js"></script>
 <script src="script/search.js"></script>
-<!--<script src="script/video.js"></script>-->
+<script src="script/video.js"></script>
 </body>
 </html>

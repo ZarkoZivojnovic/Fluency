@@ -136,6 +136,7 @@ function markMessageAsSeen(conversationKey, messageKey) {
 }
 
 function sendNotificationToReceiver(receiver, msg = true) {
+
     firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: msg});
 }
 
@@ -182,10 +183,18 @@ function proveriDaLiImaPoruka(username) {
     let tempArr = [];
     ref.once('value', snapshot => {
         snapshot.forEach(newMsgsSnapshot => {
-            if (myProfileData.myBlockList.indexOf(newMsgsSnapshot.key)===-1){
-                tempArr.push([newMsgsSnapshot.key, newMsgsSnapshot.val()]);
-            } else if (newMsgsSnapshot.val() === true){
-                markChatAsSeen(newMsgsSnapshot.key);
+            let sender = newMsgsSnapshot.key,
+                msg = newMsgsSnapshot.val();
+            if (myProfileData.myBlockList.indexOf(sender)===-1){
+                if (msg === true || msg === false){
+                    tempArr.push([sender, msg]);
+                } else {
+                    videoCallMsg(msg, sender);
+                    markChatAsSeen(sender)
+                }
+            } else if (msg === true){
+                //ako je user blokiran
+                markChatAsSeen(sender);
             }
         });
     });
