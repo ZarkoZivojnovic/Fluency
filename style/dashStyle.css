@@ -1042,12 +1042,15 @@ div .callIcon {
     transition: all 500ms;
 }
 
-.modalText {
-    color: rgb(80,21,169);
-}
+.modalText, .modalStatus {    
+    color: rgb(80,21,169);    
+    text-align: center;
+    }
 
-.modalText span {
-    font-weight: 900;
+
+.modalText span, .modalStatus span 
+{    
+    font-weight: 900;    
     font-size: 30px;
 }
 
