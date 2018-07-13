@@ -4,6 +4,12 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
     videoDatabase, yourId, pc,
     servers = {'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {'urls': 'turn:numb.viagenie.ca','credential': 'beaver','username': 'webrtc.websitebeaver@gmail.com'}]};
 
+document.getElementById("endCall").addEventListener("click", prekiniPoziv);
+
+function prekiniPoziv() {
+    pc.close();
+    hide(videoStreamDiv);
+}
 
 function videoCallRequest(receiver) {
     let callRequest = "Video Call";
