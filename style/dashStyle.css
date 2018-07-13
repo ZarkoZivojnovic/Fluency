@@ -1066,6 +1066,13 @@ div .callIcon {
     transform: scale(1.1,1.1);
 }
 
+#videoStreamDiv {
+    padding: 10px;
+    z-index: 9999;
+    height: 50%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 
 @keyframes rotiranje {
     from {transform: rotate(0deg)}
