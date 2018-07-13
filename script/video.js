@@ -1,7 +1,7 @@
 let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
-    database, yourId, pc,
+    videoDatabase, yourId, pc,
     servers = {'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {'urls': 'turn:numb.viagenie.ca','credential': 'beaver','username': 'webrtc.websitebeaver@gmail.com'}]};
 
 
@@ -40,6 +40,7 @@ function sendAnswerToSender(answer, sender) {
 }
 
 function createCallModal(sender) {
+    const receiver = myProfileData.username !== sender;
     let div = document.createElement("div"),
         modal = document.createElement("div"),
         accept = document.createElement("button"),
@@ -61,6 +62,10 @@ function createCallModal(sender) {
     document.body.appendChild(div);
 }
 
+function callingModal() {
+    
+}
+
 function videoCallMsg(msg, sender) {
     if (msg === "Video Call") {
         incomingVideoCall(sender);
@@ -79,16 +84,16 @@ function videoCallMsg(msg, sender) {
 function startWebRTC(remoteUser) {
     conversationKey = createConversationKey(myProfileData.username, remoteUser);
     firebase.database().ref('calls/'+conversationKey).set({"call":"call"});
-    database = firebase.database().ref('calls/'+conversationKey);
+    videoDatabase = firebase.database().ref('calls/'+conversationKey);
     yourId = Math.floor(Math.random()*1000000000);
     pc = new RTCPeerConnection(servers);
-    pc.onicecandidate = (event => event.candidate?sendMessage(yourId, JSON.stringify({'ice': event.candidate})):console.log("Sent All Ice") );
+    pc.onicecandidate = (event => event.candidate?sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})):console.log("Sent All Ice") );
     pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
-    database.on('child_added', readMessage);
+    videoDatabase.on('child_added', readMessage);
 }
 
-function sendMessage(senderId, data) {
-    let msg = database.push({ sender: senderId, message: data });
+function sendVideoMessage(senderId, data) {
+    let msg = videoDatabase.push({ sender: senderId, message: data });
     msg.remove();
 }
 
@@ -108,7 +113,7 @@ function readMessage(data) {
             pc.setRemoteDescription(new RTCSessionDescription(msg.sdp))
                 .then(() => pc.createAnswer())
                 .then(answer => pc.setLocalDescription(answer))
-                .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
+                .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
         else if (msg.sdp.type === "answer")
             pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
     }
@@ -124,5 +129,5 @@ function showMyFace() {
 function showFriendsFace() {
     pc.createOffer()
         .then(offer => pc.setLocalDescription(offer) )
-        .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})) );
+        .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})) );
 }
