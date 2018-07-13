@@ -584,6 +584,7 @@ function udjiNaProfil(event) {
         } else if (event.target.className === "callIcon") {
             videoCallRequest(receiver);
             //calling modal
+            callingModal(receiver);
         } else {
             indexOsobe = event.target.id;
             if (indexOsobe === "") {
