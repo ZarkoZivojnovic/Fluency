@@ -582,9 +582,8 @@ function udjiNaProfil(event) {
         if (event.target.className === "msgIcon") {
             openConversationWithThisUser(receiver);
         } else if (event.target.className === "callIcon") {
-            openConversationWithThisUser(receiver);
             videoCallRequest(receiver);
-            show(videoStreamDiv);
+            //calling modal
         } else {
             indexOsobe = event.target.id;
             if (indexOsobe === "") {

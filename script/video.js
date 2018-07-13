@@ -1,13 +1,9 @@
-const configuration = {
-    iceServers: [{
-        urls: 'stun:stun.l.google.com:19302'
-    }]
-};
 let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
-    pc,
-    offerer = false;
+    database, yourId, pc,
+    servers = {'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {'urls': 'turn:numb.viagenie.ca','credential': 'beaver','username': 'webrtc.websitebeaver@gmail.com'}]};
+
 
 function videoCallRequest(receiver) {
     let callRequest = "Video Call";
@@ -30,9 +26,10 @@ function selectAnswer(event) {
 
 function sendAnswerToSender(answer, sender) {
     if (answer === "Accepted") {
-        sendNotificationToReceiver(sender, "Accepted Video Call");
-        startWebRTC(offerer);
         receiver = sender;
+        sendNotificationToReceiver(sender, "Accepted Video Call");
+        startWebRTC(sender);
+        showMyFace();
         openConversationWithThisUser(sender);
         show(videoStreamDiv);
     } else if (answer === "Rejected") {
@@ -64,95 +61,68 @@ function createCallModal(sender) {
     document.body.appendChild(div);
 }
 
-function videoCallDataExchage(message) {
-    sendNotificationToReceiver(receiver, JSON.stringify(message));
-}
-
-function startWebRTC(offerer) {
-    pc = new RTCPeerConnection(configuration);
-
-    // 'onicecandidate' notifies us whenever an ICE agent needs to deliver a
-    // message to the other peer through the signaling server
-    pc.onicecandidate = event => {
-
-        if (event.candidate) {
-            videoCallDataExchage({'candidate': event.candidate});
-            console.log("onicecand send candidate", event.candidate);
-        }
-
-
-    };
-
-    // If user is offerer let the 'negotiationneeded' event create the offer
-    if (offerer) {
-        pc.onnegotiationneeded = () => {
-            pc.createOffer().then(localDescCreated).catch((err) => {
-                console.log(err)
-            });
-        }
-    }
-
-    // When a remote stream arrives display it in the #remoteVideo element
-    pc.ontrack = event => {
-        const stream = event.streams[0];
-        if (!friendsVideo.srcObject || friendsVideo.srcObject.id !== stream.id) {
-            friendsVideo.srcObject = stream;
-        }
-    };
-
-    navigator.mediaDevices.getUserMedia({
-        audio: true,
-        video: true,
-    }).then(stream => {
-        // Display your local video in #localVideo element
-        yourVideo.srcObject = stream;
-        // Add your stream to be sent to the conneting peer
-        stream.getTracks().forEach(track => pc.addTrack(track, stream));
-    }, (err) => {
-        console.log(err)
-    });
-}
-
 function videoCallMsg(msg, sender) {
     if (msg === "Video Call") {
         incomingVideoCall(sender);
     } else if (msg === "Accepted Video Call") {
         console.log(sender, msg);
-        offerer = true;
-        startWebRTC(offerer);
+        startWebRTC(sender);
+        showMyFace();
+        //showFriendsFace();
+        openConversationWithThisUser(sender);
+        show(videoStreamDiv);
     } else if (msg === "Rejected Video Call") {
         console.log(sender, msg);
-    } else {
-        let dataObj = JSON.parse(msg);
-        console.log("received obj", dataObj);
-        videoInfoHandler(dataObj)
     }
 }
 
-function videoInfoHandler(message) {
-    if (message.candidate) {
-        console.log("msg.candidate", message.candidate);
-        pc.addIceCandidate(new RTCIceCandidate(message.candidate)).catch((err) => {
-            console.log("err addicecandidate", err);
-        });
-    } else if (message.sdp.type === "offer") {
-        pc.setRemoteDescription(new RTCSessionDescription(message.sdp))
-            .then(() => pc.createAnswer())
-            .then(answer => pc.setLocalDescription(answer))
-            .then(() => videoCallDataExchage({'sdp': pc.localDescription}));
-    } else if (message.sdp.type === "answer") {
-        pc.setRemoteDescription(new RTCSessionDescription(message.sdp));
+function startWebRTC(remoteUser) {
+    conversationKey = createConversationKey(myProfileData.username, remoteUser);
+    firebase.database().ref('calls/'+conversationKey).set({"call":"call"});
+    database = firebase.database().ref('calls/'+conversationKey);
+    yourId = Math.floor(Math.random()*1000000000);
+    pc = new RTCPeerConnection(servers);
+    pc.onicecandidate = (event => event.candidate?sendMessage(yourId, JSON.stringify({'ice': event.candidate})):console.log("Sent All Ice") );
+    pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
+    database.on('child_added', readMessage);
+}
+
+function sendMessage(senderId, data) {
+    let msg = database.push({ sender: senderId, message: data });
+    msg.remove();
+}
+
+function readMessage(data) {
+    console.log("data", data);
+    let string = data.val();
+    if (string === "call")return;
+    console.log("string", string);
+    let msg = JSON.parse(string.message);
+    console.log("json", data.val().message);
+    console.log("msg", msg);
+    let sender = data.val().sender;
+    if (sender !== yourId) {
+        if (msg.ice !== undefined)
+            pc.addIceCandidate(new RTCIceCandidate(msg.ice));
+        else if (msg.sdp.type === "offer")
+            pc.setRemoteDescription(new RTCSessionDescription(msg.sdp))
+                .then(() => pc.createAnswer())
+                .then(answer => pc.setLocalDescription(answer))
+                .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
+        else if (msg.sdp.type === "answer")
+            pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
     }
 }
 
-function localDescCreated(desc) {
-    pc.setLocalDescription(
-        desc,
-        () => {
-            videoCallDataExchage({'sdp': pc.localDescription})
-        },
-        (err) => {
-            console.log("localDesc", err)
-        }
-    );
+function showMyFace() {
+    navigator.mediaDevices.getUserMedia({audio:true, video:true})
+        .then(stream => yourVideo.srcObject = stream)
+        .then(stream => pc.addStream(stream))
+        .then(showFriendsFace);
+}
+
+function showFriendsFace() {
+    pc.createOffer()
+        .then(offer => pc.setLocalDescription(offer) )
+        .then(() => sendMessage(yourId, JSON.stringify({'sdp': pc.localDescription})) );
 }

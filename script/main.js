@@ -11,9 +11,7 @@ firebase.initializeApp(config);
 const loginForm = document.getElementById("loginForm"),
     registerForm = document.getElementById("registerForm");
 
-let database = firebase.database().ref(),
-    user = firebase.auth().currentUser,
-    userId;
+let userId;
 
 document.querySelector("header").addEventListener("click", event=>{
    location.assign("index.html");
