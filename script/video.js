@@ -2,7 +2,13 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
     videoDatabase, yourId, pc,
-    servers = {'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {'urls': 'turn:numb.viagenie.ca','credential': 'beaver','username': 'webrtc.websitebeaver@gmail.com'}]};
+    servers = {
+        'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {
+            'urls': 'turn:numb.viagenie.ca',
+            'credential': 'beaver',
+            'username': 'webrtc.websitebeaver@gmail.com'
+        }]
+    };
 
 document.getElementById("endCall").addEventListener("click", prekiniPoziv);
 
@@ -46,7 +52,6 @@ function sendAnswerToSender(answer, sender) {
 }
 
 function createCallModal(sender) {
-    const receiver = myProfileData.username !== sender;
     let div = document.createElement("div"),
         modal = document.createElement("div"),
         accept = document.createElement("button"),
@@ -68,49 +73,64 @@ function createCallModal(sender) {
     document.body.appendChild(div);
 }
 
-function callingModal() {
-    
+function callingModal(receiver) {
+    let div = document.createElement("div"),
+        modal = document.createElement("div"),
+        text = document.createElement("h3"),
+        status = document.createElement("h2");
+    div.setAttribute("id", "modalDiv");
+    modal.className = "callModal";
+    text.className = "modalText";
+    text.innerHTML = "Calling<br><span>" + receiver + "</span>";
+    status.className = "modalStatus";
+    status.innerText = "Status: Waiting...";
+    modal.appendChild(text);
+    modal.appendChild(status);
+    div.appendChild(modal);
+    document.body.appendChild(div);
 }
 
 function videoCallMsg(msg, sender) {
+    let callStatus = "Status: ";
     if (msg === "Video Call") {
         incomingVideoCall(sender);
     } else if (msg === "Accepted Video Call") {
-        console.log(sender, msg);
         startWebRTC(sender);
         showMyFace();
-        //showFriendsFace();
         openConversationWithThisUser(sender);
         show(videoStreamDiv);
+        callStatus += "Accepted";
     } else if (msg === "Rejected Video Call") {
-        console.log(sender, msg);
+        callStatus += "Rejected";
+    }
+    if (document.querySelector(".modalStatus") !== null) {
+        document.querySelector(".modalStatus").innerText = callStatus;
+        setTimeout(() => {
+            document.body.removeChild(document.getElementById("modalDiv"));
+        }, 1500)
     }
 }
 
 function startWebRTC(remoteUser) {
     conversationKey = createConversationKey(myProfileData.username, remoteUser);
-    firebase.database().ref('calls/'+conversationKey).set({"call":"call"});
-    videoDatabase = firebase.database().ref('calls/'+conversationKey);
-    yourId = Math.floor(Math.random()*1000000000);
+    firebase.database().ref('calls/' + conversationKey).set({"call": "call"});
+    videoDatabase = firebase.database().ref('calls/' + conversationKey);
+    yourId = Math.floor(Math.random() * 1000000000);
     pc = new RTCPeerConnection(servers);
-    pc.onicecandidate = (event => event.candidate?sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})):console.log("Sent All Ice") );
+    pc.onicecandidate = (event => event.candidate ? sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})) : console.log("Sent All Ice") );
     pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
     videoDatabase.on('child_added', readMessage);
 }
 
 function sendVideoMessage(senderId, data) {
-    let msg = videoDatabase.push({ sender: senderId, message: data });
+    let msg = videoDatabase.push({sender: senderId, message: data});
     msg.remove();
 }
 
 function readMessage(data) {
-    console.log("data", data);
     let string = data.val();
-    if (string === "call")return;
-    console.log("string", string);
+    if (string === "call") return;
     let msg = JSON.parse(string.message);
-    console.log("json", data.val().message);
-    console.log("msg", msg);
     let sender = data.val().sender;
     if (sender !== yourId) {
         if (msg.ice !== undefined)
@@ -126,7 +146,7 @@ function readMessage(data) {
 }
 
 function showMyFace() {
-    navigator.mediaDevices.getUserMedia({audio:true, video:true})
+    navigator.mediaDevices.getUserMedia({audio: true, video: true})
         .then(stream => yourVideo.srcObject = stream)
         .then(stream => pc.addStream(stream))
         .then(showFriendsFace);
@@ -134,6 +154,6 @@ function showMyFace() {
 
 function showFriendsFace() {
     pc.createOffer()
-        .then(offer => pc.setLocalDescription(offer) )
-        .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})) );
+        .then(offer => pc.setLocalDescription(offer))
+        .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
 }
