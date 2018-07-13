@@ -13,7 +13,23 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
 document.getElementById("endCall").addEventListener("click", prekiniPoziv);
 
 function prekiniPoziv() {
-    pc.close();
+    closeVideoCall();
+    sendNotificationToReceiver(receiver, "End");
+}
+
+function closeVideoCall() {
+    if (pc) {
+        if (friendsVideo.srcObject) {
+            friendsVideo.srcObject.getTracks().forEach(track => track.stop());
+            friendsVideo.srcObject = null;
+        }
+        if (yourVideo.srcObject) {
+            yourVideo.srcObject.getTracks().forEach(track => track.stop());
+            yourVideo.srcObject = null;
+        }
+        pc.close();
+        pc = null;
+    }
     hide(videoStreamDiv);
 }
 
@@ -23,7 +39,7 @@ function videoCallRequest(receiver) {
 }
 
 function incomingVideoCall(sender) {
-    createCallModal(sender);
+    createCallModal(sender, true);
     document.querySelector(".callModal").addEventListener("click", selectAnswer);
 }
 
@@ -51,41 +67,33 @@ function sendAnswerToSender(answer, sender) {
     document.body.removeChild(document.getElementById("modalDiv"));
 }
 
-function createCallModal(sender) {
-    let div = document.createElement("div"),
-        modal = document.createElement("div"),
-        accept = document.createElement("button"),
-        reject = document.createElement("button"),
-        text = document.createElement("h3");
-    div.setAttribute("id", "modalDiv");
-    div.className = "sender_" + sender;
-    modal.className = "callModal";
-    accept.className = "acceptCall";
-    accept.innerText = "Accept";
-    reject.className = "rejectCall";
-    reject.innerHTML = "Reject";
-    text.className = "modalText";
-    text.innerHTML = "Video Call from<br><span>" + sender + "</span>";
-    modal.appendChild(text);
-    modal.appendChild(accept);
-    modal.appendChild(reject);
-    div.appendChild(modal);
-    document.body.appendChild(div);
-}
-
-function callingModal(receiver) {
+function createCallModal(sender, incoming) {
     let div = document.createElement("div"),
         modal = document.createElement("div"),
         text = document.createElement("h3"),
-        status = document.createElement("h2");
+        accept, reject, status;
     div.setAttribute("id", "modalDiv");
     modal.className = "callModal";
     text.className = "modalText";
-    text.innerHTML = "Calling<br><span>" + receiver + "</span>";
-    status.className = "modalStatus";
-    status.innerText = "Status: Waiting...";
     modal.appendChild(text);
-    modal.appendChild(status);
+    if (incoming){
+        accept = document.createElement("button");
+        reject = document.createElement("button");
+        accept.className = "acceptCall";
+        accept.innerText = "Accept";
+        reject.className = "rejectCall";
+        reject.innerHTML = "Reject";
+        div.className = "sender_" + sender;
+        text.innerHTML = "Video Call from<br><span>" + sender + "</span>";
+        modal.appendChild(accept);
+        modal.appendChild(reject);
+    } else {
+        status = document.createElement("h2");
+        status.className = "modalStatus";
+        status.innerText = "Status: Waiting...";
+        text.innerHTML = "Calling<br><span>" + sender + "</span>";
+        modal.appendChild(status);
+    }
     div.appendChild(modal);
     document.body.appendChild(div);
 }
@@ -102,6 +110,11 @@ function videoCallMsg(msg, sender) {
         callStatus += "Accepted";
     } else if (msg === "Rejected Video Call") {
         callStatus += "Rejected";
+    } else if (msg === "End"){
+        alert("Call Ended");
+        setTimeout(() => {
+            closeVideoCall();
+        },2000);
     }
     if (document.querySelector(".modalStatus") !== null) {
         document.querySelector(".modalStatus").innerText = callStatus;
