@@ -27,12 +27,12 @@ function createForgotPassModal() {
         text = document.createElement("h3"),
         form = createForgotPassForm(),
         cancel = document.createElement("button");
+    div.setAttribute("id", "modalDiv");
     cancel.innerHTML = "X";
     cancel.setAttribute("id", "cancelPassReset");
     text.innerHTML = `Password reset form`;
-    div.setAttribute("id", "modalDiv");
-    modal.className = "modal";
     text.className = "modalText";
+    modal.className = "modal";
     modal.appendChild(text);
     modal.appendChild(form);
     modal.appendChild(cancel);
@@ -77,6 +77,3 @@ function changePassword() {
         });
     }
 }
-
-
-
