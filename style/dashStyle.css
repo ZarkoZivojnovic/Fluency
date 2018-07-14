@@ -1021,7 +1021,7 @@ div .callIcon {
     z-index: 111;
 }
 
-.callModal {
+.callModal, .modal {
     position: relative;
     top: 150px;
     margin: auto;
@@ -1030,6 +1030,14 @@ div .callIcon {
     padding: 15px;
     border-radius: 10px;
     box-shadow: 1px 1px 1px 1px rgb(80,21,169);
+}
+
+.modal h3 {
+    border: none;
+}
+
+.modal h3 span {
+    font-size: 16px;
 }
 
 #modalDiv button {

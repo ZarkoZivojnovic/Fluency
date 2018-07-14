@@ -61,6 +61,11 @@
             alert("username alredy exist");
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+                let user = firebase.auth().currentUser;
+                user.sendEmailVerification().then(() => {
+                    alert("Verification Email Sent");
+                })
+            }).then(() => {
                 writeUserDataOnRegistration(username, email);
                 setStatus("online", userId);
                 alert("Registration Successful");

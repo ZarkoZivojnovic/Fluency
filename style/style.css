@@ -124,13 +124,13 @@ input:focus {
     
 }
 
-#haveAcc{
-    margin: auto;
+#haveAcc, #forgotPass{
+    margin: 10px auto;
     text-align: center;
     color: white;
 }
 
-#haveAcc>a {
+#haveAcc>a, #forgotPass>a{
     color: white;
     text-shadow: 0 0 5px rgb(81, 0, 172);
     font-weight: bold;
@@ -138,7 +138,7 @@ input:focus {
     text-decoration: none;
 }
 
-#haveAcc>a:hover {
+#haveAcc>a:hover, #forgotPass>a:hover{
     color: rgb(185, 61, 255);
 }
 
@@ -172,7 +172,7 @@ input:focus {
     top: -300px;
     left: 25%;
     transition: top 600ms ease-out;
-    z-index: 15;
+    z-index: 999;
 }
 
 #notice h1 {

@@ -150,9 +150,26 @@ function onload() {
                     showChannels();
                 }
             }, 100);
+            let currentUser = firebase.auth().currentUser;
+            if (!currentUser.emailVerified) {
+                createVerificationModal(currentUser.emailVerified, currentUser.email);
+            }
         }
     });
     firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
+}
+
+function createVerificationModal(status, email) {
+    let div = document.createElement("div"),
+        modal = document.createElement("div"),
+        text = document.createElement("h3");
+    text.innerHTML = `Verification status: ${status} <br><br><span>We'll send an email to ${email}. Open it up to activate your account and refresh the page.</span>`;
+    div.setAttribute("id", "modalDiv");
+    modal.className = "modal";
+    text.className = "modalText";
+    modal.appendChild(text);
+    div.appendChild(modal);
+    document.body.appendChild(div);
 }
 
 function setUpSideBar(addClass, removeClass, string) {
@@ -474,7 +491,7 @@ function prikaziUsere(nizUsera) {
         return;
     }
     for (let korisnik of nizUsera) {
-        if (myProfileData.myBlockList.indexOf(korisnik.username)!==-1) continue;
+        if (myProfileData.myBlockList.indexOf(korisnik.username) !== -1) continue;
         useriZaPrikaz.push(korisnik);
         let userDiv = document.createElement("div"),
             usersPhoto = document.createElement("div"),
