@@ -153,6 +153,13 @@ function onload() {
             let currentUser = firebase.auth().currentUser;
             if (!currentUser.emailVerified) {
                 createVerificationModal(currentUser.emailVerified, currentUser.email);
+                document.getElementById("signOutLink").addEventListener("click", goOffline);
+                document.getElementById("resendVerification").addEventListener("click", event => {
+                    event.preventDefault();
+                    currentUser.sendEmailVerification().then(function () {
+                        alert("Verification Email Sent")
+                    });
+                });
             }
         }
     });
@@ -162,12 +169,22 @@ function onload() {
 function createVerificationModal(status, email) {
     let div = document.createElement("div"),
         modal = document.createElement("div"),
-        text = document.createElement("h3");
+        text = document.createElement("h3"),
+        resendLink = document.createElement("a"),
+        signOutLink = document.createElement("a");
+    signOutLink.innerHTML = `Sign Out`;
+    signOutLink.className = "pointer";
+    signOutLink.setAttribute("id", "signOutLink");
+    resendLink.innerHTML = `Resend verification mail`;
+    resendLink.className = "pointer";
+    resendLink.setAttribute("id", "resendVerification");
     text.innerHTML = `Verification status: ${status} <br><br><span>We'll send an email to ${email}. Open it up to activate your account and refresh the page.</span>`;
     div.setAttribute("id", "modalDiv");
     modal.className = "modal";
     text.className = "modalText";
     modal.appendChild(text);
+    modal.appendChild(resendLink);
+    modal.appendChild(signOutLink);
     div.appendChild(modal);
     document.body.appendChild(div);
 }

@@ -77,3 +77,15 @@ function changePassword() {
         });
     }
 }
+
+function deleteProfile(userId) {
+    let user = firebase.auth().currentUser;
+    firebase.database().ref('users/' + userId).remove();
+    user.delete().then(() => {
+        alert("deleted profile")
+    }).catch(error => {
+        alert(error)
+    });
+}
+
+
