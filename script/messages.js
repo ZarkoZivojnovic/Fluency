@@ -22,6 +22,39 @@ setInterval(() => {
     }
 }, 1500);
 
+document.getElementById("videoCallBtn").addEventListener("click", event => {
+    event.preventDefault();
+   sendVideoCall(receiver);
+});
+
+document.getElementById("visitProfileBtn").addEventListener("click", event => {
+    event.preventDefault();
+    openUsersProfile(receiver);
+});
+
+function sendVideoCall(receiver) {
+    let isOnline = isUserOnline(receiver);
+    setTimeout(() => {
+        if (isOnline === 1){
+            videoCallRequest(receiver);
+            createCallModal(receiver, false);
+        } else {
+            alert("User is not online");
+        }
+    },500);
+}
+
+function openUsersProfile(user) {
+    firebase.database().ref('users/').once('value').then(function (snapshot) {
+        snapshot.forEach(function (userSnapshot) {
+            if (user === userSnapshot.val().username) {
+                let userData = convertUserInfoForProfileDraw(userSnapshot.val());
+                drawProfile(userData);
+            }
+        });
+    });
+}
+
 trash.addEventListener("click", event => {
     let indeks = myProfileData.myConversations.indexOf(receiver);
     if (myProfileData.deletedConversations === undefined) {

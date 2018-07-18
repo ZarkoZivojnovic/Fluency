@@ -500,6 +500,20 @@ function dovuciUsere(uslov, string, dodatniUslov) {
     return tempArr;
 }
 
+function isUserOnline(user) {
+    let arr = [];
+    firebase.database().ref('users/').once('value').then(snapshot => {
+        snapshot.forEach(userSnapshot => {
+            if (user === userSnapshot.val().username) {
+                if (userSnapshot.val().status === "online"){
+                    arr.push(userSnapshot.val());
+                }
+            }
+        });
+    });
+    return arr;
+}
+
 function prikaziUsere(nizUsera) {
     useriZaPrikaz = [];
     glavniDiv.innerHTML = "";

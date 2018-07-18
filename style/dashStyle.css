@@ -904,8 +904,29 @@ div .callIcon {
     border-radius: 3px;
 }
 
-.wholeConversatonBtn:hover {
+.wholeConversatonBtn:hover, .callAndProfileBtns:hover {
     background-color: rgba(81, 0, 172, 0.5);
+}
+
+#callAndVisitProfile{
+    position: absolute;
+    padding: 10px;
+    width: 100%;
+    top: 60px;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.callAndProfileBtns{
+    margin-left: 10px;
+    background-color: rgb(74, 74, 74);
+    color: white;
+    padding: 5px 15px;
+    border: solid 1px white;
+    border-radius: 5px;
+}
+
+#chatContent:hover #callAndVisitProfile {
+    display: block;
 }
 
 #loadingBackground{
