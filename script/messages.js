@@ -24,7 +24,11 @@ setInterval(() => {
 
 trash.addEventListener("click", event => {
     let indeks = myProfileData.myConversations.indexOf(receiver);
+    if (myProfileData.deletedConversations === undefined) {
+        myProfileData["deletedConversations"] = {};
+    }
     myProfileData.myConversations.splice(indeks, 1);
+    myProfileData.deletedConversations[conversationKey] = myProfileData.msgKeys[conversationKey][myProfileData.msgKeys[conversationKey].length - 1];
     updateInformationsInDatabase(userUid, myProfileData, "");
     trash.style.visibility = "hidden";
     drawListOfConversations(myProfileData.myConversations);
@@ -35,20 +39,13 @@ listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget && event.target.nodeName === "INPUT") {
         receiver = event.target.id;
         conversationKey = createConversationKey(myProfileData.username, receiver);
-        let interval = setInterval(() => {
-            if (receiver !== "") {
-                const poruke = dovuciPoruke(conversationKey);
-                clearInterval(interval);
-                markSelectedChat();
-                show(loading);
-                setTimeout(() => {
-                    drawChatContent(poruke, conversationKey);
-                    showHideChatContent("visible");
-                    hide(loading);
-                }, 1200);
-            }
-            trash.style.visibility = "visible";
-        }, 500);
+        let startMsg = findStartMsg(conversationKey),
+            interval = setInterval(() => {
+                if (receiver !== "") {
+                    clearInterval(interval);
+                    drawChat(conversationKey, startMsg);
+                }
+            }, 500);
     }
 });
 
@@ -76,6 +73,15 @@ zvezdice.addEventListener("click", event => {
     }
 });
 
+function findStartMsg(key) {
+    let messages = myProfileData.msgKeys[key],
+        lengthOfConversation = messages === undefined ? 0 : messages.length;
+    if (lengthOfConversation > 15) {
+        return messages[lengthOfConversation - 15]
+    }
+    return 0;
+}
+
 function markSelectedChat() {
     if (document.getElementById(receiver) === null) return;
     document.getElementById(receiver).checked = true;
@@ -95,6 +101,7 @@ function markSelectedChat() {
 function openConversationWithThisUser(user) {
     receiver = user;
     conversationKey = createConversationKey(myProfileData.username, user);
+    let startMsg = findStartMsg(conversationKey);
     if (typeof myProfileData.myConversations === "undefined") myProfileData["myConversations"] = [];
     if (myProfileData.myConversations.indexOf(user) === -1) {
         myProfileData.myConversations.unshift(user);
@@ -103,16 +110,21 @@ function openConversationWithThisUser(user) {
     for (let div of mainDivs) {
         hide(div);
     }
-    const poruke = dovuciPoruke(conversationKey);
     show(myMsgsDiv);
-    show(loading);
     drawListOfConversations(myProfileData.myConversations);
+    drawChat(conversationKey, startMsg);
+}
+
+function drawChat(conversationKey, startMsg) {
+    const poruke = dovuciPoruke(conversationKey, startMsg);
+    show(loading);
     setTimeout(() => {
         markSelectedChat();
         drawChatContent(poruke, conversationKey);
         showHideChatContent("visible");
         hide(loading);
-    }, 1000);
+    }, 1200);
+    trash.style.visibility = "visible";
 }
 
 function createConversationKey(myUsername, otherUsername) {
@@ -136,7 +148,6 @@ function markMessageAsSeen(conversationKey, messageKey) {
 }
 
 function sendNotificationToReceiver(receiver, msg = true) {
-
     firebase.database().ref('newMsgs/' + receiver).update({[myProfileData.username]: msg});
 }
 
@@ -185,15 +196,14 @@ function proveriDaLiImaPoruka(username) {
         snapshot.forEach(newMsgsSnapshot => {
             let sender = newMsgsSnapshot.key,
                 msg = newMsgsSnapshot.val();
-            if (myProfileData.myBlockList.indexOf(sender)===-1){
-                if (msg === true || msg === false){
+            if (myProfileData.myBlockList.indexOf(sender) === -1) {
+                if (msg === true || msg === false) {
                     tempArr.push([sender, msg]);
                 } else {
                     videoCallMsg(msg, sender);
                     markChatAsSeen(sender)
                 }
-            } else if (msg === true){
-                //ako je user blokiran
+            } else if (msg === true) {
                 markChatAsSeen(sender);
             }
         });
@@ -201,31 +211,47 @@ function proveriDaLiImaPoruka(username) {
     return tempArr;
 }
 
-function dovuciPoruke(imeKonverzacije) {
-    const ref = firebase.database().ref("messages/" + imeKonverzacije);
+function dovuciPoruke(imeKonverzacije, start) {
+    const ref = firebase.database().ref("messages/" + imeKonverzacije),
+        lastDeleted = findLastDeletedMsg(imeKonverzacije);
+    console.log(lastDeleted);
     let poruke = [];
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
-            let poruka = messageSnapshot.val();
-            poruke.push([poruka, messageSnapshot.key]);
+            let poruka = messageSnapshot.val(),
+                broj = messageSnapshot.key;
+            if (broj > lastDeleted && broj >= start) {
+                poruke.push([poruka, broj]);
+            }
         });
     });
     return poruke;
 }
 
+function findLastDeletedMsg(key) {
+    if (myProfileData.deletedConversations === undefined || myProfileData.deletedConversations[key] === undefined) {
+        return 0;
+    }
+    return myProfileData.deletedConversations[key];
+}
+
 function drawChatContent(poruke, imeKonverzacije) {
     let user = imeKonverzacije.split(myProfileData.username).join("");
     markChatAsSeen(user);
-    trackActiveConversation(imeKonverzacije);
+    //trackActiveConversation(imeKonverzacije);
     messages.innerHTML = "";
     if (poruke.length === 0) {
         messages.innerHTML = "<div class='noContentMsg'><h2>no messages yet</h2></div>";
     } else {
+        if (addBtnOrNot(imeKonverzacije, poruke)) {
+            messages.innerHTML = "<a href='#' id='" + imeKonverzacije + "' class='wholeConversatonBtn pointer'>whole conversation</a>";
+        }
         let sender = "";
         for (let element in poruke) {
             let poruka = poruke[element][0],
                 brojPoruke = poruke[element][1],
                 div;
+            saveMsgNumber(imeKonverzacije, brojPoruke);
             if (poruka.sender !== myProfileData.username && !poruka.seen) markMessageAsSeen(imeKonverzacije, brojPoruke);
             if (sender === poruka.sender) {
                 div = drawMessage(poruka, brojPoruke, "");
@@ -237,9 +263,29 @@ function drawChatContent(poruke, imeKonverzacije) {
         }
         messages.scrollTop = messages.scrollHeight;
     }
+    trackActiveConversation(imeKonverzacije);
     setTimeout(() => {
         newMsgInChat(user, false);
+        updateInformationsInDatabase(userUid, myProfileData);
     }, 200);
+}
+
+function addBtnOrNot(conversationKey, msgArr) {
+    let messageKeys = myProfileData.msgKeys;
+    if (messageKeys === undefined) messageKeys = {};
+    if (messageKeys[conversationKey] === undefined) messageKeys[conversationKey] = [];
+    let lastDeletedMsg = findLastDeletedMsg(conversationKey),
+        msgIndex = messageKeys[conversationKey].indexOf(lastDeletedMsg),
+        nonDeletedChat = messageKeys[conversationKey].slice(msgIndex + 1, messageKeys[conversationKey].length);
+    return messageKeys !== undefined && messageKeys[conversationKey] !== undefined && msgArr.length < nonDeletedChat.length;
+}
+
+function saveMsgNumber(conversationKey, msgNumber) {
+    if (typeof myProfileData.msgKeys === "undefined") myProfileData["msgKeys"] = {};
+    if (typeof myProfileData.msgKeys[conversationKey] === "undefined") myProfileData.msgKeys[conversationKey] = [];
+    if (myProfileData.msgKeys[conversationKey].indexOf(msgNumber) === -1) {
+        myProfileData.msgKeys[conversationKey].push(msgNumber);
+    }
 }
 
 function drawMessage(message, msgNumber, sender) {
@@ -288,17 +334,27 @@ function trackActiveConversation(conversationKey) {
     let databaseRef = firebase.database().ref("messages/" + conversationKey);
     databaseRef.on("child_changed", changeMsgStatus);
     databaseRef.on("child_added", addMessageToChat);
+    if (document.getElementById(conversationKey) !== null) {
+        document.getElementById(conversationKey).addEventListener("click", showWholeConversation)
+    }
     let interval = setInterval(() => {
         const key = whichChatIsActive();
         if (myMsgsDiv.style.display === "none" || conversationKey !== key) {
             databaseRef.off("child_changed", changeMsgStatus);
             databaseRef.off("child_added", addMessageToChat);
+            document.getElementById(conversationKey).removeEventListener("click", showWholeConversation);
             setTimeout(() => {
                 showHideChatContent("hidden");
                 clearInterval(interval);
             }, 100);
         }
     }, 1000);
+}
+
+function showWholeConversation(event) {
+    event.preventDefault();
+    let start = 0;
+    drawChat(conversationKey, start);
 }
 
 function whichChatIsActive() {
@@ -314,9 +370,12 @@ function whichChatIsActive() {
 function addMessageToChat(snapshot) {
     let msgNumber = snapshot.key,
         msgContent = snapshot.val(),
-        scroll = messages.scrollHeight - messages.scrollTop;
+        scroll = messages.scrollHeight - messages.scrollTop,
+        start = findStartMsg(conversationKey),
+        lastDeleted = findLastDeletedMsg(conversationKey);
     setTimeout(() => {
-        if (document.getElementById(msgNumber) !== null) return;
+        if (document.getElementById(msgNumber) !== null || msgNumber < start || msgNumber <= lastDeleted) return;
+        console.log(msgNumber);
         let msg = drawMessage(msgContent, msgNumber, msgContent.sender);
         messages.insertAdjacentHTML("beforeend", msg);
         if (msgContent.receiver === myProfileData.username) {
@@ -358,6 +417,7 @@ function sortMyConvesations(user) {
     let indexOfUser = myProfileData.myConversations.indexOf(user);
     myProfileData.myConversations.splice(indexOfUser, 1);
     myProfileData.myConversations.unshift(user);
+    updateInformationsInDatabase(userUid, myProfileData);
 }
 
 function newMsgInChat(user, value) {

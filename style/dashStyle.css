@@ -893,6 +893,20 @@ div .callIcon {
     font-size: 12px;
 }
 
+.wholeConversatonBtn {
+    min-height: 30px;
+    width: auto;
+    padding: 5px 15px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.35);
+    color: white;
+    border-radius: 3px;
+}
+
+.wholeConversatonBtn:hover {
+    background-color: rgba(81, 0, 172, 0.51);
+}
+
 #loadingBackground{
     min-height: 100%;
     position: fixed;
