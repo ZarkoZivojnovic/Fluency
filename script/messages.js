@@ -100,6 +100,10 @@ function markSelectedChat() {
 
 function openConversationWithThisUser(user) {
     receiver = user;
+    if (receiver === myProfileData.username) {
+        alert("You can't send message to yourself, that's weird")
+        return;
+    }
     conversationKey = createConversationKey(myProfileData.username, user);
     let startMsg = findStartMsg(conversationKey);
     if (typeof myProfileData.myConversations === "undefined") myProfileData["myConversations"] = [];
