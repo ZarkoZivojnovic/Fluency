@@ -28,12 +28,14 @@ const navigation = document.getElementById("navigation"),
     trash = document.getElementById("trash"),
     zvezdice = document.getElementById("zvezdice"),
     zvezdicePoruka = document.getElementById("zvezdicePoruka"),
+    editBtn = document.getElementById("editBtn");
     fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
 
 onload();
 
+editBtn.addEventListener("click", showMyProfile);
 signOutButton.addEventListener("click", goOffline);
 backSaProfilaBtn.addEventListener('click', backSaProfila);
 listaUsera.addEventListener('click', udjiNaProfil);
@@ -63,10 +65,8 @@ function moveSidebar(event) {
 function mainNavigation(event) {
     if (event.target !== event.currentTarget) {
         if (event.target.nodeName === "A") {
-            let divElement = document.getElementById(event.target.id + "Div");
-            show(divElement);
             if (event.target.id === "myProfile") {
-                showMyProfile();
+                udjiNaMojProfil();
             } else if (event.target.id === "channels") {
                 showChannels();
             } else if (event.target.id === "myFavorites") {
@@ -75,6 +75,9 @@ function mainNavigation(event) {
                 showMyMessages();
             } else if (event.target.id === "myBlockList") {
                 showMyBlockList();
+            }
+            else if (event.target.id === "settings") {
+                console.log("kliknuto na settings");
             }
         }
     }
@@ -99,6 +102,7 @@ function showMyProfile() {
             showProfileEditForm("disable");
             hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv);
             show(myProfileDiv);
+            hide(profileDiv);
         }
     });
 }
@@ -646,6 +650,13 @@ function udjiNaProfil(event) {
     }
 }
 
+function udjiNaMojProfil() {
+    
+            let userData = convertUserInfoForProfileDraw(myProfileData);
+            drawProfile(userData);
+     
+}
+
 function backSaProfila(event) {
     event.preventDefault();
     hide(profileDiv);
@@ -714,13 +725,19 @@ function drawProfile(obj) {
     if (typeof myProfileData.myBlockList !== "undefined" && myProfileData.myBlockList.indexOf(obj.username) !== -1) {
         blockBtn.innerText = "Unblock";
     }
+    if (myProfileData.username == obj.username) {
+    editBtn.style.display = "block";
+    blockBtn.style.display = "none";
+    } else {
+    blockBtn.style.display = "block";
+    editBtn.style.display = "none";
     blockBtn.name = obj.username;
+    }
     addToFavsBtn.name = obj.username;
     addToFavsBtn.style.display = obj.username === myProfileData.username ? "none" : "inherit";
     sracunajOcenu(obj.username);
     show(profileDiv);
 }
-
 function sracunajOcenu(korisnik) {
     let ocene = [],
         prosecnaOcena,
