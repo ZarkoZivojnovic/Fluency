@@ -107,6 +107,7 @@ zvezdice.addEventListener("click", event => {
 });
 
 function findStartMsg(key) {
+    if (myProfileData.msgKeys === undefined)myProfileData["msgKeys"] = {};
     let messages = myProfileData.msgKeys[key],
         lengthOfConversation = messages === undefined ? 0 : messages.length;
     if (lengthOfConversation > 15) {
