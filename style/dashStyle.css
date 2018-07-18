@@ -900,11 +900,12 @@ div .callIcon {
     text-align: center;
     background-color: rgba(0, 0, 0, 0.35);
     color: white;
+    border: solid 1px white;
     border-radius: 3px;
 }
 
 .wholeConversatonBtn:hover {
-    background-color: rgba(81, 0, 172, 0.51);
+    background-color: rgba(81, 0, 172, 0.5);
 }
 
 #loadingBackground{

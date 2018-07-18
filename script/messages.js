@@ -133,6 +133,10 @@ function createConversationKey(myUsername, otherUsername) {
 }
 
 function sendMessage(receiver, string) {
+    if (myProfileData.myBlockList !== undefined && myProfileData.myBlockList.indexOf(receiver) !== -1) {
+        alert("User is blocked");
+        return;
+    }
     let message = {
         body: string,
         sender: myProfileData.username,
@@ -214,7 +218,6 @@ function proveriDaLiImaPoruka(username) {
 function dovuciPoruke(imeKonverzacije, start) {
     const ref = firebase.database().ref("messages/" + imeKonverzacije),
         lastDeleted = findLastDeletedMsg(imeKonverzacije);
-    console.log(lastDeleted);
     let poruke = [];
     ref.once('value', function (snapshot) {
         snapshot.forEach(function (messageSnapshot) {
@@ -342,7 +345,6 @@ function trackActiveConversation(conversationKey) {
         if (myMsgsDiv.style.display === "none" || conversationKey !== key) {
             databaseRef.off("child_changed", changeMsgStatus);
             databaseRef.off("child_added", addMessageToChat);
-            document.getElementById(conversationKey).removeEventListener("click", showWholeConversation);
             setTimeout(() => {
                 showHideChatContent("hidden");
                 clearInterval(interval);
@@ -375,7 +377,6 @@ function addMessageToChat(snapshot) {
         lastDeleted = findLastDeletedMsg(conversationKey);
     setTimeout(() => {
         if (document.getElementById(msgNumber) !== null || msgNumber < start || msgNumber <= lastDeleted) return;
-        console.log(msgNumber);
         let msg = drawMessage(msgContent, msgNumber, msgContent.sender);
         messages.insertAdjacentHTML("beforeend", msg);
         if (msgContent.receiver === myProfileData.username) {
