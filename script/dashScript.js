@@ -1,4 +1,5 @@
 const navigation = document.getElementById("navigation"),
+    settingsDiv = document.getElementById("settingsDiv"),
     signOutButton = document.getElementById("signOut"),
     channelsDiv = document.getElementById("channelsDiv"),
     myProfileDiv = document.getElementById("myProfileDiv"),
@@ -28,13 +29,15 @@ const navigation = document.getElementById("navigation"),
     trash = document.getElementById("trash"),
     zvezdice = document.getElementById("zvezdice"),
     zvezdicePoruka = document.getElementById("zvezdicePoruka"),
-    editBtn = document.getElementById("editBtn");
+    editBtn = document.getElementById("editBtn"),
+    settingsEditBtn = document.getElementById("settingsEditBtn");
     fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
 
 onload();
 
+settingsEditBtn.addEventListener("click", showMyProfile);
 editBtn.addEventListener("click", showMyProfile);
 signOutButton.addEventListener("click", goOffline);
 backSaProfilaBtn.addEventListener('click', backSaProfila);
@@ -77,17 +80,22 @@ function mainNavigation(event) {
                 showMyBlockList();
             }
             else if (event.target.id === "settings") {
-                console.log("kliknuto na settings");
+                showSettings();
             }
         }
     }
     event.preventDefault();
 }
 
+function showSettings() {
+    show(settingsDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
+}
+
 function showMyBlockList() {
     let blockedUsers = new Array(dovuciUsere("block"));
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, settingsDiv);
     setTimeout(() => {
         drawList(blockList, blockedUsers[0], "block");
         hide(loading);
@@ -100,7 +108,7 @@ function showMyProfile() {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm("disable");
-            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv);
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
             show(myProfileDiv);
             hide(profileDiv);
         }
@@ -110,7 +118,7 @@ function showMyProfile() {
 function showChannels() {
     let listaUsera = new Array(dovuciUsere());
     show(loading);
-    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv);
+    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
     setTimeout(() => {
         prikaziUsere(listaUsera[0]);
         show(channelsDiv);
@@ -122,7 +130,7 @@ function showChannels() {
 function showMyFavorites() {
     let favorites = new Array(dovuciUsere("favs"));
     show(loading);
-    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
+    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
     setTimeout(() => {
         drawList(favoritesList, favorites[0], "fav");
         hide(loading);
@@ -132,7 +140,7 @@ function showMyFavorites() {
 
 function showMyMessages() {
     drawListOfConversations(myProfileData.myConversations);
-    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv);
+    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv);
     show(myMsgsDiv);
     trash.style.visibility = "hidden";
     zvezdice.style.display = "flex";
@@ -213,15 +221,11 @@ function selectLangChannel(event) {
 
 function showProfileEditForm(disableEnable) {
     addExistingData(myProfileData);
-    if (disableEnable === "disable") {
-        disableEnableFormElements(myProfileDiv, "disable");
-        showHideFormButtons(myProfileDiv, "none");
-        showHideEditIcon("block");
-    } else if (disableEnable === "enable") {
+    
         disableEnableFormElements(myProfileDiv, "enable");
         showHideFormButtons(myProfileDiv, "block");
-        showHideEditIcon("none");
-    }
+       
+   
     profileForms.addEventListener("click", showAndHideForms);
     personalInfoForm.addEventListener("submit", savePersonalInfo);
     aboutMeForm.addEventListener("submit", saveAboutMe);
@@ -230,12 +234,7 @@ function showProfileEditForm(disableEnable) {
     language.addEventListener("click", selectLanguage);
 }
 
-function showHideEditIcon(property) {
-    let icons = document.querySelectorAll(".editIcon");
-    for (let element = 0; element < icons.length; element++) {
-        icons[element].style.display = property;
-    }
-}
+
 
 function showHideFormButtons(parentDiv, property) {
     let buttons = document.querySelectorAll("input[type='submit']");

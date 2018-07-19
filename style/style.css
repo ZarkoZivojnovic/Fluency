@@ -101,6 +101,28 @@ input:focus {
     outline: 0;
 }
 
+#settingsDiv {
+    text-align: center;
+}
+
+#settingsDiv button {
+    background-color: transparent;
+    color: gray;
+    width: 60%;
+    text-align: center;
+    padding: 10px 5px;
+    border-radius: 7px;
+    border: solid gray 1px;
+    cursor: pointer;
+    transition: transform 1s;
+    height: 50px;
+    font-weight: bold;
+    margin: 30px auto;
+    font-size: 1.3em;
+    outline: none;
+    
+}
+
 .submitBtn {
     background-color: transparent;
     color: gray;
