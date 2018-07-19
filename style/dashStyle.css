@@ -74,7 +74,12 @@ a {
 div#pictureDiv {
     background-color: indianred;
 }
-
+#changePassDiv {
+    text-align: center;
+}
+#changePassDiv p {
+    color: rgb(121, 70, 138);
+}
 #pictureDiv {
     position: absolute;
     top: -50px;

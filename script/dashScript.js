@@ -1,5 +1,6 @@
 const navigation = document.getElementById("navigation"),
     settingsDiv = document.getElementById("settingsDiv"),
+    changePassDiv = document.getElementById("changePassDiv"),
     signOutButton = document.getElementById("signOut"),
     channelsDiv = document.getElementById("channelsDiv"),
     myProfileDiv = document.getElementById("myProfileDiv"),
@@ -31,12 +32,18 @@ const navigation = document.getElementById("navigation"),
     zvezdicePoruka = document.getElementById("zvezdicePoruka"),
     editBtn = document.getElementById("editBtn"),
     settingsEditBtn = document.getElementById("settingsEditBtn"),
+    settingsChangePass = document.getElementById("settingsChangePass"),
+    backFromPassChange = document.getElementById("backFromPassChange"),
+    updatePassBtn = document.getElementById("updatePassBtn");
     fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
 
 onload();
 
+updatePassBtn.addEventListener("click", promenaSifre);
+backFromPassChange.addEventListener("click", backSaPromeneSifre);
+settingsChangePass.addEventListener("click", showPassChange);
 settingsEditBtn.addEventListener("click", showMyProfile);
 editBtn.addEventListener("click", showMyProfile);
 signOutButton.addEventListener("click", goOffline);
@@ -49,6 +56,35 @@ showHideSidebar.addEventListener("click", event => {
     event.preventDefault();
     moveSidebar();
 });
+
+
+function promenaSifre(event) {
+    event.preventDefault();
+  var staraSifra = document.getElementById("oldPass").value;
+  var novaSifra = document.getElementById("newPass").value;
+  var novaSifraOpet = document.getElementById("newPassRepeat").value;
+  console.log(novaSifra, novaSifraOpet);
+  if(novaSifra == "" || novaSifraOpet == "" || staraSifra == "") {
+    alert("Morate popuniti sva polja!");
+  } else {
+  if(novaSifra != novaSifraOpet) {
+    alert("Niste uneli iste sifre!");
+  } else {
+    console.log("u redu je");
+  }}
+}
+
+
+function showPassChange() {
+    hide(settingsDiv);
+    show(changePassDiv);
+
+}
+
+function backSaPromeneSifre() {
+     show(settingsDiv);
+    hide(changePassDiv);
+}
 
 function hideProfileDiv(event) {
     event.stopPropagation();

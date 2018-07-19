@@ -324,6 +324,20 @@
             <button id="settingsChangePass">Change Password</button>
             <button id="settingsDeleteAcc">Delete Account</button>
         </div>
+        <div id="changePassDiv" class="form hide">
+            <form action="?" method="post" id="changePasswordForm">
+            	<p>CHANGE PASSWORD</p>
+            	<br>
+                <input type="password" name="oldPass" placeholder="Old Password" class="input" id="oldPass">
+                <br>
+                <input type="password" name="newPass" placeholder="New Password" class="input" id="newPass">
+                <br>
+                <input type="password" name="newPassRepeat" placeholder="Repeat New Password" class="input" id="newPassRepeat">
+                <br>
+                <input type="submit" value="Update Password" class="submitBtn" id="updatePassBtn">
+                <input type="button" value="Back" class="submitBtn" id="backFromPassChange">
+            </form>
+        </div>
         <div id="myFavoritesDiv" class="hide fullWidth">
             <div id="favorites" class="border shadow noOverflow">
                 <ul id="favNavigation" class="flexRow">

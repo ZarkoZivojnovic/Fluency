@@ -2,13 +2,7 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
     videoDatabase, yourId, pc,
-    servers = {
-        'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {
-            'urls': 'turn:numb.viagenie.ca',
-            'credential': 'beaver',
-            'username': 'webrtc.websitebeaver@gmail.com'
-        }]
-    };
+    servers = {        'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {            'urls': 'turn:numb.viagenie.ca',            'credential': 'fluency',            'username': 'zivojnovic@gmail.com'        }]    };
 
 document.getElementById("endCall").addEventListener("click", prekiniPoziv);
 
