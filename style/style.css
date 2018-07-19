@@ -24,6 +24,7 @@ html, body {
     min-height: 100%;
     padding: 20px;
     position: absolute;
+    overflow-x: hidden;
 }
 
 header{

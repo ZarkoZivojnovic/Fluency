@@ -30,7 +30,7 @@ const navigation = document.getElementById("navigation"),
     zvezdice = document.getElementById("zvezdice"),
     zvezdicePoruka = document.getElementById("zvezdicePoruka"),
     editBtn = document.getElementById("editBtn"),
-    settingsEditBtn = document.getElementById("settingsEditBtn");
+    settingsEditBtn = document.getElementById("settingsEditBtn"),
     fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
@@ -44,8 +44,11 @@ backSaProfilaBtn.addEventListener('click', backSaProfila);
 listaUsera.addEventListener('click', udjiNaProfil);
 chooseChannel.addEventListener('submit', filtrirajPoJeziku);
 profileDiv.addEventListener("click", hideProfileDiv);
-showHideSidebar.addEventListener("click", moveSidebar);
 navigation.addEventListener("click", mainNavigation);
+showHideSidebar.addEventListener("click", event => {
+    event.preventDefault();
+    moveSidebar();
+});
 
 function hideProfileDiv(event) {
     event.stopPropagation();
@@ -54,8 +57,7 @@ function hideProfileDiv(event) {
     }
 }
 
-function moveSidebar(event) {
-    event.preventDefault();
+function moveSidebar() {
     if (sidebar.style.right === "" || sidebar.style.right === "0px") {
         sidebar.style.right = "-300px";
         setUpSideBar("hiddenSidebar", "showingSidebar", "show ⇑");
@@ -78,10 +80,10 @@ function mainNavigation(event) {
                 showMyMessages();
             } else if (event.target.id === "myBlockList") {
                 showMyBlockList();
-            }
-            else if (event.target.id === "settings") {
+            } else if (event.target.id === "settings") {
                 showSettings();
             }
+            moveSidebar();
         }
     }
     event.preventDefault();
@@ -107,7 +109,7 @@ function showMyProfile() {
     let waitingForData = setInterval(() => {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
-            showProfileEditForm("disable");
+            showProfileEditForm();
             hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
             show(myProfileDiv);
             hide(profileDiv);
@@ -219,13 +221,10 @@ function selectLangChannel(event) {
     event.stopPropagation();
 }
 
-function showProfileEditForm(disableEnable) {
+function showProfileEditForm() {
     addExistingData(myProfileData);
-    
-        disableEnableFormElements(myProfileDiv, "enable");
-        showHideFormButtons(myProfileDiv, "block");
-       
-   
+    disableEnableFormElements(myProfileDiv, "enable");
+    showHideFormButtons(myProfileDiv, "block");
     profileForms.addEventListener("click", showAndHideForms);
     personalInfoForm.addEventListener("submit", savePersonalInfo);
     aboutMeForm.addEventListener("submit", saveAboutMe);
@@ -233,7 +232,6 @@ function showProfileEditForm(disableEnable) {
     interests.addEventListener("click", selectInterest);
     language.addEventListener("click", selectLanguage);
 }
-
 
 
 function showHideFormButtons(parentDiv, property) {
@@ -318,7 +316,6 @@ function saveLangInfo(event) {
         }
     }
     updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
-    showProfileEditForm("disable");
 }
 
 function saveAboutMe(event) {
@@ -330,7 +327,6 @@ function saveAboutMe(event) {
         if (checkboxArr[index].checked) myProfileData.interests.push(checkboxArr[index].value)
     }
     updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
-    showProfileEditForm("disable");
 }
 
 function savePersonalInfo(event) {
@@ -345,7 +341,6 @@ function savePersonalInfo(event) {
         if (radioInput[element].checked === true) myProfileData.gender = radioInput[element].id;
     }
     updateInformationsInDatabase(userUid, myProfileData, "Informations are Saved");
-    showProfileEditForm("disable");
 }
 
 function updateInformationsInDatabase(uid, infoObj, notification) {
@@ -357,7 +352,7 @@ function updateInformationsInDatabase(uid, infoObj, notification) {
 
 function showAndHideForms(event) {
     if (event.target.className.includes("editIcon")) {
-        showProfileEditForm("enable");
+        showProfileEditForm();
     }
     if (event.target !== event.currentTarget) {
         if (event.target.nodeName === "H2") {
@@ -508,7 +503,7 @@ function isUserOnline(user) {
     firebase.database().ref('users/').once('value').then(snapshot => {
         snapshot.forEach(userSnapshot => {
             if (user === userSnapshot.val().username) {
-                if (userSnapshot.val().status === "online"){
+                if (userSnapshot.val().status === "online") {
                     arr.push(userSnapshot.val());
                 }
             }
@@ -650,10 +645,10 @@ function udjiNaProfil(event) {
 }
 
 function udjiNaMojProfil() {
-    
-            let userData = convertUserInfoForProfileDraw(myProfileData);
-            drawProfile(userData);
-     
+
+    let userData = convertUserInfoForProfileDraw(myProfileData);
+    drawProfile(userData);
+
 }
 
 function backSaProfila(event) {
@@ -724,19 +719,20 @@ function drawProfile(obj) {
     if (typeof myProfileData.myBlockList !== "undefined" && myProfileData.myBlockList.indexOf(obj.username) !== -1) {
         blockBtn.innerText = "Unblock";
     }
-    if (myProfileData.username == obj.username) {
-    editBtn.style.display = "block";
-    blockBtn.style.display = "none";
+    if (myProfileData.username === obj.username) {
+        editBtn.style.display = "block";
+        blockBtn.style.display = "none";
     } else {
-    blockBtn.style.display = "block";
-    editBtn.style.display = "none";
-    blockBtn.name = obj.username;
+        blockBtn.style.display = "block";
+        editBtn.style.display = "none";
+        blockBtn.name = obj.username;
     }
     addToFavsBtn.name = obj.username;
     addToFavsBtn.style.display = obj.username === myProfileData.username ? "none" : "inherit";
     sracunajOcenu(obj.username);
     show(profileDiv);
 }
+
 function sracunajOcenu(korisnik) {
     let ocene = [],
         prosecnaOcena,

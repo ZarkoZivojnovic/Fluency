@@ -1,5 +1,3 @@
-
-
 #logo {
     width: 60px;
     height: 60px;
@@ -73,7 +71,7 @@ a {
     position: relative;
 }
 
-div#pictureDiv{
+div#pictureDiv {
     background-color: indianred;
 }
 
@@ -382,7 +380,9 @@ select {
     overflow-y: scroll;
 }
 
-#channelsDiv {position: relative}
+#channelsDiv {
+    position: relative
+}
 
 #channelsDiv > div.searchMenu:hover {
     background-color: rgb(81, 0, 172);
@@ -430,7 +430,7 @@ h3 {
 #blockedUsers {
     height: auto;
     max-height: 400px;
- }
+}
 
 .noUsersMsg {
     color: white;
@@ -495,7 +495,7 @@ div.favPhoto, div.blockPhoto {
 .favUsername, .blockUsername {
     color: white;
     width: 100%;
-    border:0;
+    border: 0;
     margin-bottom: 0;
 }
 
@@ -595,7 +595,6 @@ div.favPhoto, div.blockPhoto {
     margin: 10px auto;
 }
 
-
 .usersLangDiv p {
     padding: 5px;
 }
@@ -607,6 +606,7 @@ div.favPhoto, div.blockPhoto {
     width: 80%;
     margin: 10px auto;
 }
+
 .usersRatingDiv p {
     padding: 5px;
 }
@@ -746,12 +746,12 @@ div .callIcon {
     display: block;
 }
 
-#conversations>div{
+#conversations > div {
     background-color: transparent;
     position: relative;
 }
 
-.flexRow{
+.flexRow {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -771,12 +771,12 @@ div .callIcon {
     width: 100%;
 }
 
-.noVisibility{
+.noVisibility {
     visibility: hidden;
 }
 
 #conversations label {
-    border-bottom: solid rgb(81,0,172) 1px;
+    border-bottom: solid rgb(81, 0, 172) 1px;
     display: block;
     text-align: center;
     font-size: 22px;
@@ -804,24 +804,26 @@ div .callIcon {
     background-color: rgba(0, 0, 0, 0.3);
 }
 
-#sendMsgForm>input[type="submit"],.sendArrow {
+#sendMsgForm > input[type="submit"], .sendArrow {
     width: 10%;
     border: 0;
     color: rgb(81, 0, 172);
     transition: transform, color 500ms
 }
 
-#sendMsgForm>input[type="submit"]:hover,
-.sendArrow:hover{
+#sendMsgForm > input[type="submit"]:hover,
+.sendArrow:hover {
     text-shadow: 2px 2px 1px black;
     color: white;
-    transform: scale(1.4,1.4);
+    transform: scale(1.4, 1.4);
 }
-#sendMsgForm>input[type="submit"]:focus,
-.sendArrow:focus{
+
+#sendMsgForm > input[type="submit"]:focus,
+.sendArrow:focus {
     box-shadow: none;
     outline: 0;
 }
+
 #messages {
     height: 100%;
     width: 100%;
@@ -830,7 +832,8 @@ div .callIcon {
     padding: 10px;
     overflow-y: auto;
 }
-.divZaPoruku{
+
+.divZaPoruku {
     text-wrap: normal;
     min-width: 30%;
     max-width: 70%;
@@ -849,7 +852,7 @@ div .callIcon {
     word-wrap: break-word;
 }
 
-#messages span{
+#messages span {
     color: white;
     font-size: 12px;
     margin: 0 10px;
@@ -875,7 +878,7 @@ div .callIcon {
     color: white;
 }
 
-.newMessageNum{
+.newMessageNum {
     color: red;
     position: absolute;
     top: 5px;
@@ -883,7 +886,7 @@ div .callIcon {
     margin: 0;
 }
 
-.newMsgInConversation{
+.newMsgInConversation {
     margin-left: 5px;
     width: 10px;
     height: 10px;
@@ -908,7 +911,7 @@ div .callIcon {
     background-color: rgba(81, 0, 172, 0.5);
 }
 
-#callAndVisitProfile{
+#callAndVisitProfile {
     opacity: 0;
     position: absolute;
     top: -15px;
@@ -916,7 +919,7 @@ div .callIcon {
     transition: opacity 500ms;
 }
 
-.callAndProfileBtns{
+.callAndProfileBtns {
     width: 150px;
     margin: 0 3px;
     background-color: rgb(74, 74, 74);
@@ -934,7 +937,7 @@ div .callIcon {
     opacity: 1;
 }
 
-#loadingBackground{
+#loadingBackground {
     min-height: 100%;
     position: fixed;
     background-color: rgba(0, 0, 0, 0.6);
@@ -953,7 +956,7 @@ div .callIcon {
 }
 
 #search {
-	z-index: 10;
+    z-index: 10;
     position: absolute;
     top: -20px;
     left: 55%;
@@ -973,12 +976,12 @@ div .callIcon {
     border-radius: 0 0 10px 10px;
 }
 
-#search input[type="search"]{
+#search input[type="search"] {
     width: 250px;
     background-color: white;
 }
 
-#search input[type="submit"]{
+#search input[type="submit"] {
     width: 30px;
     border: 0;
 }
@@ -1001,7 +1004,7 @@ div .callIcon {
 }
 
 #trash:hover {
-	background-color: rgb(80,21,169);
+    background-color: rgb(80, 21, 169);
 }
 
 #divZaZvezdice {
@@ -1011,6 +1014,7 @@ div .callIcon {
     height: 50px;
     line-height: 50px;
 }
+
 .zvezdice {
     text-align: center;
     height: 50px;
@@ -1033,23 +1037,27 @@ div .callIcon {
 }
 
 .zvezdice a:hover {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
 
 .b1:hover ~ a {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
+
 .b2:hover ~ a {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
+
 .b3:hover ~ a {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
+
 .b4:hover ~ a {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
+
 .b5:hover ~ a {
-    color: rgb(80,21,169);
+    color: rgb(80, 21, 169);
 }
 
 /* ################## Video Call Modal ################## */
@@ -1070,7 +1078,7 @@ div .callIcon {
     width: 350px;
     padding: 15px;
     border-radius: 10px;
-    box-shadow: 1px 1px 1px 1px rgb(80,21,169);
+    box-shadow: 1px 1px 1px 1px rgb(80, 21, 169);
 }
 
 .modal h3 {
@@ -1097,15 +1105,13 @@ div .callIcon {
     transition: all 500ms;
 }
 
-.modalText, .modalStatus {    
-    color: rgb(80,21,169);    
+.modalText, .modalStatus {
+    color: rgb(80, 21, 169);
     text-align: center;
-    }
+}
 
-
-.modalText span, .modalStatus span 
-{    
-    font-weight: 900;    
+.modalText span, .modalStatus span {
+    font-weight: 900;
     font-size: 30px;
 }
 
@@ -1121,7 +1127,7 @@ div .callIcon {
 }
 
 #modalDiv button:hover {
-    transform: scale(1.1,1.1);
+    transform: scale(1.1, 1.1);
 }
 
 #videoStreamDiv {
@@ -1147,17 +1153,27 @@ div .callIcon {
 }
 
 @keyframes rotiranje {
-    from {transform: rotate(0deg)}
-    to {transform: rotate(360deg)}
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg)
+    }
 }
 
 @media screen and (max-width: 900px) {
     .contentDiv {
         width: 600px;
     }
-    #favorites {
+
+    #favorites, #blockedUsers {
         width: 650px;
     }
+
+    #search {
+        left: 20%;
+    }
+
 }
 
 @media screen and (max-width: 650px) {
@@ -1165,11 +1181,20 @@ div .callIcon {
         width: 100%;
     }
 
-    #favorites {
+    #favorites, #blockedUsers {
         width: 100%;
     }
 
     .smFullWidth {
+        width: 100%;
+    }
+
+    #channelsDiv .contentDiv, #msgBoard {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #channelsList {
         width: 100%;
     }
 
@@ -1179,23 +1204,43 @@ div .callIcon {
     }
 
     .hideLeftSide {
-        position: absolute;
+        position: relative;
         max-height: 25px;
-        width: 150px;
+        width: 100%;
         border-radius: 10px;
         transition: max-height 1s;
     }
 
     .hideLeftSide:hover {
-    width: 60%;
-    max-height: 100%;
-}
+        max-height: 100%;
+    }
+
     #langSelect {
         max-height: 300px;
+    }
+
+    #profile {
+        width: 95%;
     }
 }
 
 @media screen and (max-width: 500px) {
+    #wrap {
+        font-size: smaller;
+    }
+
+    .zvezdice {
+        height: 30px;
+    }
+
+    .zvezdice a {
+        font-size: 18px;
+    }
+
+    .callAndProfileBtns {
+        width: 110px;
+    }
+
     #languageInfoForm, #personalInfoForm, #aboutMeForm {
         width: 100%;
     }
@@ -1206,5 +1251,29 @@ div .callIcon {
 
     #sidebar {
         background: rgba(0, 0, 0, 0.8);
+    }
+
+    #search {
+        left: 5%;
+        width: 250px;
+        font-size: 10px;
+    }
+
+    #search form {
+        width: 250px;
+    }
+
+    .icons {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .icons > div {
+        width: 30px;
+        height: 30px;
+    }
+
+    .callIcon, .msgIcon {
+
     }
 }
