@@ -577,9 +577,9 @@ function pronadjiPoklapanjaJezika(filterJezik, onlineUseri) {
             }
         }
     } else if (typeof filterJezik[1] !== "undefined") {
-        for (korisnik of onlineUseri[0]) {
+        for (let korisnik of onlineUseri[0]) {
             if (typeof korisnik.otherLanguages !== "undefined") {
-                for (korisnikJezik of korisnik.otherLanguages) {
+                for (let korisnikJezik of korisnik.otherLanguages) {
                     if (korisnikJezik.toString().includes(filterJezik.toString())) {
                         filtriraniUseri.push(korisnik);
                     }
@@ -645,10 +645,8 @@ function udjiNaProfil(event) {
 }
 
 function udjiNaMojProfil() {
-
     let userData = convertUserInfoForProfileDraw(myProfileData);
     drawProfile(userData);
-
 }
 
 function backSaProfila(event) {
@@ -703,13 +701,15 @@ function clearData() {
 function drawProfile(obj) {
     clearData();
     for (let data in obj) {
-        if (typeof obj[data] !== "undefined" && obj[data] !== "") {
-            if (data === "profilePhoto") {
-                document.getElementById(data).style.backgroundImage = "url('" + obj[data] + "')";
-                document.getElementById(data).style.backgroundSize = "cover";
-            } else if (data !== "profilePhoto") {
-                let id = "users" + data.substring(0, 1).toUpperCase() + data.substring(1);
-                document.getElementById(id).textContent = obj[data];
+        if (obj.hasOwnProperty(data)) {
+            if (typeof obj[data] !== "undefined" && obj[data] !== "") {
+                if (data === "profilePhoto") {
+                    document.getElementById(data).style.backgroundImage = "url('" + obj[data] + "')";
+                    document.getElementById(data).style.backgroundSize = "cover";
+                } else if (data !== "profilePhoto") {
+                    let id = "users" + data.substring(0, 1).toUpperCase() + data.substring(1);
+                    document.getElementById(id).textContent = obj[data];
+                }
             }
         }
     }

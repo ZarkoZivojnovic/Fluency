@@ -24,7 +24,7 @@ setInterval(() => {
 
 document.getElementById("videoCallBtn").addEventListener("click", event => {
     event.preventDefault();
-   sendVideoCall(receiver);
+    sendVideoCall(receiver);
 });
 
 document.getElementById("visitProfileBtn").addEventListener("click", event => {
@@ -32,30 +32,8 @@ document.getElementById("visitProfileBtn").addEventListener("click", event => {
     openUsersProfile(receiver);
 });
 
-function sendVideoCall(receiver) {
-    let isOnline = isUserOnline(receiver);
-    setTimeout(() => {
-        if (isOnline === 1){
-            videoCallRequest(receiver);
-            createCallModal(receiver, false);
-        } else {
-            alert("User is not online");
-        }
-    },500);
-}
-
-function openUsersProfile(user) {
-    firebase.database().ref('users/').once('value').then(function (snapshot) {
-        snapshot.forEach(function (userSnapshot) {
-            if (user === userSnapshot.val().username) {
-                let userData = convertUserInfoForProfileDraw(userSnapshot.val());
-                drawProfile(userData);
-            }
-        });
-    });
-}
-
 trash.addEventListener("click", event => {
+    event.preventDefault();
     let indeks = myProfileData.myConversations.indexOf(receiver);
     if (myProfileData.deletedConversations === undefined) {
         myProfileData["deletedConversations"] = {};
@@ -106,8 +84,31 @@ zvezdice.addEventListener("click", event => {
     }
 });
 
+function sendVideoCall(receiver) {
+    let isOnline = isUserOnline(receiver);
+    setTimeout(() => {
+        if (isOnline === 1) {
+            videoCallRequest(receiver);
+            createCallModal(receiver, false);
+        } else {
+            alert("User is not online");
+        }
+    }, 500);
+}
+
+function openUsersProfile(user) {
+    firebase.database().ref('users/').once('value').then(function (snapshot) {
+        snapshot.forEach(function (userSnapshot) {
+            if (user === userSnapshot.val().username) {
+                let userData = convertUserInfoForProfileDraw(userSnapshot.val());
+                drawProfile(userData);
+            }
+        });
+    });
+}
+
 function findStartMsg(key) {
-    if (myProfileData.msgKeys === undefined)myProfileData["msgKeys"] = {};
+    if (myProfileData.msgKeys === undefined) myProfileData["msgKeys"] = {};
     let messages = myProfileData.msgKeys[key],
         lengthOfConversation = messages === undefined ? 0 : messages.length;
     if (lengthOfConversation > 15) {
@@ -135,7 +136,7 @@ function markSelectedChat() {
 function openConversationWithThisUser(user) {
     receiver = user;
     if (receiver === myProfileData.username) {
-        alert("You can't send message to yourself, that's weird")
+        alert("You can't send message to yourself, that's weird");
         return;
     }
     conversationKey = createConversationKey(myProfileData.username, user);
@@ -206,6 +207,7 @@ function drawListOfConversations(arr) {
     let div = document.createElement("div");
     div.setAttribute("id", "transparent");
     for (let index = 0; index < arr.length; index++) {
+        if (arr[index] === myProfileData.username) continue;
         let friend = document.createElement("input"),
             label = document.createElement("label"),
             notificationBox = document.createElement("span");
@@ -239,7 +241,7 @@ function proveriDaLiImaPoruka(username) {
             let sender = newMsgsSnapshot.key,
                 msg = newMsgsSnapshot.val();
             if (myProfileData.myBlockList.indexOf(sender) === -1) {
-                if (msg === true || msg === false) {
+                if ((msg === true || msg === false) && sender !== myProfileData.username) {
                     tempArr.push([sender, msg]);
                 } else {
                     videoCallMsg(msg, sender);
@@ -279,7 +281,6 @@ function findLastDeletedMsg(key) {
 function drawChatContent(poruke, imeKonverzacije) {
     let user = imeKonverzacije.split(myProfileData.username).join("");
     markChatAsSeen(user);
-    //trackActiveConversation(imeKonverzacije);
     messages.innerHTML = "";
     if (poruke.length === 0) {
         messages.innerHTML = "<div class='noContentMsg'><h2>no messages yet</h2></div>";
@@ -289,18 +290,20 @@ function drawChatContent(poruke, imeKonverzacije) {
         }
         let sender = "";
         for (let element in poruke) {
-            let poruka = poruke[element][0],
-                brojPoruke = poruke[element][1],
-                div;
-            saveMsgNumber(imeKonverzacije, brojPoruke);
-            if (poruka.sender !== myProfileData.username && !poruka.seen) markMessageAsSeen(imeKonverzacije, brojPoruke);
-            if (sender === poruka.sender) {
-                div = drawMessage(poruka, brojPoruke, "");
-            } else {
-                div = drawMessage(poruka, brojPoruke, sender);
-                sender = poruka.sender;
+            if (poruke.hasOwnProperty(element)) {
+                let poruka = poruke[element][0],
+                    brojPoruke = poruke[element][1],
+                    div;
+                saveMsgNumber(imeKonverzacije, brojPoruke);
+                if (poruka.sender !== myProfileData.username && !poruka.seen) markMessageAsSeen(imeKonverzacije, brojPoruke);
+                if (sender === poruka.sender) {
+                    div = drawMessage(poruka, brojPoruke, "");
+                } else {
+                    div = drawMessage(poruka, brojPoruke, sender);
+                    sender = poruka.sender;
+                }
+                messages.insertAdjacentHTML("beforeend", div);
             }
-            messages.insertAdjacentHTML("beforeend", div);
         }
         messages.scrollTop = messages.scrollHeight;
     }
@@ -359,7 +362,7 @@ function dodajNulu(broj) {
 function napuniKonverzacije(user) {
     const conversationArr = myProfileData.myConversations;
     if (conversationArr === undefined) myProfileData["myConversations"] = [];
-    if (conversationArr.indexOf(user) === -1) {
+    if (conversationArr.indexOf(user) === -1 && user !== myProfileData.username) {
         conversationArr.unshift(user);
     } else {
         sortMyConvesations(user)
@@ -447,7 +450,9 @@ function countNewMessages() {
     let newMsgs = odKogaImamPoruke.filter((value, index) => value[1]),
         arr = [];
     for (let index in newMsgs) {
-        arr.push(newMsgs[index][0]);
+        if (newMsgs.hasOwnProperty(index)) {
+            arr.push(newMsgs[index][0]);
+        }
     }
     return [arr, arr.length];
 }
