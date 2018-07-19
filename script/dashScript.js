@@ -213,15 +213,11 @@ function selectLangChannel(event) {
 
 function showProfileEditForm(disableEnable) {
     addExistingData(myProfileData);
-    if (disableEnable === "disable") {
-        disableEnableFormElements(myProfileDiv, "disable");
-        showHideFormButtons(myProfileDiv, "none");
-        showHideEditIcon("block");
-    } else if (disableEnable === "enable") {
+    
         disableEnableFormElements(myProfileDiv, "enable");
         showHideFormButtons(myProfileDiv, "block");
-        showHideEditIcon("none");
-    }
+       
+   
     profileForms.addEventListener("click", showAndHideForms);
     personalInfoForm.addEventListener("submit", savePersonalInfo);
     aboutMeForm.addEventListener("submit", saveAboutMe);
@@ -230,12 +226,7 @@ function showProfileEditForm(disableEnable) {
     language.addEventListener("click", selectLanguage);
 }
 
-function showHideEditIcon(property) {
-    let icons = document.querySelectorAll(".editIcon");
-    for (let element = 0; element < icons.length; element++) {
-        icons[element].style.display = property;
-    }
-}
+
 
 function showHideFormButtons(parentDiv, property) {
     let buttons = document.querySelectorAll("input[type='submit']");
