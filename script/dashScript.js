@@ -35,7 +35,7 @@ const navigation = document.getElementById("navigation"),
     settingsChangePass = document.getElementById("settingsChangePass"),
     backFromPassChange = document.getElementById("backFromPassChange"),
     updatePassBtn = document.getElementById("updatePassBtn");
-    fluencyColor = "rgb(81, 0, 172)";
+fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
 
@@ -60,18 +60,19 @@ showHideSidebar.addEventListener("click", event => {
 
 function promenaSifre(event) {
     event.preventDefault();
-  var staraSifra = document.getElementById("oldPass").value;
-  var novaSifra = document.getElementById("newPass").value;
-  var novaSifraOpet = document.getElementById("newPassRepeat").value;
-  console.log(novaSifra, novaSifraOpet);
-  if(novaSifra == "" || novaSifraOpet == "" || staraSifra == "") {
-    alert("Morate popuniti sva polja!");
-  } else {
-  if(novaSifra != novaSifraOpet) {
-    alert("Niste uneli iste sifre!");
-  } else {
-    console.log("u redu je");
-  }}
+    var staraSifra = document.getElementById("oldPass").value;
+    var novaSifra = document.getElementById("newPass").value;
+    var novaSifraOpet = document.getElementById("newPassRepeat").value;
+    console.log(novaSifra, novaSifraOpet);
+    if (novaSifra == "" || novaSifraOpet == "" || staraSifra == "") {
+        alert("Morate popuniti sva polja!");
+    } else {
+        if (novaSifra != novaSifraOpet) {
+            alert("Niste uneli iste sifre!");
+        } else {
+            console.log("u redu je");
+        }
+    }
 }
 
 
@@ -82,7 +83,7 @@ function showPassChange() {
 }
 
 function backSaPromeneSifre() {
-     show(settingsDiv);
+    show(settingsDiv);
     hide(changePassDiv);
 }
 
@@ -119,7 +120,7 @@ function mainNavigation(event) {
             } else if (event.target.id === "settings") {
                 showSettings();
             }
-            moveSidebar();
+            if (screen.width < 1000) moveSidebar();
         }
     }
     event.preventDefault();

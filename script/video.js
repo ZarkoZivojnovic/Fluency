@@ -2,7 +2,13 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
     videoDatabase, yourId, pc,
-    servers = {        'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {            'urls': 'turn:numb.viagenie.ca',            'credential': 'fluency',            'username': 'zivojnovic@gmail.com'        }]    };
+    servers = {
+        'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {
+            'urls': 'turn:numb.viagenie.ca',
+            'credential': 'fluency',
+            'username': 'zivojnovic@gmail.com'
+        }]
+    };
 
 document.getElementById("endCall").addEventListener("click", prekiniPoziv);
 
@@ -70,7 +76,7 @@ function createCallModal(sender, incoming) {
     modal.className = "callModal";
     text.className = "modalText";
     modal.appendChild(text);
-    if (incoming){
+    if (incoming) {
         accept = document.createElement("button");
         reject = document.createElement("button");
         accept.className = "acceptCall";
@@ -104,11 +110,11 @@ function videoCallMsg(msg, sender) {
         callStatus += "Accepted";
     } else if (msg === "Rejected Video Call") {
         callStatus += "Rejected";
-    } else if (msg === "End"){
+    } else if (msg === "End") {
         alert("Call Ended");
         setTimeout(() => {
             closeVideoCall();
-        },2000);
+        }, 2000);
     }
     if (document.querySelector(".modalStatus") !== null) {
         document.querySelector(".modalStatus").innerText = callStatus;
