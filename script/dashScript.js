@@ -35,6 +35,8 @@ const navigation = document.getElementById("navigation"),
     settingsChangePass = document.getElementById("settingsChangePass"),
     backFromPassChange = document.getElementById("backFromPassChange"),
     updatePassBtn = document.getElementById("updatePassBtn"),
+    channelsList = document.getElementById("channelsList"),
+    conversationList = document.getElementById("conversationList"),
     fluencyColor = "rgb(81, 0, 172)";
 
 let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList", "settings"],
@@ -57,6 +59,22 @@ showHideSidebar.addEventListener("click", event => {
     event.preventDefault();
     moveSidebar();
 });
+channelsList.addEventListener("click", event => {
+    event.preventDefault();
+   showOrHideListResponsive(channelsList);
+});
+conversationList.addEventListener("click", event => {
+    event.preventDefault();
+    showOrHideListResponsive(conversationList);
+});
+
+function showOrHideListResponsive(list) {
+    if (list.style.maxHeight === "100%"){
+        list.style.maxHeight = "25px"
+    } else {
+        list.style.maxHeight = "100%";
+    }  
+}
 
 function promenaSifre(event) {
     event.preventDefault();

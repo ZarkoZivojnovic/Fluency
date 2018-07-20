@@ -25,8 +25,8 @@
     <div id="contentsDiv">
         <div id="myMessagesDiv" class="hide fullWidth">
             <div id="msgBoard" class="flexRow contentDiv shadow border noOverflow">
-                <div class="noOverflow leftSide hideLeftSide">
-                    <div class="showHideLeftSideBtn">Conversations</div>
+                <div id="conversationList" class="noOverflow leftSide hideLeftSide">
+                    <div id="showConversationsBtn" class="showHideLeftSideBtn">Conversations</div>
                     <div id="conversations" class="flexColumn"></div>
                     <div id="trash" class="pointer"><i class="fas fa-trash-alt"></i></div>
                 </div>
@@ -364,7 +364,7 @@
             </div>
             <div class="contentDiv shadow border flexRow noOverflow">
                 <div id="channelsList" class="noOverflow leftSide hideLeftSide">
-                    <div class="showHideLeftSideBtn">Channels</div>
+                    <div id="showChannelsBtn" class="showHideLeftSideBtn">Channels</div>
                     <form action="?" method="post" id="chooseChannel">
                         <h3>Select language:</h3>
                         <div id="langSelect">

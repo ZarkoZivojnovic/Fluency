@@ -1,5 +1,3 @@
-document.getElementById("forgotPassLink").addEventListener("click", openForgotPassModal);
-
 function openForgotPassModal(event) {
     event.preventDefault();
     createForgotPassModal();

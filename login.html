@@ -8,39 +8,6 @@
     <link rel="icon" type="image/png" href="graph/favicon.png" sizes="16x16">
     <link rel="stylesheet" href="style/style.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Nunito" rel="stylesheet">
-    <style>
-        #modalDiv {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            z-index: 111;
-            color: rgb(80,21,169);
-            text-align: center;
-        }
-
-        .modal {
-            position: relative;
-            top: 150px;
-            margin: auto;
-            background-color: #afafaf;
-            width: 350px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 1px 1px 1px 1px rgb(80,21,169);
-        }
-
-        #cancelPassReset {
-            position: absolute;
-            top:10px;
-            right: 10px;
-            font-weight: 900;
-            border-radius: 100%;
-            cursor: pointer;
-            color: rgb(80,21,169);
-        }
-
-    </style>
 </head>
 <body>
 <div id="wrap">
@@ -74,6 +41,7 @@
 <script src="script/settings.js"></script>
 <script>
     loginForm.addEventListener("submit", goOnline);
+    forgotPassLink.addEventListener("click", openForgotPassModal);
 </script>
 </body>
 </html>

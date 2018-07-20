@@ -1,11 +1,11 @@
 @font-face {
-font-family: AvenirNextRegular;
-src: url(../font/AvenirRegular.otf);
+    font-family: AvenirNextRegular;
+    src: url(../font/AvenirRegular.otf);
 }
 
 @font-face {
-font-family: AvenirNextBold;
-src: url(../font/AvenirBold.otf);
+    font-family: AvenirNextBold;
+    src: url(../font/AvenirBold.otf);
 }
 
 html, body {
@@ -13,13 +13,14 @@ html, body {
     font-family: AvenirNextBold, 'Montserrat', sans-serif;
     overflow-x: hidden;
 }
-*,*:before,*:after {
+
+*, *:before, *:after {
     box-sizing: inherit;
     margin: auto;
 }
 
 #wrap {
-    background-color: rgb(80,71,88);
+    background-color: rgb(80, 71, 88);
     width: 100%;
     min-height: 100%;
     padding: 20px;
@@ -27,7 +28,7 @@ html, body {
     overflow-x: hidden;
 }
 
-header{
+header {
     width: 400px;
     display: flex;
     flex-direction: row;
@@ -121,7 +122,7 @@ input:focus {
     margin: 30px auto;
     font-size: 1.3em;
     outline: none;
-    
+
 }
 
 .submitBtn {
@@ -144,16 +145,16 @@ input:focus {
     box-shadow: 0 0 10px rgb(81, 0, 172);
     background-color: #afafaf;
     color: white;
-    
+
 }
 
-#haveAcc, #forgotPass{
+#haveAcc, #forgotPass {
     margin: 10px auto;
     text-align: center;
     color: white;
 }
 
-#haveAcc>a, #forgotPass>a{
+#haveAcc > a, #forgotPass > a {
     color: white;
     text-shadow: 0 0 5px rgb(81, 0, 172);
     font-weight: bold;
@@ -161,7 +162,7 @@ input:focus {
     text-decoration: none;
 }
 
-#haveAcc>a:hover, #forgotPass>a:hover{
+#haveAcc > a:hover, #forgotPass > a:hover {
     color: rgb(185, 61, 255);
 }
 
@@ -174,7 +175,7 @@ input:focus {
     border: solid rgb(81, 0, 172) 1px;
 }
 
-#noticeBackground{
+#noticeBackground {
     position: absolute;
     top: 0;
     left: 0;
@@ -208,13 +209,84 @@ input:focus {
     cursor: pointer;
 }
 
-@media screen and (max-width:500px){
-   header{
-       width: 100%;
-       transform: scale(0.6,0.6);
-       margin-top: -30px;
+#modalDiv {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 111;
+    color: rgb(80, 21, 169);
+    text-align: center;
+}
+
+.modal {
+    position: relative;
+    top: 150px;
+    margin: auto;
+    background-color: #afafaf;
+    width: 350px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 1px 1px 1px 1px rgb(80, 21, 169);
+}
+
+#cancelPassReset {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-weight: 900;
+    border-radius: 100%;
+    cursor: pointer;
+    color: rgb(80, 21, 169);
+}
+
+@media screen and (max-width: 500px) {
+    body {
+        font-size: smaller;
     }
+
+    header {
+        width: 100%;
+        transform: scale(0.6, 0.6);
+        margin-top: -30px;
+    }
+
     #formDiv, .form {
         width: 100%;
+    }
+
+    #profileDiv #profile p {
+        margin: 5px auto;
+    }
+
+    p#usersBirthDate {
+        font-size: 12px;
+        margin: 5px;
+    }
+
+    button.profileBtns {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 350px){
+    #logo {
+        height: auto;
+        width: 100px;
+        margin: 0 auto;
+    }
+
+    input {
+        margin: 10px auto;
+        width: 100%;
+    }
+
+    .submitBtn {
+        padding: 5px;
+        height: auto;
+    }
+
+    .modal {
+        width: 80%;
     }
 }

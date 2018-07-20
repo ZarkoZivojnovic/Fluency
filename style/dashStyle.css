@@ -1213,11 +1213,7 @@ div .callIcon {
         max-height: 25px;
         width: 100%;
         border-radius: 10px;
-        transition: max-height 1s;
-    }
-
-    .hideLeftSide:hover {
-        max-height: 100%;
+        transition: height 1s;
     }
 
     #langSelect {
@@ -1226,6 +1222,10 @@ div .callIcon {
 
     #profile {
         width: 95%;
+    }
+
+    #trash {
+        bottom:25px;
     }
 }
 
@@ -1278,7 +1278,16 @@ div .callIcon {
         height: 30px;
     }
 
-    .callIcon, .msgIcon {
+    #profile {
+        min-height: 250px;
+    }
 
+    #profilePhoto {
+        width: 100px;
+        height: 100px;
+    }
+
+    #genderAndYears {
+        top: -100px;
     }
 }

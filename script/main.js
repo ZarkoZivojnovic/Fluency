@@ -9,12 +9,13 @@ let config = {
 firebase.initializeApp(config);
 
 const loginForm = document.getElementById("loginForm"),
-    registerForm = document.getElementById("registerForm");
+    registerForm = document.getElementById("registerForm"),
+    forgotPassLink = document.getElementById("forgotPassLink");
 
 let userId;
 
-document.querySelector("header").addEventListener("click", event=>{
-   location.assign("index.html");
+document.querySelector("header").addEventListener("click", event => {
+    location.assign("index.html");
 });
 
 firebase.auth().onAuthStateChanged((user) => {

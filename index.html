@@ -8,41 +8,8 @@
     <title>Fluency</title>
     <link rel="icon" type="image/png" href="graph/favicon.png" sizes="16x16">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/indexStyle.css">
     <link href="https://fonts.googleapis.com/css?family=Montserrat|Nunito" rel="stylesheet">
-    <style>
-        body {
-            font-family: AvenirNextBold, 'Montserrat', sans-serif;
-        }
-
-        h3 {
-            font-family: AvenirNextBold, 'Montserrat', sans-serif;
-            text-align: center;
-            font-size: 40px;
-            color: rgba(185, 61, 255, 1);
-            letter-spacing: 2px;
-            animation: glow 2s infinite;
-            margin: 50px auto 30px;
-        }
-
-        #logo {
-            margin: 30px auto;
-        }
-
-        @-webkit-keyframes glow {
-            0% {
-                text-shadow: 0 0 10px rgba(81, 0, 172, 0.8);
-            }
-            50% {
-                text-shadow: 0 0 0 rgba(81, 0, 172, 0.8);
-            }
-            100% {
-                text-shadow: 0 0 10px rgba(81, 0, 172, 0.8);
-            }
-        }
-
-        @media screen and (max-width: 500px) {
-        }
-    </style>
 </head>
 <body>
 <div id="wrap">
@@ -69,8 +36,6 @@
         messagingSenderId: "365373726518"
     };
     firebase.initializeApp(config);
-
-    let user = firebase.auth().currentUser;
 
     setTimeout(() => {
         firebase.auth().onAuthStateChanged((user) => {
