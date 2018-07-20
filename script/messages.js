@@ -259,8 +259,8 @@ function dovuciPoruke(imeKonverzacije, start) {
     const ref = firebase.database().ref("messages/" + imeKonverzacije),
         lastDeleted = findLastDeletedMsg(imeKonverzacije);
     let poruke = [];
-    ref.once('value', function (snapshot) {
-        snapshot.forEach(function (messageSnapshot) {
+    ref.once('value', snapshot => {
+        snapshot.forEach(messageSnapshot => {
             let poruka = messageSnapshot.val(),
                 broj = messageSnapshot.key;
             if (broj > lastDeleted && broj >= start) {
@@ -272,10 +272,11 @@ function dovuciPoruke(imeKonverzacije, start) {
 }
 
 function findLastDeletedMsg(key) {
-    if (myProfileData.deletedConversations === undefined || myProfileData.deletedConversations[key] === undefined) {
+    const deleted = myProfileData.deletedConversations;
+    if (typeof deleted === "undefined" || typeof deleted[key] === "undefined") {
         return 0;
     }
-    return myProfileData.deletedConversations[key];
+    return deleted[key];
 }
 
 function drawChatContent(poruke, imeKonverzacije) {

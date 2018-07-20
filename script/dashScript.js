@@ -19,7 +19,7 @@ const navigation = document.getElementById("navigation"),
     myProfileData = getExistingData(userUid),
     usersName = document.getElementById("usersName"),
     profileDiv = document.getElementById("profileDiv"),
-    mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv, myBlockListDiv],
+    mainDivs = [myProfileDiv, channelsDiv, myMsgsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv],
     loading = document.getElementById("loadingBackground"),
     listaUsera = document.getElementById("usersList"),
     backSaProfilaBtn = document.getElementById("backSaProfila"),
@@ -34,8 +34,8 @@ const navigation = document.getElementById("navigation"),
     settingsEditBtn = document.getElementById("settingsEditBtn"),
     settingsChangePass = document.getElementById("settingsChangePass"),
     backFromPassChange = document.getElementById("backFromPassChange"),
-    updatePassBtn = document.getElementById("updatePassBtn");
-fluencyColor = "rgb(81, 0, 172)";
+    updatePassBtn = document.getElementById("updatePassBtn"),
+    fluencyColor = "rgb(81, 0, 172)";
 
 let useriZaPrikaz = [];
 
@@ -75,7 +75,6 @@ function promenaSifre(event) {
     }
 }
 
-
 function showPassChange() {
     hide(settingsDiv);
     show(changePassDiv);
@@ -104,26 +103,37 @@ function moveSidebar() {
     }
 }
 
+let links = ["myProfile", "channels","myMessages", "myFavorites", "myBlockList", "settings"];
+
 function mainNavigation(event) {
     if (event.target !== event.currentTarget) {
         if (event.target.nodeName === "A") {
-            if (event.target.id === "myProfile") {
+            let id = event.target.id;
+            if (id === "myProfile") {
                 udjiNaMojProfil();
-            } else if (event.target.id === "channels") {
+            } else if (id === "channels") {
                 showChannels();
-            } else if (event.target.id === "myFavorites") {
+            } else if (id === "myFavorites") {
                 showMyFavorites();
-            } else if (event.target.id === "myMessages") {
+            } else if (id === "myMessages") {
                 showMyMessages();
-            } else if (event.target.id === "myBlockList") {
+            } else if (id === "myBlockList") {
                 showMyBlockList();
-            } else if (event.target.id === "settings") {
+            } else if (id === "settings") {
                 showSettings();
             }
+            if (id !== "myProfile")  markSelectedLink(id);
             if (screen.width < 1000) moveSidebar();
         }
     }
     event.preventDefault();
+}
+
+function markSelectedLink(id) {
+    for (let link of links){
+        document.getElementById(link).style.backgroundColor = "inherit";
+    }
+    document.getElementById(id).style.backgroundColor = fluencyColor;
 }
 
 function showSettings() {
