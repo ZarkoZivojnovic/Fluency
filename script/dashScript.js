@@ -59,14 +59,17 @@ showHideSidebar.addEventListener("click", event => {
     event.preventDefault();
     moveSidebar();
 });
-channelsList.addEventListener("click", event => {
-    event.preventDefault();
-   showOrHideListResponsive(channelsList);
-});
-conversationList.addEventListener("click", event => {
-    event.preventDefault();
-    showOrHideListResponsive(conversationList);
-});
+
+if (window.innerWidth<650){
+    channelsList.addEventListener("click", event => {
+        event.preventDefault();
+        showOrHideListResponsive(channelsList);
+    });
+    conversationList.addEventListener("click", event => {
+        event.preventDefault();
+        showOrHideListResponsive(conversationList);
+    });
+}
 
 function showOrHideListResponsive(list) {
     if (list.style.maxHeight === "100%"){
