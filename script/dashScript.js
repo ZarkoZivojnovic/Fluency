@@ -209,6 +209,7 @@ function onload() {
                     usersName.innerText = myProfileData.username;
                     hide(loading);
                     showChannels();
+                    markSelectedLink("channels");
                 }
             }, 100);
             let currentUser = firebase.auth().currentUser;
