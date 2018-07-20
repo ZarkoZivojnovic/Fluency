@@ -37,7 +37,8 @@ const navigation = document.getElementById("navigation"),
     updatePassBtn = document.getElementById("updatePassBtn"),
     fluencyColor = "rgb(81, 0, 172)";
 
-let useriZaPrikaz = [];
+let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList", "settings"],
+    useriZaPrikaz = [];
 
 onload();
 
@@ -56,7 +57,6 @@ showHideSidebar.addEventListener("click", event => {
     event.preventDefault();
     moveSidebar();
 });
-
 
 function promenaSifre(event) {
     event.preventDefault();
@@ -78,7 +78,6 @@ function promenaSifre(event) {
 function showPassChange() {
     hide(settingsDiv);
     show(changePassDiv);
-
 }
 
 function backSaPromeneSifre() {
@@ -103,8 +102,6 @@ function moveSidebar() {
     }
 }
 
-let links = ["myProfile", "channels","myMessages", "myFavorites", "myBlockList", "settings"];
-
 function mainNavigation(event) {
     if (event.target !== event.currentTarget) {
         if (event.target.nodeName === "A") {
@@ -122,7 +119,7 @@ function mainNavigation(event) {
             } else if (id === "settings") {
                 showSettings();
             }
-            if (id !== "myProfile")  markSelectedLink(id);
+            if (id !== "myProfile") markSelectedLink(id);
             if (screen.width < 1000) moveSidebar();
         }
     }
@@ -130,7 +127,7 @@ function mainNavigation(event) {
 }
 
 function markSelectedLink(id) {
-    for (let link of links){
+    for (let link of links) {
         document.getElementById(link).style.backgroundColor = "inherit";
     }
     document.getElementById(id).style.backgroundColor = fluencyColor;
@@ -204,28 +201,35 @@ function onload() {
             location.assign("./login.html");
         } else {
             let getUsername = setInterval(() => {
-                if (myProfileData.username !== undefined) {
-                    clearInterval(getUsername);
-                    usersName.innerText = myProfileData.username;
-                    hide(loading);
-                    showChannels();
-                    markSelectedLink("channels");
-                }
+                ifUsername(getUsername)
             }, 100);
-            let currentUser = firebase.auth().currentUser;
-            if (!currentUser.emailVerified) {
-                createVerificationModal(currentUser.emailVerified, currentUser.email);
-                document.getElementById("signOutLink").addEventListener("click", goOffline);
-                document.getElementById("resendVerification").addEventListener("click", event => {
-                    event.preventDefault();
-                    currentUser.sendEmailVerification().then(function () {
-                        alert("Verification Email Sent")
-                    });
-                });
+            if (!firebase.auth().currentUser.emailVerified) {
+                verificationAlert();
             }
         }
     });
     firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
+}
+
+function ifUsername(getUsername) {
+    if (myProfileData.username !== undefined) {
+        clearInterval(getUsername);
+        usersName.innerText = myProfileData.username;
+        hide(loading);
+        showChannels();
+        markSelectedLink("channels");
+    }
+}
+
+function verificationAlert() {
+    createVerificationModal(currentUser.emailVerified, currentUser.email);
+    document.getElementById("signOutLink").addEventListener("click", goOffline);
+    document.getElementById("resendVerification").addEventListener("click", event => {
+        event.preventDefault();
+        currentUser.sendEmailVerification().then(() => {
+            alert("Verification Email Sent")
+        });
+    });
 }
 
 function createVerificationModal(status, email) {
@@ -259,12 +263,14 @@ function setUpSideBar(addClass, removeClass, string) {
 
 function selectLangChannel(event) {
     const radioInputs = document.querySelectorAll("input[type='radio']");
+    let color;
     for (let element = 0; element < radioInputs.length; element++) {
         if (radioInputs[element].checked) {
-            radioInputs[element].parentNode.style.backgroundColor = fluencyColor;
+            color = fluencyColor;
         } else {
-            radioInputs[element].parentNode.style.backgroundColor = "inherit";
+            color = "inherit";
         }
+        radioInputs[element].parentNode.style.backgroundColor = color;
     }
     event.stopPropagation();
 }
@@ -339,7 +345,7 @@ function addExistingData(object) {
 
 function getExistingData(userId) {
     let profileData = {};
-    firebase.database().ref('users/' + userId).on('child_added', function (data) {
+    firebase.database().ref('users/' + userId).on('child_added', data => {
         profileData[data.key] = data.val();
     });
     return profileData;
@@ -515,8 +521,8 @@ function hide(...elements) {
 
 function dovuciUsere(uslov, string, dodatniUslov) {
     let tempArr = [];
-    firebase.database().ref('users/').once('value').then(function (snapshot) {
-        snapshot.forEach(function (userSnapshot) {
+    firebase.database().ref('users/').once('value').then(snapshot => {
+        snapshot.forEach(userSnapshot => {
             let user = userSnapshot.val();
             if (!uslov) {
                 if (user.status === "online") {
