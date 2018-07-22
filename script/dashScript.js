@@ -1,4 +1,5 @@
 const navigation = document.getElementById("navigation"),
+    settingsDeleteAcc = document.getElementById("settingsDeleteAcc"),
     settingsDiv = document.getElementById("settingsDiv"),
     changePassDiv = document.getElementById("changePassDiv"),
     signOutButton = document.getElementById("signOut"),
@@ -44,6 +45,7 @@ let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList"
 
 onload();
 
+//settingsDeleteAcc.addEventListener("click", deleteProfile(userId));
 updatePassBtn.addEventListener("click", promenaSifre);
 backFromPassChange.addEventListener("click", backSaPromeneSifre);
 settingsChangePass.addEventListener("click", showPassChange);
@@ -79,6 +81,16 @@ function showOrHideListResponsive(list) {
     }  
 }
 
+function deleteProfile() {
+    let user = firebase.auth().currentUser;
+    firebase.database().ref('users/' + userId).remove();
+    user.delete().then(() => {
+        alert("deleted profile")
+    }).catch(error => {
+        alert(error)
+    });
+}
+
 function promenaSifre(event) {
     event.preventDefault();
     var staraSifra = document.getElementById("oldPass").value;
@@ -86,24 +98,48 @@ function promenaSifre(event) {
     var novaSifraOpet = document.getElementById("newPassRepeat").value;
     console.log(novaSifra, novaSifraOpet);
     if (novaSifra == "" || novaSifraOpet == "" || staraSifra == "") {
-        alert("Morate popuniti sva polja!");
+        alert("You cannot leave fields blank!");
     } else {
         if (novaSifra != novaSifraOpet) {
-            alert("Niste uneli iste sifre!");
+            alert("Passwords do not match!");
         } else {
-            console.log("u redu je");
+            updatePassword(novaSifra);
         }
     }
 }
 
+function updatePassword(novaSifra) {
+    const user = firebase.auth().currentUser;
+    if (novaSifra.length < 6) {
+        alert("Password is too short!");
+        return;
+    } else {
+        user.updatePassword(novaSifra).then(() => {
+            alert("Your password has been changed successfully!");
+        }).catch(error => {
+            alert("An error has occurred, try again later!");
+        });
+    }
+}
+
 function showPassChange() {
+    show(loading);
     hide(settingsDiv);
-    show(changePassDiv);
+    setTimeout(() => {
+        hide(loading);
+        show(changePassDiv);
+    }, 500);
 }
 
 function backSaPromeneSifre() {
-    show(settingsDiv);
     hide(changePassDiv);
+    show(loading);
+    setTimeout(() => {
+        hide(loading);
+        show(settingsDiv);
+    }, 500);
+    
+    
 }
 
 function hideProfileDiv(event) {
@@ -155,8 +191,12 @@ function markSelectedLink(id) {
 }
 
 function showSettings() {
-    show(settingsDiv);
+    show(loading);
     hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
+    setTimeout(() => {
+        hide(loading);
+        show(settingsDiv);
+    }, 500);
 }
 
 function showMyBlockList() {
@@ -172,12 +212,15 @@ function showMyBlockList() {
 
 function showMyProfile() {
     let waitingForData = setInterval(() => {
+        show(loading);
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm();
             hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
-            show(myProfileDiv);
-            hide(profileDiv);
+            setTimeout(() => {
+        hide(loading);
+        show(myProfileDiv);
+    }, 500);
         }
     });
 }

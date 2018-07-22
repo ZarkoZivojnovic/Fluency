@@ -58,32 +58,6 @@ function createForgotPassForm() {
     return form;
 }
 
-/* kad je user ulogovan */
-function changePassword() {
-    const user = firebase.auth().currentUser,
-        newPassword = document.getElementById("").value,
-        newPassConfirm = document.getElementById("").value;
-    if (newPassword.length < 6) {
-        alert("Weak password");
-        return;
-    }
-    if (newPassword === newPassConfirm) {
-        user.updatePassword(newPassword).then(() => {
-            alert("Your password has been changed successfully");
-        }).catch(error => {
-            alert("An error has occurred, try again later");
-        });
-    }
-}
 
-function deleteProfile(userId) {
-    let user = firebase.auth().currentUser;
-    firebase.database().ref('users/' + userId).remove();
-    user.delete().then(() => {
-        alert("deleted profile")
-    }).catch(error => {
-        alert(error)
-    });
-}
 
 
