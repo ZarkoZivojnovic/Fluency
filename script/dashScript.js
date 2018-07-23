@@ -202,7 +202,7 @@ function markSelectedLink(id) {
 
 function showSettings() {
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, changePassDiv, changePassDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, changePassDiv);
     setTimeout(() => {
         hide(loading);
         show(settingsDiv);
@@ -226,7 +226,7 @@ function showMyProfile() {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm();
-            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, profileDiv);
             setTimeout(() => {
         hide(loading);
         show(myProfileDiv);
