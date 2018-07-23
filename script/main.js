@@ -56,7 +56,7 @@ function goOnline(event) {
         setTimeout(() => {
             location.assign('./dashboard.html');
         }, 3e3);
-    }).catch(function (error) {
+    }).catch(error => {
         alert(error);
     });
     event.preventDefault();
@@ -71,7 +71,7 @@ function goOffline(event) {
         setTimeout(() => {
             location.assign('./login.html');
         }, 3e3);
-    }).catch(function (error) {
+    }).catch(error => {
         alert(error);
     });
 }
