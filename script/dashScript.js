@@ -138,8 +138,6 @@ function backSaPromeneSifre() {
         hide(loading);
         show(settingsDiv);
     }, 500);
-    
-    
 }
 
 function hideProfileDiv(event) {
@@ -265,17 +263,18 @@ function onload() {
             location.assign("./login.html");
         } else {
             let getUsername = setInterval(() => {
-                ifUsername(getUsername)
-            }, 100);
-            if (!firebase.auth().currentUser.emailVerified) {
-                verificationAlert();
+                ifUser(getUsername)
+            }, 100),
+                currentUser = firebase.auth().currentUser;
+            if (!currentUser.emailVerified) {
+                verificationAlert(currentUser);
             }
         }
     });
     firebase.database().ref("users/" + userUid + "/status").onDisconnect().set("offline");
 }
 
-function ifUsername(getUsername) {
+function ifUser(getUsername) {
     if (myProfileData.username !== undefined) {
         clearInterval(getUsername);
         usersName.innerText = myProfileData.username;
@@ -285,7 +284,7 @@ function ifUsername(getUsername) {
     }
 }
 
-function verificationAlert() {
+function verificationAlert(currentUser) {
     createVerificationModal(currentUser.emailVerified, currentUser.email);
     document.getElementById("signOutLink").addEventListener("click", goOffline);
     document.getElementById("resendVerification").addEventListener("click", event => {
