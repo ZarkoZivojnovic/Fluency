@@ -45,7 +45,7 @@ let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList"
 
 onload();
 
-//settingsDeleteAcc.addEventListener("click", deleteProfile(userId));
+settingsDeleteAcc.addEventListener("click", deleteProfile(userId));
 updatePassBtn.addEventListener("click", promenaSifre);
 backFromPassChange.addEventListener("click", backSaPromeneSifre);
 settingsChangePass.addEventListener("click", showPassChange);
@@ -84,11 +84,13 @@ function showOrHideListResponsive(list) {
 function deleteProfile() {
     let user = firebase.auth().currentUser;
     firebase.database().ref('users/' + userId).remove();
+    if (user != null) {
     user.delete().then(() => {
         alert("deleted profile")
     }).catch(error => {
         alert(error)
     });
+}
 }
 
 function promenaSifre(event) {
