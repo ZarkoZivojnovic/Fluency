@@ -45,7 +45,7 @@ let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList"
 
 onload();
 
-settingsDeleteAcc.addEventListener("click", deleteProfile(userId));
+settingsDeleteAcc.addEventListener("click", deleteProfile);
 updatePassBtn.addEventListener("click", promenaSifre);
 backFromPassChange.addEventListener("click", backSaPromeneSifre);
 settingsChangePass.addEventListener("click", showPassChange);
@@ -62,7 +62,7 @@ showHideSidebar.addEventListener("click", event => {
     moveSidebar();
 });
 
-if (window.innerWidth<650){
+if (window.innerWidth < 650) {
     channelsList.addEventListener("click", event => {
         event.preventDefault();
         showOrHideListResponsive(channelsList);
@@ -74,23 +74,30 @@ if (window.innerWidth<650){
 }
 
 function showOrHideListResponsive(list) {
-    if (list.style.maxHeight === "100%"){
+    if (list.style.maxHeight === "100%") {
         list.style.maxHeight = "25px"
     } else {
         list.style.maxHeight = "100%";
-    }  
+    }
 }
 
 function deleteProfile() {
-    let user = firebase.auth().currentUser;
-    firebase.database().ref('users/' + userId).remove();
-    if (user != null) {
-    user.delete().then(() => {
-        alert("deleted profile")
+    let user = firebase.auth().currentUser,
+        password = prompt("password"),
+        credentials = firebase.auth.EmailAuthProvider.credential(
+        user.email,
+        password
+    );
+    user.reauthenticateWithCredential(credentials).then(() => {
+        firebase.database().ref("users/"+userUid).remove();
+        user.delete().then(() => {
+            alert("deleted profile");
+        }).catch(error => {
+            alert(error);
+        });
     }).catch(error => {
-        alert(error)
+        alert(error);
     });
-}
 }
 
 function promenaSifre(event) {
@@ -113,24 +120,24 @@ function promenaSifre(event) {
 function updatePassword(staraSifra, novaSifra) {
     const user = firebase.auth().currentUser;
     var credentials = firebase.auth.EmailAuthProvider.credential(
-  user.email,
-  staraSifra
-);
+        user.email,
+        staraSifra
+    );
     if (novaSifra.length < 6) {
         alert("Password is too short!");
         return;
     } else {
-    	user.reauthenticateWithCredential(credentials).then(() => {
+        user.reauthenticateWithCredential(credentials).then(() => {
             user.updatePassword(novaSifra).then(() => {
-            alert("Your password has been changed successfully!");
-        }).catch(error => {
-            alert("An error has occured, please try later!");
-        });
+                alert("Your password has been changed successfully!");
+            }).catch(error => {
+                alert("An error has occured, please try later!");
+            });
         }).catch(error => {
             alert("Incorrect Password!");
         });
-    	
-        
+
+
     }
 }
 
@@ -228,9 +235,9 @@ function showMyProfile() {
             showProfileEditForm();
             hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, profileDiv);
             setTimeout(() => {
-        hide(loading);
-        show(myProfileDiv);
-    }, 500);
+                hide(loading);
+                show(myProfileDiv);
+            }, 500);
         }
     });
 }
@@ -275,8 +282,8 @@ function onload() {
             location.assign("./login.html");
         } else {
             let getUsername = setInterval(() => {
-                ifUser(getUsername)
-            }, 100),
+                    ifUser(getUsername)
+                }, 100),
                 currentUser = firebase.auth().currentUser;
             if (!currentUser.emailVerified) {
                 verificationAlert(currentUser);
