@@ -103,22 +103,32 @@ function promenaSifre(event) {
         if (novaSifra != novaSifraOpet) {
             alert("Passwords do not match!");
         } else {
-            updatePassword(novaSifra);
+            updatePassword(staraSifra, novaSifra);
         }
     }
 }
 
-function updatePassword(novaSifra) {
+function updatePassword(staraSifra, novaSifra) {
     const user = firebase.auth().currentUser;
+    var credentials = firebase.auth.EmailAuthProvider.credential(
+  user.email,
+  staraSifra
+);
     if (novaSifra.length < 6) {
         alert("Password is too short!");
         return;
     } else {
-        user.updatePassword(novaSifra).then(() => {
+    	user.reauthenticateWithCredential(credentials).then(() => {
+            user.updatePassword(novaSifra).then(() => {
             alert("Your password has been changed successfully!");
         }).catch(error => {
-            alert("An error has occurred, try again later!");
+            alert("An error has occured, please try later!");
         });
+        }).catch(error => {
+            alert("Incorrect Password!");
+        });
+    	
+        
     }
 }
 
@@ -190,7 +200,7 @@ function markSelectedLink(id) {
 
 function showSettings() {
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, changePassDiv, changePassDiv);
     setTimeout(() => {
         hide(loading);
         show(settingsDiv);
@@ -200,7 +210,7 @@ function showSettings() {
 function showMyBlockList() {
     let blockedUsers = new Array(dovuciUsere("block"));
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, settingsDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, settingsDiv, changePassDiv);
     setTimeout(() => {
         drawList(blockList, blockedUsers[0], "block");
         hide(loading);
@@ -214,7 +224,7 @@ function showMyProfile() {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm();
-            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
             setTimeout(() => {
         hide(loading);
         show(myProfileDiv);
@@ -226,7 +236,7 @@ function showMyProfile() {
 function showChannels() {
     let listaUsera = new Array(dovuciUsere());
     show(loading);
-    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
+    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
     setTimeout(() => {
         prikaziUsere(listaUsera[0]);
         show(channelsDiv);
@@ -238,7 +248,7 @@ function showChannels() {
 function showMyFavorites() {
     let favorites = new Array(dovuciUsere("favs"));
     show(loading);
-    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, settingsDiv);
+    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
     setTimeout(() => {
         drawList(favoritesList, favorites[0], "fav");
         hide(loading);
@@ -248,7 +258,7 @@ function showMyFavorites() {
 
 function showMyMessages() {
     drawListOfConversations(myProfileData.myConversations);
-    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv);
+    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv, changePassDiv);
     show(myMsgsDiv);
     trash.style.visibility = "hidden";
     zvezdice.style.display = "flex";
