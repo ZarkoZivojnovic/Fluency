@@ -102,14 +102,13 @@ function deleteProfile() {
 
 function promenaSifre(event) {
     event.preventDefault();
-    var staraSifra = document.getElementById("oldPass").value;
-    var novaSifra = document.getElementById("newPass").value;
-    var novaSifraOpet = document.getElementById("newPassRepeat").value;
-    console.log(novaSifra, novaSifraOpet);
-    if (novaSifra == "" || novaSifraOpet == "" || staraSifra == "") {
+    let staraSifra = document.getElementById("oldPass").value,
+        novaSifra = document.getElementById("newPass").value,
+        novaSifraOpet = document.getElementById("newPassRepeat").value;
+    if (novaSifra === "" || novaSifraOpet === "" || staraSifra === "") {
         alert("You cannot leave fields blank!");
     } else {
-        if (novaSifra != novaSifraOpet) {
+        if (novaSifra !== novaSifraOpet) {
             alert("Passwords do not match!");
         } else {
             updatePassword(staraSifra, novaSifra);
@@ -118,26 +117,24 @@ function promenaSifre(event) {
 }
 
 function updatePassword(staraSifra, novaSifra) {
-    const user = firebase.auth().currentUser;
-    var credentials = firebase.auth.EmailAuthProvider.credential(
+    const user = firebase.auth().currentUser,
+        credentials = firebase.auth.EmailAuthProvider.credential(
         user.email,
         staraSifra
     );
     if (novaSifra.length < 6) {
         alert("Password is too short!");
-        return;
     } else {
         user.reauthenticateWithCredential(credentials).then(() => {
             user.updatePassword(novaSifra).then(() => {
                 alert("Your password has been changed successfully!");
+                showSettings();
             }).catch(error => {
                 alert("An error has occured, please try later!");
             });
         }).catch(error => {
             alert("Incorrect Password!");
         });
-
-
     }
 }
 
