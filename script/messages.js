@@ -34,17 +34,16 @@ document.getElementById("visitProfileBtn").addEventListener("click", event => {
 
 trash.addEventListener("click", event => {
     event.preventDefault();
-    let indeks = myProfileData.myConversations.indexOf(receiver);
-    if (myProfileData.deletedConversations === undefined) {
-        myProfileData["deletedConversations"] = {};
-    }
-    myProfileData.myConversations.splice(indeks, 1);
-    myProfileData.deletedConversations[conversationKey] = myProfileData.msgKeys[conversationKey][myProfileData.msgKeys[conversationKey].length - 1];
+    let [conversations, deletedConversations] = [myProfileData.myConversations, myProfileData.deletedConversations],
+        indeks = conversations.indexOf(receiver),
+        msgArr = myProfileData.msgKeys[conversationKey];
+    if (deletedConversations === undefined) myProfileData["deletedConversations"] = {};
+    if (msgArr !== undefined) deletedConversations[conversationKey] = msgArr[msgArr.length - 1];
+    conversations.splice(indeks, 1);
     updateInformationsInDatabase(userUid, myProfileData, "");
-    trash.style.visibility = "hidden";
     drawListOfConversations(myProfileData.myConversations);
+    trash.style.visibility = "hidden";
 });
-
 
 listOfConversations.addEventListener("click", event => {
     if (event.target !== event.currentTarget && event.target.nodeName === "INPUT") {
