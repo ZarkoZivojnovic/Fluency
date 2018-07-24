@@ -358,6 +358,7 @@ function selectLangChannel(event) {
 }
 
 function showProfileEditForm() {
+    markSelectedLink("settings");
     addExistingData(myProfileData);
     disableEnableFormElements(myProfileDiv, "enable");
     showHideFormButtons(myProfileDiv, "block");
