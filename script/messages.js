@@ -41,7 +41,7 @@ trash.addEventListener("click", event => {
     if (msgArr !== undefined) deletedConversations[conversationKey] = msgArr[msgArr.length - 1];
     conversations.splice(indeks, 1);
     updateInformationsInDatabase(userUid, myProfileData, "");
-    drawListOfConversations(myProfileData.myConversations);
+    drawListOfConversations(conversations);
     trash.style.visibility = "hidden";
 });
 
