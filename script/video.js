@@ -1,6 +1,7 @@
 let videoStreamDiv = document.getElementById("videoStreamDiv"),
     yourVideo = document.getElementById("yourVideo"),
     friendsVideo = document.getElementById("friendsVideo"),
+    endCallBtn = document.getElementById("endCall"),
     videoDatabase, yourId, pc,
     servers = {
         'iceServers': [{'urls': 'stun:stun.services.mozilla.com'}, {'urls': 'stun:stun.l.google.com:19302'}, {
@@ -10,7 +11,7 @@ let videoStreamDiv = document.getElementById("videoStreamDiv"),
         }]
     };
 
-document.getElementById("endCall").addEventListener("click", prekiniPoziv);
+endCallBtn.addEventListener("click", prekiniPoziv);
 
 function prekiniPoziv() {
     closeVideoCall();

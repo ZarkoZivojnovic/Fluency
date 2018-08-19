@@ -609,7 +609,7 @@ function dovuciUsere(uslov, string, dodatniUslov) {
                     tempArr.push(user);
                 }
             } else if (uslov === "search") {
-                if (user.username.includes(string)) {
+                if (user.username.toLowerCase().includes(string)) {
                     tempArr.push(user);
                 }
             } else if (uslov === "favs") {

@@ -57,7 +57,3 @@ function createForgotPassForm() {
     form.appendChild(submit);
     return form;
 }
-
-
-
-

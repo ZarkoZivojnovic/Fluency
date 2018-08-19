@@ -1,11 +1,11 @@
 const searchDiv = document.getElementById("search"),
     searchBar = document.getElementById("searchBar"),
     searchForm = document.getElementById("searchForm"),
-    showSearchBtn = document.getElementById("showSearchBtn");
+    showSearchBtn = document.getElementById("showSearchBtn"),
+    background = document.getElementById("noticeBackground");
 
 showSearchBtn.addEventListener("click", event => {
     event.preventDefault();
-    console.log(event.target.id);
     if (searchDiv.offsetHeight === 20) {
         searchTransform("big");
     } else {
@@ -15,15 +15,15 @@ showSearchBtn.addEventListener("click", event => {
 
 searchForm.addEventListener("submit", event => {
     event.preventDefault();
-    let string = getStringForSearch();
+    let string = getStringForSearch().toLowerCase();
     let matchArr = new Array(dovuciUsere("search", string));
-    if (!string){
+    if (!string) {
         return;
     }
     show(loading);
     setTimeout(() => {
         searchTransform("small");
-        if (string === "all"){
+        if (string === "all") {
             showChannels();
         } else {
             prikaziUsere(matchArr[0]);
@@ -38,18 +38,22 @@ function searchTransform(property) {
         searchDiv.style.transform = "scale(1,1)";
         setTimeout(() => {
             searchDiv.style.maxHeight = "20px";
+            hide(background);
+            background.removeEventListener("click", hideSearchBarHandler);
         }, 500)
     } else if (property === "big") {
         searchDiv.style.maxHeight = "300px";
         setTimeout(() => {
             searchDiv.style.transform = "scale(1.2,1.2)";
+            show(background);
+            background.addEventListener("click", hideSearchBarHandler);
         }, 500)
     }
 }
 
 function getStringForSearch() {
     const string = searchBar.value;
-    if (string.length===0){
+    if (string.length === 0) {
         alert("all online users");
         return "all";
     }
@@ -58,4 +62,11 @@ function getStringForSearch() {
         return false;
     }
     return string;
+}
+
+function hideSearchBarHandler(event) {
+    if (searchDiv.offsetHeight > 20) {
+        event.preventDefault();
+        searchTransform("small");
+    }
 }

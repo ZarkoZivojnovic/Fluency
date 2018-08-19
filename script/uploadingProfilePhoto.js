@@ -50,7 +50,7 @@ function uploadProfilePhoto(event) {
     resizeImage({
         file: file.files[0],
         maxSize: 500
-    }).then(function (resizedImage) {
+    }).then(resizedImage => {
         let uploading = firebase.storage().ref('profilePhotos/' + myProfileData.username + "/" + file.name).put(resizedImage);
         uploading.on("state_changed", snapshot => {
             let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -59,8 +59,8 @@ function uploadProfilePhoto(event) {
                 getImageUrl(uploading);
             }
         });
-    }).catch(function (err) {
-        console.error(err);
+    }).catch(err => {
+        alert(err);
     });
 }
 
@@ -80,7 +80,7 @@ function resizeImage(settings) {
     let reader = new FileReader(),
         image = new Image(),
         canvas = document.createElement('canvas');
-    let dataURItoBlob = function (dataURI) {
+    let dataURItoBlob = (dataURI) => {
         let bytes = dataURI.split(',')[0].indexOf('base64') >= 0 ?
             atob(dataURI.split(',')[1]) :
             unescape(dataURI.split(',')[1]);
@@ -91,7 +91,7 @@ function resizeImage(settings) {
             ia[i] = bytes.charCodeAt(i);
         return new Blob([ia], { type: mime });
     };
-    let resize = function () {
+    let resize = () => {
         let width = image.width;
         let height = image.height;
         if (width > height) {
@@ -111,13 +111,13 @@ function resizeImage(settings) {
         let dataUrl = canvas.toDataURL('image/jpeg');
         return dataURItoBlob(dataUrl);
     };
-    return new Promise(function (ok, no) {
+    return new Promise((ok, no) => {
         if (!file.type.match(/image.*/)) {
             no(new Error("Not an image"));
             return;
         }
-        reader.onload = function (readerEvent) {
-            image.onload = function () { return ok(resize()); };
+        reader.onload = (readerEvent) => {
+            image.onload = () => ok(resize());
             image.src = readerEvent.target.result;
         };
         reader.readAsDataURL(file);
