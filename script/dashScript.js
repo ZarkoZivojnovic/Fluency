@@ -63,14 +63,24 @@ showHideSidebar.addEventListener("click", event => {
 });
 
 if (window.innerWidth < 650) {
-    channelsList.addEventListener("click", event => {
-        event.preventDefault();
-        showOrHideListResponsive(channelsList);
-    });
-    conversationList.addEventListener("click", event => {
+    document.getElementById("showChannelsBtn").addEventListener("click", channelsListHandler);
+    document.getElementById("showConversationsBtn").addEventListener("click", conversationListHandler);
+    channelsList.addEventListener("click", channelsListHandler);
+    conversationList.addEventListener("click", conversationListHandler);
+}
+
+function conversationListHandler(event) {
+    if (event.target === event.currentTarget){
         event.preventDefault();
         showOrHideListResponsive(conversationList);
-    });
+    }
+}
+
+function channelsListHandler(event) {
+    if (event.target === event.currentTarget){
+        event.preventDefault();
+        showOrHideListResponsive(channelsList);
+    }
 }
 
 function showOrHideListResponsive(list) {
@@ -85,11 +95,11 @@ function deleteProfile() {
     let user = firebase.auth().currentUser,
         password = prompt("password"),
         credentials = firebase.auth.EmailAuthProvider.credential(
-        user.email,
-        password
-    );
+            user.email,
+            password
+        );
     user.reauthenticateWithCredential(credentials).then(() => {
-        firebase.database().ref("users/"+userUid).remove();
+        firebase.database().ref("users/" + userUid).remove();
         user.delete().then(() => {
             alert("deleted profile");
         }).catch(error => {
@@ -119,9 +129,9 @@ function promenaSifre(event) {
 function updatePassword(staraSifra, novaSifra) {
     const user = firebase.auth().currentUser,
         credentials = firebase.auth.EmailAuthProvider.credential(
-        user.email,
-        staraSifra
-    );
+            user.email,
+            staraSifra
+        );
     if (novaSifra.length < 6) {
         alert("Password is too short!");
     } else {
