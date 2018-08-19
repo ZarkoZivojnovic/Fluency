@@ -544,7 +544,7 @@ div.favPhoto, div.blockPhoto {
     border: solid gray 4px;
     position: relative;
     top: -50px;
-    background: indianred;
+    background-color: indianred;
 }
 
 #genderAndYears {

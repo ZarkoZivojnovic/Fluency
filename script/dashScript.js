@@ -861,7 +861,8 @@ function clearData() {
     for (let info of data) {
         document.getElementById(info).innerText = "no info";
     }
-    usersProfilePhoto.style.backgroundImage = "inherit";
+    usersProfilePhoto.style.backgroundImage = 'url("./graph/favicon.png")';
+    usersProfilePhoto.style.backgroundSize = '50px 50px';
     usersRating.innerText = "Not Rated Yet";
     addToFavsBtn.innerText = "Add To Favorites";
     blockBtn.innerText = "Block";
