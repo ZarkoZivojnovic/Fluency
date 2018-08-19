@@ -1,4 +1,7 @@
 const navigation = document.getElementById("navigation"),
+    deleteAccDivDeleteAcc = document.getElementById("deleteAccDivDeleteAcc"),
+    backFromDeleteAcc = document.getElementById("backFromDeleteAcc"),
+    deleteAccDiv = document.getElementById("deleteAccDiv"),
     settingsDeleteAcc = document.getElementById("settingsDeleteAcc"),
     settingsDiv = document.getElementById("settingsDiv"),
     changePassDiv = document.getElementById("changePassDiv"),
@@ -45,7 +48,9 @@ let links = ["myProfile", "channels", "myMessages", "myFavorites", "myBlockList"
 
 onload();
 
-settingsDeleteAcc.addEventListener("click", deleteProfile);
+deleteAccDivDeleteAcc.addEventListener("click", deleteProfile)
+backFromDeleteAcc.addEventListener("click", backSaBrisanjaProfila);
+settingsDeleteAcc.addEventListener("click", showDeleteAccDiv);
 updatePassBtn.addEventListener("click", promenaSifre);
 backFromPassChange.addEventListener("click", backSaPromeneSifre);
 settingsChangePass.addEventListener("click", showPassChange);
@@ -91,9 +96,10 @@ function showOrHideListResponsive(list) {
     }
 }
 
-function deleteProfile() {
+function deleteProfile(event) {
+    event.preventDefault();
     let user = firebase.auth().currentUser,
-        password = prompt("password"),
+        password = document.getElementById("confirmPassForDelete").value,
         credentials = firebase.auth.EmailAuthProvider.credential(
             user.email,
             password
@@ -147,6 +153,14 @@ function updatePassword(staraSifra, novaSifra) {
         });
     }
 }
+function showDeleteAccDiv() {
+        show(loading);
+        hide(settingsDiv);
+        setTimeout(() => {
+            hide(loading);
+            show(deleteAccDiv);
+        }, 500);
+}
 
 function showPassChange() {
     show(loading);
@@ -158,7 +172,18 @@ function showPassChange() {
 }
 
 function backSaPromeneSifre() {
+    document.getElementById("changePasswordForm").reset(); 
     hide(changePassDiv);
+    show(loading);
+    setTimeout(() => {
+        hide(loading);
+        show(settingsDiv);
+    }, 500);
+}
+
+function backSaBrisanjaProfila() {
+    document.getElementById("deleteAccForm").reset(); 
+    hide(deleteAccDiv);
     show(loading);
     setTimeout(() => {
         hide(loading);
@@ -216,7 +241,7 @@ function markSelectedLink(id) {
 
 function showSettings() {
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, changePassDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, changePassDiv, deleteAccDiv);
     setTimeout(() => {
         hide(loading);
         show(settingsDiv);
@@ -226,7 +251,7 @@ function showSettings() {
 function showMyBlockList() {
     let blockedUsers = new Array(dovuciUsere("block"));
     show(loading);
-    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, settingsDiv, changePassDiv);
+    hide(myFavoritesDiv, myProfileDiv, channelsDiv, myMsgsDiv, settingsDiv, changePassDiv, deleteAccDiv);
     setTimeout(() => {
         drawList(blockList, blockedUsers[0], "block");
         hide(loading);
@@ -240,7 +265,7 @@ function showMyProfile() {
         if (typeof myProfileData.username !== "undefined") {
             clearInterval(waitingForData);
             showProfileEditForm();
-            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, profileDiv);
+            hide(channelsDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, profileDiv, deleteAccDiv);
             setTimeout(() => {
                 hide(loading);
                 show(myProfileDiv);
@@ -252,7 +277,7 @@ function showMyProfile() {
 function showChannels() {
     let listaUsera = new Array(dovuciUsere());
     show(loading);
-    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
+    hide(myProfileDiv, myFavoritesDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, deleteAccDiv);
     setTimeout(() => {
         prikaziUsere(listaUsera[0]);
         show(channelsDiv);
@@ -264,7 +289,7 @@ function showChannels() {
 function showMyFavorites() {
     let favorites = new Array(dovuciUsere("favs"));
     show(loading);
-    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv);
+    hide(myProfileDiv, channelsDiv, myMsgsDiv, myBlockListDiv, settingsDiv, changePassDiv, deleteAccDiv);
     setTimeout(() => {
         drawList(favoritesList, favorites[0], "fav");
         hide(loading);
@@ -274,7 +299,7 @@ function showMyFavorites() {
 
 function showMyMessages() {
     drawListOfConversations(myProfileData.myConversations);
-    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv, changePassDiv);
+    hide(myProfileDiv, channelsDiv, myFavoritesDiv, myBlockListDiv, settingsDiv, changePassDiv, deleteAccDiv);
     show(myMsgsDiv);
     trash.style.visibility = "hidden";
     zvezdice.style.display = "flex";
