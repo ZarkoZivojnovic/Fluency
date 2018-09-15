@@ -131,7 +131,7 @@ function startWebRTC(remoteUser) {
     videoDatabase = firebase.database().ref('calls/' + conversationKey);
     yourId = Math.floor(Math.random() * 1000000000);
     pc = new RTCPeerConnection(servers);
-    pc.onicecandidate = (event => event.candidate ? sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})) : console.log("Sent All Ice") );
+    pc.onicecandidate = (event => event.candidate ? sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})) : c+onsole.log("Sent All Ice") );
     pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
     videoDatabase.on('child_added', readMessage);
 }
