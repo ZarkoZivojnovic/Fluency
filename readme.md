@@ -3,6 +3,9 @@ This is chat / video chat application for improving foreign languages.
 Online demo version - http://fluency.epizy.com
 
 - registration (email, username, password)
+
+![Screenshot](./graph/screenshot/register.jpg?raw=true "Registration")
+
 - forgot password
 - send email verification
 - login / logout
@@ -29,6 +32,10 @@ Online demo version - http://fluency.epizy.com
     * show only last 20 messages in conversation / show whole conversation
     * sent / seen message status
     * delete conversation
+
+![Screenshot](./graph/screenshot/msg_notification.jpg?raw=true "Message notification")
+    
+![Screenshot](./graph/screenshot/conversation.jpg?raw=true "Conversation")
     
 - other options: 
     * add/remove to favorite
