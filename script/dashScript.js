@@ -921,23 +921,3 @@ function sracunajOcenu(korisnik) {
         }
     });
 }
-
-/*                                                   Promise
-                                                ako nekad zatreba
-function testPromise() {
-    return new Promise((resolve) => {
-        let tempArr = [];
-        firebase.database().ref('users/').once('value').then(snapshot => {
-            snapshot.forEach(userSnapshot => {
-                let user = userSnapshot.val();
-
-                if (user.status === "online") {
-                    tempArr.push(user);
-                }
-
-            });
-        });
-        resolve(tempArr);
-    })
-}
-*/
