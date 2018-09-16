@@ -1,19 +1,40 @@
-Online demo version - http://fluency.epizy.com/dashboard.html
+This is chat / video chat application for improving foreign languages.
 
-- registracija
-- login/logout
-- popunjavanje profila
-    * jezik/jezici koje korisnik govori
-    * zemlja, godine, interesovanja...
-- lista online korisnika po kriterijumu (jezik)
-- pretraga korisnika po nick-u
-- prikaz profila korisnika 
-    * zapocni chat/voice chat
-    * dodaj u favorite
-    * oceni korisnika
-    * blokiraj
-- dashboard 
-    * edituj profil (opcija obrisi profil)
-    * moji favoriti (izbaci iz favorita)
-    * blokirani korisnici (odblokiraj korisnika)
-    * moje beleske (cuvaju se u lokalu)
+Online demo version - http://fluency.epizy.com
+
+- registration (email, username, password)
+- forgot password
+- send email verification
+- login / logout
+- status (online, offline, away)
+- channels: 
+    * filter online users by language
+    * search users by username 
+    * start chat / voice chat
+    
+![Screenshot](./graph/screenshot/channels.jpg?raw=true "Channels")
+
+- users profile information (personal info, about me, language info) 
+    * set/change profile photo
+    * native language / other languages and level
+    * country, birthday, interests, etc...
+    
+![Screenshot](./graph/screenshot/profile.jpg?raw=true "Profile")
+
+![Screenshot](./graph/screenshot/edit.jpg?raw=true "Edit profile")
+
+- messages:
+    * list of conversations sorted by received date
+    * new message notification
+    * show only last 20 messages in conversation / show whole conversation
+    * sent / seen message status
+    * delete conversation
+    
+- other options: 
+    * add/remove to favorite
+    * all favorites / online favorites
+    * add/remove to block list
+    * user rating
+    * edit profile
+    * change password
+    * delete profile
