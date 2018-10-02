@@ -18,32 +18,38 @@ Blocked users will not be displayed on the online users list and you will not re
 But if you change your mind, you can unblock them.
    
 ---
-##### Registration 
+
+#### Registration 
 
 You need to enter unique email and username for registration. Verification email will be sent after successfull registration and
 until email is unverified you will not be able to access the content of the application.
+
 ---
 ![Screenshot](./graph/screenshot/register.jpg?raw=true "Registration")
 ---
-##### Forgot password
+
+#### Forgot password
 
 If you forget the password you can require an email to reset it.
 
 ---
-##### Login / Logout
+#### Login / Logout
 
 For login you must enter email and password. After successfull logging you will be redirected to dashboard and your status will be changed to "online".
 By clicking on *"Sign Out"* button status will be setted to "offline", same as you leave the page.
 Third status option is "away" and it will appear if there is no activity on the page.
+
 ---
-##### Channels:
+#### Channels:
 
 All online users will be dispayed on this page. If you want to filter users by language you must select one of the options in select list.
 There is also an option to search users by username and on this page you can to send message or video chat call to someone.
+
 ---
 ![Screenshot](./graph/screenshot/channels.jpg?raw=true "Channels")
 ---
-##### Users profile information (personal info, about me, language info)
+
+#### Users profile information (personal info, about me, language info)
 
 Every user can fill in this forms with their data.
  
@@ -55,7 +61,7 @@ Every user can fill in this forms with their data.
 ---
 ![Screenshot](./graph/screenshot/edit.jpg?raw=true "Edit profile")
 ---
-##### Messages:
+#### Messages:
   
    * list of conversations sorted by received date
    * new message notification
@@ -67,7 +73,7 @@ Every user can fill in this forms with their data.
 ---    
 ![Screenshot](./graph/screenshot/conversation.jpg?raw=true "Conversation")
 ---
-##### Other options: 
+#### Other options: 
 
    * add / remove to favorite
    * all favorites / online favorites
