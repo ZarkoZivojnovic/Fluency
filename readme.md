@@ -10,7 +10,8 @@ and someone else will help you. The application is easy to use. Find your perfec
 same time practicing your language skills. The text chat will helps you to improve your written technique 
 and you can practice your spoken skills trough video chat. After the conversation, do not forget to rate
 the user. That will help other users to choose the right interlocutor.  
-
+\
+\
 For the back-end we used Firebase authentication for login, Firebase database to store all the data and Firebase storage to store profile photos.
 We have three pages here. The first two are for login and registration, and the third is for the dashboard where all other parts of the application are displayed.
 The dashboard has 6 main parts:
@@ -52,6 +53,7 @@ Third status option is "away" and it will appear if there is no activity on the 
 
 All online users will be displayed on this page. If you want to filter users by language you must select one of the options in select list.
 There is also an option to search users by username and on this page you can to send message or video chat call to someone.
+
 ---
 ![Screenshot](./graph/screenshot/channels.jpg?raw=true "Channels")
 ---
@@ -71,17 +73,25 @@ Every user can fill in this forms with their data. It is not mandatory but it wo
 ---
 
 #### Messages:
+
 All your conversations are in this section. They are sorted by received date. If you add a new
-conversation it will be placed on top of the list. 
-When new message is received you will get a 
+conversation it will be placed on top of the list. When new message is received you will get a 
 notification in the sidebar and also next to the name of conversation. 
+\
+\
 By clicking on the conversation name (displayed as same as username of your conversation partner)
 you will see conversation content. Only 20 last messages will be displayed. At the top of conversation
 will be placed _**"whole conversation"**_ button and clicking on it will be printed whole conversation.
+\
+\
 Below the message in chat, the message status is printed _(**sent** and **seen**)_ and that be automatically
 updated when the message is seen.
+\
+\
 Do not forget to rate your interlocutor. You can rate the same user how many time you want but current evaluation
 will cancel the previous one.
+\
+\
 Also, you can to delete the conversation. If you start a new conversation with this user, deleted messages 
 will not be available.  
 
@@ -92,12 +102,16 @@ will not be available.
 ---
 
 #### Other options: 
+
 When you open someone's profile, you will see _**"Add To Favorites"**_ and _**"Block"**_ buttons.
 If that user is already on your favorites list you can remove him from the list. The same applies to the 
 block list.
+\
 Whenever you want, you can edit your profile. Also, you can change your password at any time.
+\
 And if you do not want to use our application any more, you can delete profile. 
 By deleting the profile, all data will be permanently lost.
+
 ---
 
 #### If you have some trouble with our application, feel free to contact us by [email](mailto:appfluency@gmail.com)
