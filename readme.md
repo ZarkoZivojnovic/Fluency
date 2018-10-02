@@ -1,6 +1,21 @@
-This is chat / video chat application for improving foreign languages.
+#Fluency
 
-Online demo version - http://fluency.epizy.com
+####Online [DEMO](http://fluency.epizy.com) version
+
+This is a real time chat and video chat application for improving foreign languages.
+For the backend we used Firebase authentication for login, Firebase database to store all the data and Firebase storage to store profile photos.
+We have three pages here. The first two are for login and registration, and the third is for the dashboard where all other parts of the application are dispayed.
+The dashboard has 6 main parts:
+- My messages *- There is a list of all conversations* 
+- My profile *- To see how your profile looks like*
+- My favorites *- List of your favorite users*
+- My block list *- List of blocked users*
+- Channels *- List of online users and search form by language and level*
+- Settings *- Here you can find edit profile, change password and delete profile forms*
+
+Blocked users will not be displayed on the online user list and you will not receive messages from them.
+
+---
 
 - registration (email, username, password)
 
