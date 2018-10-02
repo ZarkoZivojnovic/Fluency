@@ -1,6 +1,6 @@
 # Fluency
 
-#### Online [DEMO](http://fluency.epizy.com) version
+### Online [DEMO](http://fluency.epizy.com) version
 
 This is a real time chat and video chat application for improving foreign languages.
 For the backend we used Firebase authentication for login, Firebase database to store all the data and Firebase storage to store profile photos.
