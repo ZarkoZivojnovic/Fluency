@@ -119,7 +119,7 @@ By deleting the profile, all data will be permanently lost.
 ---
 ---
 
-### Technologies we used
+## Technologies we used
 
 ---
 
@@ -272,7 +272,113 @@ function readMessage(data) {
 
 The Google Chrome requires secure protocol for camera and microphone access and because that on our 
 online version may have some issues. This is the relatively new technology and it's still under development.
-This means that this version of our application will not work for a long time. The other problem with WebRTC is 
-the list of necessary codecs.
+This means that this version of our application will not work for a long time. The other problem with WebRTC 
+can be the list of necessary codecs. But for now everything works fine on https and localhost protocols.
 
+---
 
+#### The code that we wrote:
+
+The whole JS code was written using the ECMAScript 6 syntax and divided into seven Javascript files _(main.js, dashScript.js, 
+search.js, blockAndFavorites.js, messages.js, uploadingProfilePhoto.js and settings.js)_.
+
+---
+
+At the time we worked on application, we did not know much about _Promises_, and were 
+dealing with the asyncronous using setInterval method. That is the thing we need to change. 
+This is the sample:
+
+```angular2html
+let getUsername = setInterval(() => {
+    ifUser(getUsername)
+    }, 100),
+    currentUser = firebase.auth().currentUser;
+                  
+function ifUser(getUsername) {
+    if (myProfileData.username !== undefined) {
+        clearInterval(getUsername);
+        usersName.innerText = myProfileData.username;
+        hide(loading);
+        showChannels();
+        markSelectedLink("channels");
+    }
+}
+```
+
+---
+
+To show the user's profile, we used default HTML model we previously created. We have created a function 
+that writes data into that model. There is also a function that removes data. We did not want 
+to use too much DOM manipulations and we assessed this as a good solution.
+
+---
+
+We used a similar logic to add (and remove) from favorite list or list of blocked users, so we
+made mutual functions for this.
+
+```angular2html
+function addOrRemoveFromList(event) {
+    event.stopPropagation();
+    let  user = event.target.name,
+        btn = event.target.id === "blockBtn" ? blockBtn:addToFavsBtn,
+        favOrBlock = btn === blockBtn ? myProfileData.myBlockList : myProfileData.myFavorites;
+    if (favOrBlock.indexOf(user) === -1) {
+        addToList(favOrBlock, user);
+    } else {
+        removeFromList(favOrBlock, user);
+    }
+}
+
+function addToList(favOrBlock, user) {
+    favOrBlock.push(user);
+    if (favOrBlock === myProfileData.myBlockList) {
+        blockBtn.textContent = "Unblock";
+    } else {
+        addToFavsBtn.textContent = "Remove From Favorites";
+    }
+}
+
+function removeFromList(favOrBlock, user) {
+    let index = favOrBlock.indexOf(user);
+    favOrBlock.splice(index, 1);
+    if (favOrBlock === myProfileData.myBlockList) {
+        blockBtn.textContent = "Block";
+        showMyBlockList();
+    } else {
+        addToFavsBtn.textContent = "Add To Favorites";
+        showMyFavorites();
+    }
+}
+```
+
+---
+
+### HTML 
+
+This application have three main HTML pages. First one is for registration, second is for login, and third one is dashboard.
+On dashboard.html you can see header div with the logo and name of application. Next is a contentsDiv and it contains main containers like messages, my profile, favorites, settings, etc.
+Each of them has a content that includes different forms and other containers. There is also a sidebar div with navigation.
+Below are located and other divs such as various modals (profile, photo upload div, alert, notification and the others).
+
+---
+
+### CSS
+
+All the animations in our application are made with CSS only. We used CSS transitions and 
+CSS animations for that. This code below is the animation for loading modal and this 
+is really simple keyframes rule:
+
+```angular2html
+#loading {
+    animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg)
+    }
+    to {
+        transform: rotate(360deg)
+    }
+}
+```
