@@ -199,7 +199,7 @@ can read and write data in storage.
 
 Video chat is enabled by WebRTC. This is the open project that provides browsers with Real-Time Communications
 (RTC) capabilities via APIs. It is available in all popular browsers.
-WebRTC implements tree APIs: MediaStream, RTCPeerConnection and RTCDataChannel. We used only first two. 
+WebRTC implements three APIs: MediaStream, RTCPeerConnection and RTCDataChannel. We used only first two. 
 
 ---
 
