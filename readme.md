@@ -7,7 +7,7 @@
 This is a real time chat and video chat application for learning foreign languages. It differs from
 other applications because you can be both a teacher and the student. You can help someone to master the language you know well,
 and someone else will help you. The application is easy to use. Find your perfect conversation partner and enjoy in chat, while at the
-same time practicing your language skills. The text chat will helps you to improve your written technique 
+same time practicing your language skills. The text chat will help you to improve your written technique 
 and you can practice your spoken skills trough video chat. After the conversation, do not forget to rate
 the user. That will help other users to choose the right interlocutor.  
 \
@@ -192,6 +192,7 @@ function getExistingData(userId) {
 For upload and storing photos we used _**"Firebase Storage"**_. It allows us to upload
 the photos directly from mobile devices and web browsers, and keeps it safe because only authenticated users
 can read and write data in storage.
+
 ----
 
 #### WebRTC:
