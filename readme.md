@@ -4,7 +4,7 @@
    
 ---
 
-This is a real time chat and video chat application for improving foreign languages. It differs from
+This is a real time chat and video chat application for learning foreign languages. It differs from
 other applications because you can be both a teacher and the student. You can help someone to master the language you know well,
 and someone else will help you. The application is easy to use. Find your perfect conversation partner and enjoy in chat, while at the
 same time practicing your language skills. The text chat will helps you to improve your written technique 
@@ -117,3 +117,161 @@ By deleting the profile, all data will be permanently lost.
 #### If you have some trouble with our application, feel free to contact us by [email](mailto:appfluency@gmail.com)
 
 ---
+---
+
+### Technologies we used
+
+---
+
+#### Firebase:
+
+As I mentioned earlier, we used Firebase for back-end. At the beginning of the code we had to 
+initialize Firebase with a configuration object. We included some Firebase libraries to handle this.
+\
+\
+At the first place we made registration with _**"Firebase Authentication"**_. 
+This part checks if the email address or username is reserved and whether the password is strong enough.
+
+```angular2html
+firebase.auth().createUserWithEmailAndPassword(email, password).then(() => {
+                let user = firebase.auth().currentUser;
+                user.sendEmailVerification().then(() => {
+                    alert("Verification Email Sent");
+                })
+            })
+```
+
+For the login page we used this technology, too. The code looks like this:
+
+```angular2html
+firebase.auth().signInWithEmailAndPassword(email, password).then(() => {
+    userId = firebase.auth().currentUser.uid;
+    setStatus("online", userId);
+    alert("You Are Online");
+    location.assign('./dashboard.html');
+}).catch(error => {
+    alert(error);
+});
+```
+
+---
+
+_**"Firebase Database"**_ was used for data storage. All the data are stored as JSON object.
+
+![Screenshot](./graph/screenshot/database_user.jpg "Conversation")
+
+----
+
+This is one of the functions that writes data into the database:
+
+```angular2html
+function writeUserDataOnRegistration(username, email) {
+    let userId = firebase.auth().currentUser.uid;
+    firebase.database().ref('users/' + userId).set({
+        username,
+        email
+    });
+}
+```
+The function expects two arguments, name and email, and forwards the object that will be saved in database.
+\
+\
+And another one that reads data from database:
+
+```angular2html
+function getExistingData(userId) {
+    let profileData = {};
+    firebase.database().ref('users/' + userId).on('child_added', data => {
+        profileData[data.key] = data.val();
+    });
+    return profileData;
+}
+```
+---
+
+For upload and storing photos we used _**"Firebase Storage"**_. It allows us to upload
+the photos directly from mobile devices and web browsers, and keeps it safe because only authenticated users
+can read and write data in storage.
+----
+
+#### WebRTC:
+
+Video chat is enabled by WebRTC. This is the open project that provides browsers with Real-Time Communications
+(RTC) capabilities via APIs. It is available in all popular browsers.
+WebRTC implements tree APIs: MediaStream, RTCPeerConnection and RTCDataChannel. We used only first two. 
+
+---
+
+##### MediaStream API
+
+The MediaStream API represents synchronized streams of media. A stream taken from camera and 
+microphone input has synchronized video and audio tracks.
+
+Navigator.getUserMedia() method prompts the user for permission to use camera and
+ microphone as the source for a MediaStream. If permission is granted, a MediaStream
+ whose video and/or audio tracks come from those devices is delivered to the 
+ specified success callback.
+ 
+ ```angular2html
+function showMyFace() {
+    navigator.mediaDevices.getUserMedia({audio: true, video: true})
+        .then(stream => yourVideo.srcObject = stream)
+        .then(stream => pc.addStream(stream))
+        .then(showFriendsFace);
+}
+
+function showFriendsFace() {
+    pc.createOffer()
+        .then(offer => pc.setLocalDescription(offer))
+        .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
+}
+```
+
+##### RTCPeerConnestion API
+
+WebRTC uses RTCPeerConnection to communicate streaming data between browsers. 
+But also needs a mechanism to coordinate communication and to send control messages, 
+a process known as signalling. Signalling methods and protocols are not specified by WebRTC.
+For this purpose we used an already existing database. RTCPeerConnection is the WebRTC 
+component that handles stable and efficient communication of streaming data 
+between peers. This functions below do it.
+
+```angular2html
+function startWebRTC(remoteUser) {
+    conversationKey = createConversationKey(myProfileData.username, remoteUser);
+    firebase.database().ref('calls/' + conversationKey).set({"call": "call"});
+    videoDatabase = firebase.database().ref('calls/' + conversationKey);
+    yourId = Math.floor(Math.random() * 1000000000);
+    pc = new RTCPeerConnection(servers);
+    pc.onicecandidate = (event => event.candidate ? sendVideoMessage(yourId, JSON.stringify({'ice': event.candidate})) : console.log("Sent All Ice") );
+    pc.onaddstream = (event => friendsVideo.srcObject = event.stream);
+    videoDatabase.on('child_added', readMessage);
+}
+```
+```angular2html
+function readMessage(data) {
+    let string = data.val();
+    if (string === "call") return;
+    let msg = JSON.parse(string.message);
+    let sender = data.val().sender;
+    if (sender !== yourId) {
+        if (msg.ice !== undefined)
+            pc.addIceCandidate(new RTCIceCandidate(msg.ice));
+        else if (msg.sdp.type === "offer")
+            pc.setRemoteDescription(new RTCSessionDescription(msg.sdp))
+                .then(() => pc.createAnswer())
+                .then(answer => pc.setLocalDescription(answer))
+                .then(() => sendVideoMessage(yourId, JSON.stringify({'sdp': pc.localDescription})));
+        else if (msg.sdp.type === "answer")
+            pc.setRemoteDescription(new RTCSessionDescription(msg.sdp));
+    }
+}
+```
+***
+
+The Google Chrome requires secure protocol for camera and microphone access and because that on our 
+online version may have some issues. This is the relatively new technology and it's still under development.
+This means that this version of our application will not work for a long time. The other problem with WebRTC is 
+the list of necessary codecs.
+
+
